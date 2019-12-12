@@ -17,6 +17,8 @@ quicktype \
   --visibility public \
   --derive-debug
 
+#cp $file $file.off
+
 echo '-- remove extra comments'
 sed -i '' '/^\/\/[^\/]*$/d' $file
 
@@ -75,14 +77,14 @@ sed -i '' 's/pub \(\w*\): \([^<]*\),$/#[serde(skip_serializing_if = "Option::is_
 echo '-- simplification'
 sed -i '' 's/pub enum InlineDataset /#[allow(unused)]enum UnusedInlineDataset /' $file
 sed -i '' 's/<InlineDataset>/<serde_json::value::Value>/' $file
-sed -i '' 's/BoxPlotDefClass/MarkDefClass/g' $file
-#sed -i '' 's/BoxPlotDefExtent/MarkDefExtent/' $file
-sed -i '' 's/Enum(BoxPlot)/Enum(Mark)/' $file
-sed -i '' 's/<BoxPlot>/<Mark>/' $file
-sed -i '' 's/pub enum BoxPlot /pub enum Mark /' $file
+# sed -i '' 's/BoxPlotDefClass/MarkDefClass/g' $file
+# #sed -i '' 's/BoxPlotDefExtent/MarkDefExtent/' $file
+# sed -i '' 's/Enum(BoxPlot)/Enum(Mark)/' $file
+# sed -i '' 's/<BoxPlot>/<Mark>/' $file
+# sed -i '' 's/pub enum BoxPlot /pub enum Mark /' $file
 
-sed -i '' 's/pub \(\w*\): Box<Option<\(\S*\)>>/#[serde(skip_serializing_if = "Option::is_none")] #[builder(default)] pub \1: Option<\2>/' $file
-sed -i '' 's/pub filter: Option<Box<PurpleLogicalOperandPredicate>>,/pub filter: Option<PurpleLogicalOperandPredicate>,/' $file
+# sed -i '' 's/pub \(\w*\): Box<Option<\(\S*\)>>/#[serde(skip_serializing_if = "Option::is_none")] #[builder(default)] pub \1: Option<\2>/' $file
+# sed -i '' 's/pub filter: Option<Box<PurpleLogicalOperandPredicate>>,/pub filter: Option<PurpleLogicalOperandPredicate>,/' $file
 
 echo '-- From for enums'
 sed -i '' '/use serde::/i\

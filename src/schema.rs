@@ -6824,7 +6824,7 @@ pub struct LayerEncoding {
 
 #[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
-pub struct MarkDefClass {
+pub struct BoxPlotDefClass {
     #[serde(rename = "box")]
     pub def_box: Option<DefBox>,
     /// Whether a composite mark be clipped to the enclosing group’s width and height.
@@ -13058,8 +13058,8 @@ pub enum HeightUnion {
 #[serde(untagged)]
 #[derive(From)]
 pub enum AnyMark {
-    MarkDefClass(MarkDefClass),
-    Enum(Mark),
+    BoxPlotDefClass(BoxPlotDefClass),
+    Enum(BoxPlot),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -14707,7 +14707,7 @@ pub enum Content {
 ///
 /// All types of primitive marks.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum Mark {
+pub enum BoxPlot {
     #[serde(rename = "area")]
     Area,
     #[serde(rename = "bar")]
