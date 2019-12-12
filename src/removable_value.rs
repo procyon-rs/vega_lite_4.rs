@@ -15,7 +15,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::fmt;
 use std::marker::PhantomData;
 
-use crate::schema::*;
+// use crate::schema::*;
 
 /// Wrapper for a field that can be either the default value, null or specified
 #[derive(Clone, Debug)]
@@ -70,17 +70,17 @@ macro_rules! from_into_with_removable{
 from_into_with_removable! {
     &str => String,
 
-    SortOrder => Sort,
-    EncodingSortField => Sort,
-    Vec<SelectionInitIntervalElement> => Sort,
+    // SortOrder => Sort,
+    // EncodingSortField => Sort,
+    // Vec<SelectionInitIntervalElement> => Sort,
 
-    DefWithConditionTextFieldDefValue => Tooltip,
-    Vec<TextFieldDef> => Tooltip,
+    // DefWithConditionTextFieldDefValue => Tooltip,
+    // Vec<TextFieldDef> => Tooltip,
 
-    bool => TooltipUnion,
-    f64 => TooltipUnion,
-    String => TooltipUnion,
-    TooltipContent => TooltipUnion,
+    // bool => TooltipUnion,
+    // f64 => TooltipUnion,
+    // String => TooltipUnion,
+    // TooltipContent => TooltipUnion,
 }
 
 impl<T: Clone> Default for RemovableValue<T> {
