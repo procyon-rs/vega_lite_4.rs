@@ -51,7 +51,7 @@ macro_rules! from_into_string{
 }
 
 from_into_string!(
-    // Title,
+    Text,
     SelectionOperandElement,
     PurpleSelectionOperand,
     LogicalOperandPredicateElement,
