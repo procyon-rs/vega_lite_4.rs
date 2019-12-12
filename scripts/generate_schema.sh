@@ -60,7 +60,7 @@ sed -i '' 's/enum Box {/enum DefBox {/' $file
 
 echo '-- make everything clonable and default'
 sed -i '' 's/#\[derive(Debug, Serialize, Deserialize)\]/#[derive(Debug, Clone, Serialize, Deserialize)]/' $file
-sed -i '' 's/pub struct/#[derive(Default)] pub struct/' $file
+# sed -i '' 's/pub struct/#[derive(Default)] pub struct/' $file
 
 echo '-- setup builder'
 sed -i '' '/use serde::/i\

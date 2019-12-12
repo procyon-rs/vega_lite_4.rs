@@ -21,7 +21,7 @@ use std::collections::HashMap;
 /// A Vega-Lite top-level specification.
 /// This is the root class for all Vega-Lite specifications.
 /// (The json schema is generated from this type.)
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Vegalite {
     /// URL to [JSON schema](http://json-schema.org/) for a Vega-Lite specification. Unless you
@@ -231,14 +231,14 @@ pub struct Vegalite {
     pub hconcat: Option<Vec<Spec>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct RowColLayoutAlign {
     pub column: Option<LayoutAlign>,
     pub row: Option<LayoutAlign>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct AutoSizeParams {
     /// Determines how size calculation should be performed, one of `"content"` or `"padding"`.
@@ -263,7 +263,7 @@ pub struct AutoSizeParams {
     pub auto_size_params_type: Option<Type>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct RowColBoolean {
     pub column: Option<bool>,
@@ -291,7 +291,7 @@ pub struct RowColBoolean {
 /// Base interface for a vertical concatenation specification.
 ///
 /// Base interface for a horizontal concatenation specification.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct SpecClass {
     /// An object describing the data source. Set to `null` to ignore the parent's data source.
@@ -485,7 +485,7 @@ pub struct SpecClass {
 /// Base interface for a vertical concatenation specification.
 ///
 /// Base interface for a horizontal concatenation specification.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Spec {
     /// The bounds calculation method to use for determining the extent of a sub-plot. One of
@@ -660,7 +660,7 @@ pub struct Spec {
     pub hconcat: Option<Vec<Spec>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct UrlData {
     /// An object that specifies the format for parsing the data.
@@ -684,7 +684,7 @@ pub struct UrlData {
 }
 
 /// An object that specifies the format for parsing the data.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct DataFormat {
     /// If set to `null`, disable type inference based on the spec and only use type inference
@@ -736,7 +736,7 @@ pub struct DataFormat {
     pub mesh: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct GraticuleParams {
     /// Sets both the major and minor extents to the same values.
@@ -767,7 +767,7 @@ pub struct GraticuleParams {
 }
 
 /// Generate a sequence of numbers.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct SequenceParams {
     /// The name of the generated sequence field.
@@ -785,7 +785,7 @@ pub struct SequenceParams {
     pub stop: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct SphereClass {}
 
@@ -793,7 +793,7 @@ pub struct SphereClass {}
 ///
 /// A shared key-value mapping between encoding channels and definition of fields in the
 /// underlying layers.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Encoding {
     /// Color of the marks – either fill or stroke color based on  the `filled` property of mark
@@ -1002,7 +1002,7 @@ pub struct Encoding {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct DefWithConditionMarkPropFieldDefGradientStringNull {
     /// Aggregation function for the field
@@ -1184,7 +1184,7 @@ pub struct DefWithConditionMarkPropFieldDefGradientStringNull {
     pub value: Option<ValueUnion>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ArgmDef {
     pub argmax: Option<String>,
@@ -1192,7 +1192,7 @@ pub struct ArgmDef {
 }
 
 /// Binning properties or boolean flag for determining whether to bin data or not.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct BinParams {
     /// A value in the binned domain at which to anchor the bins, shifting the bin boundaries if
@@ -1235,7 +1235,7 @@ pub struct BinParams {
     pub steps: Option<Vec<f64>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct BinExtentClass {
     /// The field name to extract selected values for, when a selection is
@@ -1250,7 +1250,7 @@ pub struct BinExtentClass {
     pub encoding: Option<SingleDefUnitChannel>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalValueDefGradientStringNull {
     /// Predicate for triggering the condition
@@ -1264,7 +1264,7 @@ pub struct ConditionalValueDefGradientStringNull {
     pub selection: Box<Option<Box<PurpleSelectionOperand>>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Selection {
     pub not: Box<Option<Box<PurpleSelectionOperand>>>,
@@ -1272,7 +1272,7 @@ pub struct Selection {
     pub or: Option<Vec<SelectionOperandElement>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Predicate {
     pub not: Option<PurpleLogicalOperandPredicate>,
@@ -1311,7 +1311,7 @@ pub struct Predicate {
 /// If both month and quarter are provided, month has higher precedence.
 /// `day` cannot be combined with other date.
 /// We accept string for month and day names.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct DateTime {
     /// Integer value representing the date from 1-31.
@@ -1346,7 +1346,7 @@ pub struct DateTime {
     pub year: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ValueLinearGradient {
     /// The type of gradient. Use `"linear"` for a linear gradient.
@@ -1404,7 +1404,7 @@ pub struct ValueLinearGradient {
     pub r2: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct GradientStop {
     /// The color value at this point in the gradient.
@@ -1413,7 +1413,7 @@ pub struct GradientStop {
     pub offset: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefGradientStringNullClass {
     /// Predicate for triggering the condition
@@ -1592,14 +1592,14 @@ pub struct ConditionalPredicateValueDefGradientStringNullClass {
 }
 
 /// Reference to a repeated value.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct RepeatRef {
     pub repeat: RepeatEnum,
 }
 
 /// Properties of a legend or boolean flag for determining whether to show it.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Legend {
     /// The height in pixels to clip symbol legend entries and limit their size.
@@ -1914,7 +1914,7 @@ pub struct Legend {
     pub zindex: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Scale {
     /// The alignment of the steps within the scale range.
@@ -2113,7 +2113,7 @@ pub struct Scale {
     pub zero: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct DomainClass {
     /// The field name to extract selected values for, when a selection is
@@ -2128,7 +2128,7 @@ pub struct DomainClass {
     pub encoding: Option<SingleDefUnitChannel>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ScaleInterpolateParams {
     pub gamma: Option<f64>,
@@ -2136,14 +2136,14 @@ pub struct ScaleInterpolateParams {
     pub scale_interpolate_params_type: ScaleInterpolateParamsType,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct NiceClass {
     pub interval: String,
     pub step: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct SchemeParams {
     /// The number of colors to use in the scheme. This can be useful for scale types such as
@@ -2161,7 +2161,7 @@ pub struct SchemeParams {
 }
 
 /// A sort definition for sorting a discrete scale in an encoding field definition.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct EncodingSortField {
     /// The data [field](https://vega.github.io/vega-lite/docs/field.html) to sort by.
@@ -2192,7 +2192,7 @@ pub struct EncodingSortField {
 /// A field definition for the horizontal facet of trellis plots.
 ///
 /// A field definition for the vertical facet of trellis plots.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct RowColumnEncodingFieldDef {
     /// Aggregation function for the field
@@ -2357,7 +2357,7 @@ pub struct RowColumnEncodingFieldDef {
 /// An object defining properties of a facet's header.
 ///
 /// Headers of row / column channels for faceted plots.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Header {
     /// The text formatting pattern for labels of guides (axes, legends, headers) and text
@@ -2511,7 +2511,7 @@ pub struct Header {
 }
 
 /// A sort definition for sorting a discrete scale in an encoding field definition.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct SortEncodingSortField {
     /// The data [field](https://vega.github.io/vega-lite/docs/field.html) to sort by.
@@ -2543,7 +2543,7 @@ pub struct SortEncodingSortField {
 /// A data field to use as a unique key for data binding. When a visualization’s data is
 /// updated, the key value will be used to match data elements to existing mark instances.
 /// Use a key channel to enable object constancy for transitions over dynamic data.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct TypedFieldDef {
     /// Aggregation function for the field
@@ -2657,7 +2657,7 @@ pub struct TypedFieldDef {
 /// A field definition for the (flexible) facet of trellis plots.
 ///
 /// If either `row` or `column` is specified, this channel will be ignored.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct FacetEncodingFieldDef {
     /// Aggregation function for the field
@@ -2854,7 +2854,7 @@ pub struct FacetEncodingFieldDef {
     pub facet_encoding_field_def_type: StandardType,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct RowColNumber {
     pub column: Option<f64>,
@@ -2897,7 +2897,7 @@ pub struct RowColNumber {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct DefWithConditionMarkPropFieldDefNumber {
     /// Aggregation function for the field
@@ -3079,7 +3079,7 @@ pub struct DefWithConditionMarkPropFieldDefNumber {
     pub value: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalNumberValueDef {
     /// Predicate for triggering the condition
@@ -3093,7 +3093,7 @@ pub struct ConditionalNumberValueDef {
     pub selection: Box<Option<Box<PurpleSelectionOperand>>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalDef {
     /// Predicate for triggering the condition
@@ -3281,7 +3281,7 @@ pub struct ConditionalDef {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct HrefClass {
     /// Aggregation function for the field
@@ -3437,7 +3437,7 @@ pub struct HrefClass {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionElement {
     /// Predicate for triggering the condition
@@ -3451,7 +3451,7 @@ pub struct ConditionElement {
     pub selection: Box<Option<Box<PurpleSelectionOperand>>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefStringClass {
     /// Predicate for triggering the condition
@@ -3635,7 +3635,7 @@ pub struct ConditionalPredicateValueDefStringClass {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct LatitudeClass {
     /// Aggregation function for the field
@@ -3771,7 +3771,7 @@ pub struct LatitudeClass {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Latitude2Class {
     /// Aggregation function for the field
@@ -3853,7 +3853,7 @@ pub struct Latitude2Class {
     pub value: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct OrderFieldDef {
     /// Aggregation function for the field
@@ -3968,7 +3968,7 @@ pub struct OrderFieldDef {
 
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct OrderFieldDefClass {
     /// Aggregation function for the field
@@ -4109,7 +4109,7 @@ pub struct OrderFieldDefClass {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct DefWithConditionMarkPropFieldDefTypeForShapeStringNull {
     /// Aggregation function for the field
@@ -4292,7 +4292,7 @@ pub struct DefWithConditionMarkPropFieldDefTypeForShapeStringNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalStringValueDef {
     /// Predicate for triggering the condition
@@ -4306,7 +4306,7 @@ pub struct ConditionalStringValueDef {
     pub selection: Box<Option<Box<PurpleSelectionOperand>>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateMarkPropFieldDefTypeForShapeClass {
     /// Predicate for triggering the condition
@@ -4492,7 +4492,7 @@ pub struct ConditionalPredicateMarkPropFieldDefTypeForShapeClass {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct DefWithConditionStringFieldDefText {
     /// Aggregation function for the field
@@ -4648,7 +4648,7 @@ pub struct DefWithConditionStringFieldDefText {
     pub value: Option<PurpleText>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalValueDefText {
     /// Predicate for triggering the condition
@@ -4662,7 +4662,7 @@ pub struct ConditionalValueDefText {
     pub selection: Box<Option<Box<PurpleSelectionOperand>>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefTextClass {
     /// Predicate for triggering the condition
@@ -4814,7 +4814,7 @@ pub struct ConditionalPredicateValueDefTextClass {
     pub conditional_type: Option<StandardType>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct StringFieldDef {
     /// Aggregation function for the field
@@ -4963,7 +4963,7 @@ pub struct StringFieldDef {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct FieldDefWithConditionStringFieldDefString {
     /// Aggregation function for the field
@@ -5127,7 +5127,7 @@ pub struct FieldDefWithConditionStringFieldDefString {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct XClass {
     /// Aggregation function for the field
@@ -5341,7 +5341,7 @@ pub struct XClass {
     pub value: Option<XUnion>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Axis {
     /// An interpolation fraction indicating where, for `band` scales, axis ticks should be
@@ -5666,7 +5666,7 @@ pub struct Axis {
     pub zindex: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyColorNull {
     pub condition: ConditionalAxisPropertyColorNullCondition,
@@ -5676,7 +5676,7 @@ pub struct ConditionalAxisPropertyColorNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefColorNull {
     /// Predicate for triggering the condition
@@ -5687,7 +5687,7 @@ pub struct ConditionalPredicateValueDefColorNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyNumberNull {
     pub condition: ConditionalAxisPropertyNumberNullCondition,
@@ -5697,7 +5697,7 @@ pub struct ConditionalAxisPropertyNumberNull {
     pub value: Option<Vec<f64>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefNumberNull {
     /// Predicate for triggering the condition
@@ -5708,7 +5708,7 @@ pub struct ConditionalPredicateValueDefNumberNull {
     pub value: Option<Vec<f64>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyNumberNullClass {
     pub condition: ConditionalAxisPropertyNumberNullConditionUnion,
@@ -5718,7 +5718,7 @@ pub struct ConditionalAxisPropertyNumberNullClass {
     pub value: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefNumberNullElement {
     /// Predicate for triggering the condition
@@ -5729,7 +5729,7 @@ pub struct ConditionalPredicateValueDefNumberNullElement {
     pub value: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyTextBaselineNull {
     pub condition: ConditionalAxisPropertyTextBaselineNullCondition,
@@ -5739,7 +5739,7 @@ pub struct ConditionalAxisPropertyTextBaselineNull {
     pub value: Option<Baseline>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefTextBaselineNull {
     /// Predicate for triggering the condition
@@ -5750,7 +5750,7 @@ pub struct ConditionalPredicateValueDefTextBaselineNull {
     pub value: Option<Baseline>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyStringNull {
     pub condition: ConditionalAxisPropertyStringNullCondition,
@@ -5760,7 +5760,7 @@ pub struct ConditionalAxisPropertyStringNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateStringValueDef {
     /// Predicate for triggering the condition
@@ -5771,7 +5771,7 @@ pub struct ConditionalPredicateStringValueDef {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyFontStyleNull {
     pub condition: ConditionalAxisPropertyFontStyleNullCondition,
@@ -5781,7 +5781,7 @@ pub struct ConditionalAxisPropertyFontStyleNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefFontStyleNull {
     /// Predicate for triggering the condition
@@ -5792,7 +5792,7 @@ pub struct ConditionalPredicateValueDefFontStyleNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyFontWeightNull {
     pub condition: ConditionalAxisPropertyFontWeightNullCondition,
@@ -5802,7 +5802,7 @@ pub struct ConditionalAxisPropertyFontWeightNull {
     pub value: Option<FontWeight>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefFontWeightNull {
     /// Predicate for triggering the condition
@@ -5813,7 +5813,7 @@ pub struct ConditionalPredicateValueDefFontWeightNull {
     pub value: Option<FontWeight>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ImputeParams {
     /// A frame specification as a two-element array used to control the window over which the
@@ -5845,7 +5845,7 @@ pub struct ImputeParams {
     pub value: Option<serde_json::Value>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ImputeSequence {
     /// The starting value of the sequence.
@@ -5868,7 +5868,7 @@ pub struct ImputeSequence {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct X2Class {
     /// Aggregation function for the field
@@ -5958,7 +5958,7 @@ pub struct X2Class {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct YClass {
     /// Aggregation function for the field
@@ -6182,7 +6182,7 @@ pub struct YClass {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Y2Class {
     /// Aggregation function for the field
@@ -6273,7 +6273,7 @@ pub struct Y2Class {
 /// A field definition for the horizontal facet of trellis plots.
 ///
 /// A field definition for the vertical facet of trellis plots.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Facet {
     /// Aggregation function for the field
@@ -6418,7 +6418,7 @@ pub struct Facet {
 /// A field definition for the horizontal facet of trellis plots.
 ///
 /// A field definition for the vertical facet of trellis plots.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct FacetFieldDef {
     /// Aggregation function for the field
@@ -6556,7 +6556,7 @@ pub struct FacetFieldDef {
     pub facet_field_def_type: StandardType,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Step {
     /// The size (width/height) per discrete step.
@@ -6570,7 +6570,7 @@ pub struct Step {
 /// marks](https://vega.github.io/vega-lite/docs/mark.html#types).
 ///
 /// Base interface for a unit (single-view) specification.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct LayerSpec {
     /// An object describing the data source. Set to `null` to ignore the parent's data source.
@@ -6658,7 +6658,7 @@ pub struct LayerSpec {
 /// underlying layers.
 ///
 /// A key-value mapping between encoding channels and definition of fields.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct LayerEncoding {
     /// Color of the marks – either fill or stroke color based on  the `filled` property of mark
@@ -6822,7 +6822,7 @@ pub struct LayerEncoding {
     pub y_error2: Option<Latitude2Class>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct MarkDefClass {
     #[serde(rename = "box")]
@@ -7260,7 +7260,7 @@ pub struct MarkDefClass {
 /// Square-Specific Config
 ///
 /// Text-Specific Config
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct MarkConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
@@ -7540,7 +7540,7 @@ pub struct MarkConfig {
     pub y2: Option<YUnion>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ColorLinearGradient {
     /// The type of gradient. Use `"linear"` for a linear gradient.
@@ -7598,7 +7598,7 @@ pub struct ColorLinearGradient {
     pub r2: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct FillLinearGradient {
     /// The type of gradient. Use `"linear"` for a linear gradient.
@@ -7656,13 +7656,13 @@ pub struct FillLinearGradient {
     pub r2: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct TooltipContent {
     pub content: Content,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct OverlayMarkDef {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
@@ -7981,7 +7981,7 @@ pub struct OverlayMarkDef {
 /// and to `latitude` and `"longitude"` channels for other marks.
 ///
 /// An object defining properties of the geographic projection shared by underlying layers.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Projection {
     /// The projection’s center to the specified center, a two-element array of longitude and
@@ -8050,7 +8050,7 @@ pub struct Projection {
 /// Defines how scales, axes, and legends from different specs should be combined. Resolve is
 /// a mapping from `scale`, `axis`, and `legend` to a mapping from channels to resolutions.
 /// Scales and guides can be resolved to be `"independent"` or `"shared"`.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Resolve {
     pub axis: Option<AxisResolveMap>,
@@ -8058,14 +8058,14 @@ pub struct Resolve {
     pub scale: Option<ScaleResolveMap>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct AxisResolveMap {
     pub x: Option<ResolveMode>,
     pub y: Option<ResolveMode>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct LegendResolveMap {
     pub color: Option<ResolveMode>,
@@ -8082,7 +8082,7 @@ pub struct LegendResolveMap {
     pub stroke_width: Option<ResolveMode>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ScaleResolveMap {
     pub color: Option<ResolveMode>,
@@ -8101,7 +8101,7 @@ pub struct ScaleResolveMap {
     pub y: Option<ResolveMode>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct SelectionDef {
     /// When set, a selection is populated by input elements (also known as dynamic query
@@ -8241,7 +8241,7 @@ pub struct SelectionDef {
     pub zoom: Option<Translate>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct PurpleBinding {
     pub debounce: Option<f64>,
@@ -8268,7 +8268,7 @@ pub struct PurpleBinding {
     pub merge: Option<Vec<Stream>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Stream {
     pub between: Option<Vec<Stream>>,
@@ -8285,7 +8285,7 @@ pub struct Stream {
     pub merge: Option<Vec<Stream>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ClearDerivedStream {
     pub between: Option<Vec<Stream>>,
@@ -8308,7 +8308,7 @@ pub struct ClearDerivedStream {
 ///
 /// __See also:__ [`mark`](https://vega.github.io/vega-lite/docs/selection-mark.html)
 /// documentation.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct BrushConfig {
     /// The fill color of the interval mark.
@@ -8339,7 +8339,7 @@ pub struct BrushConfig {
     pub stroke_width: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct OnDerivedStream {
     pub between: Option<Vec<Stream>>,
@@ -8356,7 +8356,7 @@ pub struct OnDerivedStream {
     pub merge: Option<Vec<Stream>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct TitleParams {
     /// Horizontal text alignment for title text. One of `"left"`, `"center"`, or `"right"`.
@@ -8451,7 +8451,7 @@ pub struct TitleParams {
     pub zindex: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Transform {
     /// Array of objects that define fields to aggregate.
@@ -8736,7 +8736,7 @@ pub struct Transform {
     pub pivot: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct AggregatedFieldDef {
     /// The output field names to use for each aggregated field.
@@ -8754,7 +8754,7 @@ pub struct AggregatedFieldDef {
 }
 
 /// Data source or selection for secondary data reference.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Lookup {
     /// Secondary data source to lookup in.
@@ -8769,7 +8769,7 @@ pub struct Lookup {
 }
 
 /// Secondary data source to lookup in.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Data {
     /// An object that specifies the format for parsing the data.
@@ -8792,7 +8792,7 @@ pub struct Data {
     pub graticule: Option<Graticule>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct JoinAggregateFieldDef {
     /// The output name for the join aggregate operation.
@@ -8808,7 +8808,7 @@ pub struct JoinAggregateFieldDef {
 }
 
 /// A sort definition for transform
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct SortField {
     /// The name of the field to sort.
@@ -8820,7 +8820,7 @@ pub struct SortField {
     pub order: RemovableValue<SortOrder>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct WindowFieldDef {
     /// The output name for the window operation.
@@ -8845,7 +8845,7 @@ pub struct WindowFieldDef {
 /// An object defining the view background's fill and stroke.
 ///
 /// __Default value:__ none (transparent)
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ViewBackground {
     /// The radius in pixels of rounded rectangle corners.
@@ -8908,7 +8908,7 @@ pub struct ViewBackground {
     pub style: Option<PurpleText>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct RepeatMapping {
     /// An array of fields to be repeated horizontally.
@@ -8919,7 +8919,7 @@ pub struct RepeatMapping {
 
 /// Vega-Lite configuration object. This property can only be defined at the top-level of a
 /// specification.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Config {
     /// Area-Specific Config
@@ -9098,7 +9098,7 @@ pub struct Config {
 }
 
 /// Area-Specific Config
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct AreaConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
@@ -9420,7 +9420,7 @@ pub struct AreaConfig {
 /// X-axis specific config.
 ///
 /// Y-axis specific config.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct AxisConfig {
     /// An interpolation fraction indicating where, for `band` scales, axis ticks should be
@@ -9664,7 +9664,7 @@ pub struct AxisConfig {
 /// Image-specific Config
 ///
 /// Rect-Specific Config
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct RectConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
@@ -9960,7 +9960,7 @@ pub struct RectConfig {
 }
 
 /// Box Config
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct BoxPlotConfig {
     #[serde(rename = "box")]
@@ -9988,7 +9988,7 @@ pub struct BoxPlotConfig {
 /// Default configuration for the `facet` view composition operator
 ///
 /// Default configuration for the `repeat` view composition operator
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct CompositionConfig {
     /// The number of columns to include in the view composition layout.
@@ -10014,7 +10014,7 @@ pub struct CompositionConfig {
 }
 
 /// ErrorBand Config
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ErrorBandConfig {
     pub band: Option<DefBox>,
@@ -10055,7 +10055,7 @@ pub struct ErrorBandConfig {
 }
 
 /// ErrorBar Config
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ErrorBarConfig {
     /// The extent of the rule. Available options include:
@@ -10095,7 +10095,7 @@ pub struct ErrorBarConfig {
 ///
 /// For a full list of header configuration options, please see the [corresponding section of
 /// in the header documentation](https://vega.github.io/vega-lite/docs/header.html#config).
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct HeaderConfig {
     /// The text formatting pattern for labels of guides (axes, legends, headers) and text
@@ -10234,7 +10234,7 @@ pub struct HeaderConfig {
 /// [legends](https://vega.github.io/vega-lite/docs/legend.html). For a full list of legend
 /// configuration options, please see the [corresponding section of in the legend
 /// documentation](https://vega.github.io/vega-lite/docs/legend.html#config).
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct LegendConfig {
     /// The height in pixels to clip symbol legend entries and limit their size.
@@ -10539,7 +10539,7 @@ pub struct LegendConfig {
 }
 
 /// Legend orient group layout parameters.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct LegendLayout {
     /// The anchor point for legend orient group layout.
@@ -10568,13 +10568,13 @@ pub struct LegendLayout {
     pub top_right: Option<BaseLegendLayout>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct PurpleSignalRef {
     pub signal: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct BaseLegendLayout {
     /// The anchor point for legend orient group layout.
@@ -10594,7 +10594,7 @@ pub struct BaseLegendLayout {
 /// Line-Specific Config
 ///
 /// Trail-Specific Config
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct LineConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
@@ -10888,7 +10888,7 @@ pub struct LineConfig {
     pub y2: Option<YUnion>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct PaddingClass {
     pub bottom: Option<f64>,
@@ -10901,7 +10901,7 @@ pub struct PaddingClass {
 /// For a full list of scale range configuration options, please see the [corresponding
 /// section of the scale
 /// documentation](https://vega.github.io/vega-lite/docs/scale.html#config).
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct RangeConfig {
     /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for categorical data.
@@ -10922,7 +10922,7 @@ pub struct RangeConfig {
     pub symbol: Option<Vec<String>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct CategorySignalRef {
     pub signal: Option<String>,
@@ -10931,7 +10931,7 @@ pub struct CategorySignalRef {
     pub scheme: Option<ColorScheme>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct DivergingSignalRef {
     pub signal: Option<String>,
@@ -10940,7 +10940,7 @@ pub struct DivergingSignalRef {
     pub scheme: Option<ColorScheme>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct HeatmapSignalRef {
     pub signal: Option<String>,
@@ -10949,7 +10949,7 @@ pub struct HeatmapSignalRef {
     pub scheme: Option<ColorScheme>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct OrdinalSignalRef {
     pub signal: Option<String>,
@@ -10958,7 +10958,7 @@ pub struct OrdinalSignalRef {
     pub scheme: Option<ColorScheme>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct RampSignalRef {
     pub signal: Option<String>,
@@ -10971,7 +10971,7 @@ pub struct RampSignalRef {
 /// [scales](https://vega.github.io/vega-lite/docs/scale.html). For a full list of scale
 /// configuration options, please see the [corresponding section of the scale
 /// documentation](https://vega.github.io/vega-lite/docs/scale.html#config).
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ScaleConfig {
     /// Default inner padding for `x` and `y` band-ordinal scales.
@@ -11096,7 +11096,7 @@ pub struct ScaleConfig {
 }
 
 /// An object hash for defining default properties for each type of selections.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct SelectionConfig {
     /// The default definition for an
@@ -11132,7 +11132,7 @@ pub struct SelectionConfig {
 ///
 /// For instance, setting `interval` to `{"translate": false}` disables the ability to move
 /// interval selections by default.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct IntervalSelectionConfig {
     /// Establishes a two-way binding between the interval selection and the scales
@@ -11218,7 +11218,7 @@ pub struct IntervalSelectionConfig {
 ///
 /// For instance, setting `multi` to `{"toggle": "event.altKey"}` adds additional values to
 /// multi selections when clicking with the alt-key pressed by default.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct MultiSelectionConfig {
     /// When set, a selection is populated by interacting with the corresponding legend. Direct
@@ -11286,7 +11286,7 @@ pub struct MultiSelectionConfig {
     pub toggle: Option<Translate>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct LegendStreamBinding {
     pub legend: LegendUnion,
@@ -11299,7 +11299,7 @@ pub struct LegendStreamBinding {
 ///
 /// For instance, setting `single` to `{"on": "dblclick"}` populates single selections on
 /// double-click by default.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct SingleSelectionConfig {
     /// When set, a selection is populated by input elements (also known as dynamic query
@@ -11366,7 +11366,7 @@ pub struct SingleSelectionConfig {
     pub resolve: Option<SelectionResolution>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct FluffyBinding {
     pub debounce: Option<f64>,
@@ -11393,7 +11393,7 @@ pub struct FluffyBinding {
     pub merge: Option<Vec<Stream>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct BaseMarkConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
@@ -11616,7 +11616,7 @@ pub struct BaseMarkConfig {
 }
 
 /// Tick-Specific Config
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct TickConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
@@ -11910,7 +11910,7 @@ pub struct TickConfig {
 /// [titles](https://vega.github.io/vega-lite/docs/title.html). For a full list of title
 /// configuration options, please see the [corresponding section of the title
 /// documentation](https://vega.github.io/vega-lite/docs/title.html#config).
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ExcludeMappedValueRefBaseTitle {
     /// Horizontal text alignment for title text. One of `"left"`, `"center"`, or `"right"`.
@@ -11983,7 +11983,7 @@ pub struct ExcludeMappedValueRefBaseTitle {
 
 /// Default properties for [single view
 /// plots](https://vega.github.io/vega-lite/docs/spec.html#single).
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ViewConfig {
     /// Whether the view should be clipped.
@@ -12068,13 +12068,13 @@ pub struct ViewConfig {
     pub width: Option<f64>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct DiscreteHeightClass {
     pub step: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[derive(Debug, Clone, Serialize, Deserialize, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct DiscreteWidthClass {
     pub step: f64,
