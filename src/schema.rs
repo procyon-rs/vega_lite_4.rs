@@ -12,26 +12,17 @@
 
 #![allow(missing_docs, clippy::large_enum_variant)]
 
-// Example code that deserializes and serializes the model.
-// extern crate serde;
-// #[macro_use]
-// extern crate serde_derive;
-// extern crate serde_json;
-//
-// use generated_module::[object Object];
-//
-// fn main() {
-//     let json = r#"{"answer": 42}"#;
-//     let model: [object Object] = serde_json::from_str(&json).unwrap();
-// }
-
-extern crate serde_json;
+use crate::removable_value::RemovableValue;
+use derive_builder::Builder;
+use derive_more::From;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 /// A Vega-Lite top-level specification.
 /// This is the root class for all Vega-Lite specifications.
 /// (The json schema is generated from this type.)
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Vegalite {
     /// URL to [JSON schema](http://json-schema.org/) for a Vega-Lite specification. Unless you
     /// have a reason to change this, use `https://vega.github.io/schema/vega-lite/v4.json`.
@@ -240,13 +231,15 @@ pub struct Vegalite {
     pub hconcat: Option<Vec<Spec>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct RowColLayoutAlign {
     pub column: Option<LayoutAlign>,
     pub row: Option<LayoutAlign>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct AutoSizeParams {
     /// Determines how size calculation should be performed, one of `"content"` or `"padding"`.
     /// The default setting (`"content"`) interprets the width and height settings as the data
@@ -270,7 +263,8 @@ pub struct AutoSizeParams {
     pub auto_size_params_type: Option<Type>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct RowColBoolean {
     pub column: Option<bool>,
     pub row: Option<bool>,
@@ -297,7 +291,8 @@ pub struct RowColBoolean {
 /// Base interface for a vertical concatenation specification.
 ///
 /// Base interface for a horizontal concatenation specification.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct SpecClass {
     /// An object describing the data source. Set to `null` to ignore the parent's data source.
     /// If no data is set, it is derived from the parent.
@@ -490,7 +485,8 @@ pub struct SpecClass {
 /// Base interface for a vertical concatenation specification.
 ///
 /// Base interface for a horizontal concatenation specification.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Spec {
     /// The bounds calculation method to use for determining the extent of a sub-plot. One of
     /// `full` (the default) or `flush`.
@@ -664,7 +660,8 @@ pub struct Spec {
     pub hconcat: Option<Vec<Spec>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct UrlData {
     /// An object that specifies the format for parsing the data.
     pub format: Option<DataFormat>,
@@ -687,7 +684,8 @@ pub struct UrlData {
 }
 
 /// An object that specifies the format for parsing the data.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct DataFormat {
     /// If set to `null`, disable type inference based on the spec and only use type inference
     /// based on the data.
@@ -738,7 +736,8 @@ pub struct DataFormat {
     pub mesh: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct GraticuleParams {
     /// Sets both the major and minor extents to the same values.
     pub extent: Option<Vec<Vec<f64>>>,
@@ -768,7 +767,8 @@ pub struct GraticuleParams {
 }
 
 /// Generate a sequence of numbers.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct SequenceParams {
     /// The name of the generated sequence field.
     ///
@@ -785,14 +785,16 @@ pub struct SequenceParams {
     pub stop: f64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct SphereClass {}
 
 /// A key-value mapping between encoding channels and definition of fields.
 ///
 /// A shared key-value mapping between encoding channels and definition of fields in the
 /// underlying layers.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Encoding {
     /// Color of the marks – either fill or stroke color based on  the `filled` property of mark
     /// definition.
@@ -1000,7 +1002,8 @@ pub struct Encoding {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct DefWithConditionMarkPropFieldDefGradientStringNull {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -1097,7 +1100,7 @@ pub struct DefWithConditionMarkPropFieldDefGradientStringNull {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -1181,14 +1184,16 @@ pub struct DefWithConditionMarkPropFieldDefGradientStringNull {
     pub value: Option<ValueUnion>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ArgmDef {
     pub argmax: Option<String>,
     pub argmin: Option<String>,
 }
 
 /// Binning properties or boolean flag for determining whether to bin data or not.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct BinParams {
     /// A value in the binned domain at which to anchor the bins, shifting the bin boundaries if
     /// necessary to ensure that a boundary aligns with the anchor value.
@@ -1230,7 +1235,8 @@ pub struct BinParams {
     pub steps: Option<Vec<f64>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct BinExtentClass {
     /// The field name to extract selected values for, when a selection is
     /// [projected](https://vega.github.io/vega-lite/docs/project.html)
@@ -1244,7 +1250,8 @@ pub struct BinExtentClass {
     pub encoding: Option<SingleDefUnitChannel>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalValueDefGradientStringNull {
     /// Predicate for triggering the condition
     pub test: Option<PurpleLogicalOperandPredicate>,
@@ -1257,14 +1264,16 @@ pub struct ConditionalValueDefGradientStringNull {
     pub selection: Box<Option<Box<PurpleSelectionOperand>>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Selection {
     pub not: Box<Option<Box<PurpleSelectionOperand>>>,
     pub and: Option<Vec<SelectionOperandElement>>,
     pub or: Option<Vec<SelectionOperandElement>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Predicate {
     pub not: Option<PurpleLogicalOperandPredicate>,
     pub and: Option<Vec<LogicalOperandPredicateElement>>,
@@ -1302,7 +1311,8 @@ pub struct Predicate {
 /// If both month and quarter are provided, month has higher precedence.
 /// `day` cannot be combined with other date.
 /// We accept string for month and day names.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct DateTime {
     /// Integer value representing the date from 1-31.
     pub date: Option<f64>,
@@ -1336,7 +1346,8 @@ pub struct DateTime {
     pub year: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ValueLinearGradient {
     /// The type of gradient. Use `"linear"` for a linear gradient.
     ///
@@ -1393,7 +1404,8 @@ pub struct ValueLinearGradient {
     pub r2: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct GradientStop {
     /// The color value at this point in the gradient.
     pub color: String,
@@ -1401,7 +1413,8 @@ pub struct GradientStop {
     pub offset: f64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefGradientStringNullClass {
     /// Predicate for triggering the condition
     pub test: Option<PurpleLogicalOperandPredicate>,
@@ -1498,7 +1511,7 @@ pub struct ConditionalPredicateValueDefGradientStringNullClass {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -1579,13 +1592,15 @@ pub struct ConditionalPredicateValueDefGradientStringNullClass {
 }
 
 /// Reference to a repeated value.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct RepeatRef {
     pub repeat: RepeatEnum,
 }
 
 /// Properties of a legend or boolean flag for determining whether to show it.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Legend {
     /// The height in pixels to clip symbol legend entries and limit their size.
     #[serde(rename = "clipHeight")]
@@ -1899,7 +1914,8 @@ pub struct Legend {
     pub zindex: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Scale {
     /// The alignment of the steps within the scale range.
     ///
@@ -2097,7 +2113,8 @@ pub struct Scale {
     pub zero: Option<bool>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct DomainClass {
     /// The field name to extract selected values for, when a selection is
     /// [projected](https://vega.github.io/vega-lite/docs/project.html)
@@ -2111,20 +2128,23 @@ pub struct DomainClass {
     pub encoding: Option<SingleDefUnitChannel>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ScaleInterpolateParams {
     pub gamma: Option<f64>,
     #[serde(rename = "type")]
     pub scale_interpolate_params_type: ScaleInterpolateParamsType,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct NiceClass {
     pub interval: String,
     pub step: f64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct SchemeParams {
     /// The number of colors to use in the scheme. This can be useful for scale types such as
     /// `"quantize"`, which use the length of the scale range to determine the number of discrete
@@ -2141,7 +2161,8 @@ pub struct SchemeParams {
 }
 
 /// A sort definition for sorting a discrete scale in an encoding field definition.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct EncodingSortField {
     /// The data [field](https://vega.github.io/vega-lite/docs/field.html) to sort by.
     ///
@@ -2171,7 +2192,8 @@ pub struct EncodingSortField {
 /// A field definition for the horizontal facet of trellis plots.
 ///
 /// A field definition for the vertical facet of trellis plots.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct RowColumnEncodingFieldDef {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -2248,7 +2270,7 @@ pub struct RowColumnEncodingFieldDef {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -2335,7 +2357,8 @@ pub struct RowColumnEncodingFieldDef {
 /// An object defining properties of a facet's header.
 ///
 /// Headers of row / column channels for faceted plots.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Header {
     /// The text formatting pattern for labels of guides (axes, legends, headers) and text
     /// marks.
@@ -2488,7 +2511,8 @@ pub struct Header {
 }
 
 /// A sort definition for sorting a discrete scale in an encoding field definition.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct SortEncodingSortField {
     /// The data [field](https://vega.github.io/vega-lite/docs/field.html) to sort by.
     ///
@@ -2519,7 +2543,8 @@ pub struct SortEncodingSortField {
 /// A data field to use as a unique key for data binding. When a visualization’s data is
 /// updated, the key value will be used to match data elements to existing mark instances.
 /// Use a key channel to enable object constancy for transitions over dynamic data.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct TypedFieldDef {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -2632,7 +2657,8 @@ pub struct TypedFieldDef {
 /// A field definition for the (flexible) facet of trellis plots.
 ///
 /// If either `row` or `column` is specified, this channel will be ignored.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct FacetEncodingFieldDef {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -2742,7 +2768,7 @@ pub struct FacetEncodingFieldDef {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -2828,7 +2854,8 @@ pub struct FacetEncodingFieldDef {
     pub facet_encoding_field_def_type: StandardType,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct RowColNumber {
     pub column: Option<f64>,
     pub row: Option<f64>,
@@ -2870,7 +2897,8 @@ pub struct RowColNumber {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct DefWithConditionMarkPropFieldDefNumber {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -2967,7 +2995,7 @@ pub struct DefWithConditionMarkPropFieldDefNumber {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -3051,7 +3079,8 @@ pub struct DefWithConditionMarkPropFieldDefNumber {
     pub value: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalNumberValueDef {
     /// Predicate for triggering the condition
     pub test: Option<PurpleLogicalOperandPredicate>,
@@ -3064,7 +3093,8 @@ pub struct ConditionalNumberValueDef {
     pub selection: Box<Option<Box<PurpleSelectionOperand>>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalDef {
     /// Predicate for triggering the condition
     pub test: Option<PurpleLogicalOperandPredicate>,
@@ -3161,7 +3191,7 @@ pub struct ConditionalDef {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -3251,7 +3281,8 @@ pub struct ConditionalDef {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct HrefClass {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -3406,7 +3437,8 @@ pub struct HrefClass {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionElement {
     /// Predicate for triggering the condition
     pub test: Option<PurpleLogicalOperandPredicate>,
@@ -3419,7 +3451,8 @@ pub struct ConditionElement {
     pub selection: Box<Option<Box<PurpleSelectionOperand>>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefStringClass {
     /// Predicate for triggering the condition
     pub test: Option<PurpleLogicalOperandPredicate>,
@@ -3516,7 +3549,7 @@ pub struct ConditionalPredicateValueDefStringClass {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -3602,7 +3635,8 @@ pub struct ConditionalPredicateValueDefStringClass {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct LatitudeClass {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -3737,7 +3771,8 @@ pub struct LatitudeClass {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Latitude2Class {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -3818,7 +3853,8 @@ pub struct Latitude2Class {
     pub value: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct OrderFieldDef {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -3932,7 +3968,8 @@ pub struct OrderFieldDef {
 
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct OrderFieldDefClass {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -4072,7 +4109,8 @@ pub struct OrderFieldDefClass {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct DefWithConditionMarkPropFieldDefTypeForShapeStringNull {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -4169,7 +4207,7 @@ pub struct DefWithConditionMarkPropFieldDefTypeForShapeStringNull {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -4254,7 +4292,8 @@ pub struct DefWithConditionMarkPropFieldDefTypeForShapeStringNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalStringValueDef {
     /// Predicate for triggering the condition
     pub test: Option<PurpleLogicalOperandPredicate>,
@@ -4267,7 +4306,8 @@ pub struct ConditionalStringValueDef {
     pub selection: Box<Option<Box<PurpleSelectionOperand>>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateMarkPropFieldDefTypeForShapeClass {
     /// Predicate for triggering the condition
     pub test: Option<PurpleLogicalOperandPredicate>,
@@ -4364,7 +4404,7 @@ pub struct ConditionalPredicateMarkPropFieldDefTypeForShapeClass {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -4452,7 +4492,8 @@ pub struct ConditionalPredicateMarkPropFieldDefTypeForShapeClass {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct DefWithConditionStringFieldDefText {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -4607,7 +4648,8 @@ pub struct DefWithConditionStringFieldDefText {
     pub value: Option<PurpleText>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalValueDefText {
     /// Predicate for triggering the condition
     pub test: Option<PurpleLogicalOperandPredicate>,
@@ -4620,7 +4662,8 @@ pub struct ConditionalValueDefText {
     pub selection: Box<Option<Box<PurpleSelectionOperand>>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefTextClass {
     /// Predicate for triggering the condition
     pub test: Option<PurpleLogicalOperandPredicate>,
@@ -4771,7 +4814,8 @@ pub struct ConditionalPredicateValueDefTextClass {
     pub conditional_type: Option<StandardType>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct StringFieldDef {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -4919,7 +4963,8 @@ pub struct StringFieldDef {
 /// field: ...,
 /// ...
 /// }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct FieldDefWithConditionStringFieldDefString {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -5082,7 +5127,8 @@ pub struct FieldDefWithConditionStringFieldDefString {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct XClass {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -5187,7 +5233,7 @@ pub struct XClass {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -5295,7 +5341,8 @@ pub struct XClass {
     pub value: Option<XUnion>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Axis {
     /// An interpolation fraction indicating where, for `band` scales, axis ticks should be
     /// positioned. A value of `0` places ticks at the left edge of their bands. A value of `0.5`
@@ -5619,7 +5666,8 @@ pub struct Axis {
     pub zindex: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyColorNull {
     pub condition: ConditionalAxisPropertyColorNullCondition,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
@@ -5628,7 +5676,8 @@ pub struct ConditionalAxisPropertyColorNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefColorNull {
     /// Predicate for triggering the condition
     pub test: LogicalOperandPredicateElement,
@@ -5638,7 +5687,8 @@ pub struct ConditionalPredicateValueDefColorNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyNumberNull {
     pub condition: ConditionalAxisPropertyNumberNullCondition,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
@@ -5647,7 +5697,8 @@ pub struct ConditionalAxisPropertyNumberNull {
     pub value: Option<Vec<f64>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefNumberNull {
     /// Predicate for triggering the condition
     pub test: LogicalOperandPredicateElement,
@@ -5657,7 +5708,8 @@ pub struct ConditionalPredicateValueDefNumberNull {
     pub value: Option<Vec<f64>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyNumberNullClass {
     pub condition: ConditionalAxisPropertyNumberNullConditionUnion,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
@@ -5666,7 +5718,8 @@ pub struct ConditionalAxisPropertyNumberNullClass {
     pub value: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefNumberNullElement {
     /// Predicate for triggering the condition
     pub test: LogicalOperandPredicateElement,
@@ -5676,7 +5729,8 @@ pub struct ConditionalPredicateValueDefNumberNullElement {
     pub value: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyTextBaselineNull {
     pub condition: ConditionalAxisPropertyTextBaselineNullCondition,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
@@ -5685,7 +5739,8 @@ pub struct ConditionalAxisPropertyTextBaselineNull {
     pub value: Option<Baseline>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefTextBaselineNull {
     /// Predicate for triggering the condition
     pub test: LogicalOperandPredicateElement,
@@ -5695,7 +5750,8 @@ pub struct ConditionalPredicateValueDefTextBaselineNull {
     pub value: Option<Baseline>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyStringNull {
     pub condition: ConditionalAxisPropertyStringNullCondition,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
@@ -5704,7 +5760,8 @@ pub struct ConditionalAxisPropertyStringNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateStringValueDef {
     /// Predicate for triggering the condition
     pub test: LogicalOperandPredicateElement,
@@ -5714,7 +5771,8 @@ pub struct ConditionalPredicateStringValueDef {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyFontStyleNull {
     pub condition: ConditionalAxisPropertyFontStyleNullCondition,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
@@ -5723,7 +5781,8 @@ pub struct ConditionalAxisPropertyFontStyleNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefFontStyleNull {
     /// Predicate for triggering the condition
     pub test: LogicalOperandPredicateElement,
@@ -5733,7 +5792,8 @@ pub struct ConditionalPredicateValueDefFontStyleNull {
     pub value: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalAxisPropertyFontWeightNull {
     pub condition: ConditionalAxisPropertyFontWeightNullCondition,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
@@ -5742,7 +5802,8 @@ pub struct ConditionalAxisPropertyFontWeightNull {
     pub value: Option<FontWeight>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ConditionalPredicateValueDefFontWeightNull {
     /// Predicate for triggering the condition
     pub test: LogicalOperandPredicateElement,
@@ -5752,7 +5813,8 @@ pub struct ConditionalPredicateValueDefFontWeightNull {
     pub value: Option<FontWeight>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ImputeParams {
     /// A frame specification as a two-element array used to control the window over which the
     /// specified method is applied. The array entries should either be a number indicating the
@@ -5783,7 +5845,8 @@ pub struct ImputeParams {
     pub value: Option<serde_json::Value>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ImputeSequence {
     /// The starting value of the sequence.
     /// __Default value:__ `0`
@@ -5805,7 +5868,8 @@ pub struct ImputeSequence {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct X2Class {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -5894,7 +5958,8 @@ pub struct X2Class {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct YClass {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -5999,7 +6064,7 @@ pub struct YClass {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -6117,7 +6182,8 @@ pub struct YClass {
 ///
 /// Definition object for a constant value (primitive value or gradient definition) of an
 /// encoding channel.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Y2Class {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -6207,7 +6273,8 @@ pub struct Y2Class {
 /// A field definition for the horizontal facet of trellis plots.
 ///
 /// A field definition for the vertical facet of trellis plots.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Facet {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -6266,7 +6333,7 @@ pub struct Facet {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -6351,7 +6418,8 @@ pub struct Facet {
 /// A field definition for the horizontal facet of trellis plots.
 ///
 /// A field definition for the vertical facet of trellis plots.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct FacetFieldDef {
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
@@ -6410,7 +6478,7 @@ pub struct FacetFieldDef {
     /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
     /// sort order will obey the values in the array, followed by any unspecified values in their
     /// original order. For discrete time field, values in the sort array can be [date-time
-    /// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
     /// the values can be the month or day names (case insensitive) or their 3-letter initials
     /// (e.g., `"Mon"`, `"Tue"`).
     /// - `null` indicating no sort.
@@ -6488,7 +6556,8 @@ pub struct FacetFieldDef {
     pub facet_field_def_type: StandardType,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Step {
     /// The size (width/height) per discrete step.
     pub step: f64,
@@ -6501,7 +6570,8 @@ pub struct Step {
 /// marks](https://vega.github.io/vega-lite/docs/mark.html#types).
 ///
 /// Base interface for a unit (single-view) specification.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct LayerSpec {
     /// An object describing the data source. Set to `null` to ignore the parent's data source.
     /// If no data is set, it is derived from the parent.
@@ -6588,7 +6658,8 @@ pub struct LayerSpec {
 /// underlying layers.
 ///
 /// A key-value mapping between encoding channels and definition of fields.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct LayerEncoding {
     /// Color of the marks – either fill or stroke color based on  the `filled` property of mark
     /// definition.
@@ -6751,10 +6822,11 @@ pub struct LayerEncoding {
     pub y_error2: Option<Latitude2Class>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BoxPlotDefClass {
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct MarkDefClass {
     #[serde(rename = "box")]
-    pub def_box: Option<Box>,
+    pub def_box: Option<DefBox>,
     /// Whether a composite mark be clipped to the enclosing group’s width and height.
     ///
     /// Whether a mark be clipped to the enclosing group’s width and height.
@@ -6798,7 +6870,7 @@ pub struct BoxPlotDefClass {
     ///
     /// __Default value:__ `"stderr"`.
     pub extent: Option<BoxPlotDefExtent>,
-    pub median: Option<Box>,
+    pub median: Option<DefBox>,
     /// The opacity (value between [0,1]) of the mark.
     ///
     /// The overall opacity (value between [0,1]).
@@ -6829,8 +6901,8 @@ pub struct BoxPlotDefClass {
     /// For stacked charts, this is always determined by the orientation of the stack;
     /// therefore explicitly specified value will be ignored.
     pub orient: Option<Orientation>,
-    pub outliers: Option<Box>,
-    pub rule: Option<Box>,
+    pub outliers: Option<DefBox>,
+    pub rule: Option<DefBox>,
     /// Size of the box and median tick of a box plot
     ///
     /// Default size for marks.
@@ -6846,15 +6918,15 @@ pub struct BoxPlotDefClass {
     /// - `5` for bar marks with continuous dimensions;
     /// - `11` for text marks.
     pub size: Option<f64>,
-    pub ticks: Option<Box>,
+    pub ticks: Option<DefBox>,
     /// The mark type. This could a primitive mark type
     /// (one of `"bar"`, `"circle"`, `"square"`, `"tick"`, `"line"`,
     /// `"area"`, `"point"`, `"geoshape"`, `"rule"`, and `"text"`)
     /// or a composite mark type (`"boxplot"`, `"errorband"`, `"errorbar"`).
     #[serde(rename = "type")]
     pub def_type: BoxPlot,
-    pub band: Option<Box>,
-    pub borders: Option<Box>,
+    pub band: Option<DefBox>,
+    pub borders: Option<DefBox>,
     /// The line interpolation method for the error band. One of the following:
     /// - `"linear"`: piecewise linear segments, as in a polyline.
     /// - `"linear-closed"`: close the linear segments to form a polygon.
@@ -7188,7 +7260,8 @@ pub struct BoxPlotDefClass {
 /// Square-Specific Config
 ///
 /// Text-Specific Config
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct MarkConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
     /// of `"left"`, `"right"`, `"center"`.
@@ -7467,7 +7540,8 @@ pub struct MarkConfig {
     pub y2: Option<YUnion>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ColorLinearGradient {
     /// The type of gradient. Use `"linear"` for a linear gradient.
     ///
@@ -7524,7 +7598,8 @@ pub struct ColorLinearGradient {
     pub r2: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct FillLinearGradient {
     /// The type of gradient. Use `"linear"` for a linear gradient.
     ///
@@ -7581,12 +7656,14 @@ pub struct FillLinearGradient {
     pub r2: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct TooltipContent {
     pub content: Content,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct OverlayMarkDef {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
     /// of `"left"`, `"right"`, `"center"`.
@@ -7904,7 +7981,8 @@ pub struct OverlayMarkDef {
 /// and to `latitude` and `"longitude"` channels for other marks.
 ///
 /// An object defining properties of the geographic projection shared by underlying layers.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Projection {
     /// The projection’s center to the specified center, a two-element array of longitude and
     /// latitude in degrees.
@@ -7972,20 +8050,23 @@ pub struct Projection {
 /// Defines how scales, axes, and legends from different specs should be combined. Resolve is
 /// a mapping from `scale`, `axis`, and `legend` to a mapping from channels to resolutions.
 /// Scales and guides can be resolved to be `"independent"` or `"shared"`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Resolve {
     pub axis: Option<AxisResolveMap>,
     pub legend: Option<LegendResolveMap>,
     pub scale: Option<ScaleResolveMap>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct AxisResolveMap {
     pub x: Option<ResolveMode>,
     pub y: Option<ResolveMode>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct LegendResolveMap {
     pub color: Option<ResolveMode>,
     pub fill: Option<ResolveMode>,
@@ -8001,7 +8082,8 @@ pub struct LegendResolveMap {
     pub stroke_width: Option<ResolveMode>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ScaleResolveMap {
     pub color: Option<ResolveMode>,
     pub fill: Option<ResolveMode>,
@@ -8019,7 +8101,8 @@ pub struct ScaleResolveMap {
     pub y: Option<ResolveMode>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct SelectionDef {
     /// When set, a selection is populated by input elements (also known as dynamic query
     /// widgets)
@@ -8158,7 +8241,8 @@ pub struct SelectionDef {
     pub zoom: Option<Translate>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct PurpleBinding {
     pub debounce: Option<f64>,
     pub element: Option<String>,
@@ -8184,7 +8268,8 @@ pub struct PurpleBinding {
     pub merge: Option<Vec<Stream>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Stream {
     pub between: Option<Vec<Stream>>,
     pub consume: Option<bool>,
@@ -8200,7 +8285,8 @@ pub struct Stream {
     pub merge: Option<Vec<Stream>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ClearDerivedStream {
     pub between: Option<Vec<Stream>>,
     pub consume: Option<bool>,
@@ -8222,7 +8308,8 @@ pub struct ClearDerivedStream {
 ///
 /// __See also:__ [`mark`](https://vega.github.io/vega-lite/docs/selection-mark.html)
 /// documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct BrushConfig {
     /// The fill color of the interval mark.
     ///
@@ -8252,7 +8339,8 @@ pub struct BrushConfig {
     pub stroke_width: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct OnDerivedStream {
     pub between: Option<Vec<Stream>>,
     pub consume: Option<bool>,
@@ -8268,7 +8356,8 @@ pub struct OnDerivedStream {
     pub merge: Option<Vec<Stream>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct TitleParams {
     /// Horizontal text alignment for title text. One of `"left"`, `"center"`, or `"right"`.
     pub align: Option<Align>,
@@ -8362,7 +8451,8 @@ pub struct TitleParams {
     pub zindex: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Transform {
     /// Array of objects that define fields to aggregate.
     pub aggregate: Option<Vec<AggregatedFieldDef>>,
@@ -8646,7 +8736,8 @@ pub struct Transform {
     pub pivot: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct AggregatedFieldDef {
     /// The output field names to use for each aggregated field.
     #[serde(rename = "as")]
@@ -8663,7 +8754,8 @@ pub struct AggregatedFieldDef {
 }
 
 /// Data source or selection for secondary data reference.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Lookup {
     /// Secondary data source to lookup in.
     pub data: Option<Data>,
@@ -8677,7 +8769,8 @@ pub struct Lookup {
 }
 
 /// Secondary data source to lookup in.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Data {
     /// An object that specifies the format for parsing the data.
     pub format: Option<DataFormat>,
@@ -8699,7 +8792,8 @@ pub struct Data {
     pub graticule: Option<Graticule>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct JoinAggregateFieldDef {
     /// The output name for the join aggregate operation.
     #[serde(rename = "as")]
@@ -8714,7 +8808,8 @@ pub struct JoinAggregateFieldDef {
 }
 
 /// A sort definition for transform
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct SortField {
     /// The name of the field to sort.
     pub field: String,
@@ -8725,7 +8820,8 @@ pub struct SortField {
     pub order: RemovableValue<SortOrder>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct WindowFieldDef {
     /// The output name for the window operation.
     #[serde(rename = "as")]
@@ -8749,7 +8845,8 @@ pub struct WindowFieldDef {
 /// An object defining the view background's fill and stroke.
 ///
 /// __Default value:__ none (transparent)
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ViewBackground {
     /// The radius in pixels of rounded rectangle corners.
     ///
@@ -8811,7 +8908,8 @@ pub struct ViewBackground {
     pub style: Option<PurpleText>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct RepeatMapping {
     /// An array of fields to be repeated horizontally.
     pub column: Option<Vec<String>>,
@@ -8821,7 +8919,8 @@ pub struct RepeatMapping {
 
 /// Vega-Lite configuration object. This property can only be defined at the top-level of a
 /// specification.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct Config {
     /// Area-Specific Config
     pub area: Option<AreaConfig>,
@@ -8999,7 +9098,8 @@ pub struct Config {
 }
 
 /// Area-Specific Config
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct AreaConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
     /// of `"left"`, `"right"`, `"center"`.
@@ -9320,7 +9420,8 @@ pub struct AreaConfig {
 /// X-axis specific config.
 ///
 /// Y-axis specific config.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct AxisConfig {
     /// An interpolation fraction indicating where, for `band` scales, axis ticks should be
     /// positioned. A value of `0` places ticks at the left edge of their bands. A value of `0.5`
@@ -9563,7 +9664,8 @@ pub struct AxisConfig {
 /// Image-specific Config
 ///
 /// Rect-Specific Config
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct RectConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
     /// of `"left"`, `"right"`, `"center"`.
@@ -9858,10 +9960,11 @@ pub struct RectConfig {
 }
 
 /// Box Config
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct BoxPlotConfig {
     #[serde(rename = "box")]
-    pub box_plot_config_box: Option<Box>,
+    pub box_plot_config_box: Option<DefBox>,
     /// The extent of the whiskers. Available options include:
     /// - `"min-max"`: min and max are the lower and upper whiskers respectively.
     /// - A number representing multiple of the interquartile range. This number will be
@@ -9871,12 +9974,12 @@ pub struct BoxPlotConfig {
     ///
     /// __Default value:__ `1.5`.
     pub extent: Option<BoxplotExtent>,
-    pub median: Option<Box>,
-    pub outliers: Option<Box>,
-    pub rule: Option<Box>,
+    pub median: Option<DefBox>,
+    pub outliers: Option<DefBox>,
+    pub rule: Option<DefBox>,
     /// Size of the box and median tick of a box plot
     pub size: Option<f64>,
-    pub ticks: Option<Box>,
+    pub ticks: Option<DefBox>,
 }
 
 /// Default configuration for all concatenation view composition operators (`concat`,
@@ -9885,7 +9988,8 @@ pub struct BoxPlotConfig {
 /// Default configuration for the `facet` view composition operator
 ///
 /// Default configuration for the `repeat` view composition operator
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct CompositionConfig {
     /// The number of columns to include in the view composition layout.
     ///
@@ -9910,10 +10014,11 @@ pub struct CompositionConfig {
 }
 
 /// ErrorBand Config
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ErrorBandConfig {
-    pub band: Option<Box>,
-    pub borders: Option<Box>,
+    pub band: Option<DefBox>,
+    pub borders: Option<DefBox>,
     /// The extent of the band. Available options include:
     /// - `"ci"`: Extend the band to the confidence interval of the mean.
     /// - `"stderr"`: The size of band are set to the value of standard error, extending from the
@@ -9950,7 +10055,8 @@ pub struct ErrorBandConfig {
 }
 
 /// ErrorBar Config
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ErrorBarConfig {
     /// The extent of the rule. Available options include:
     /// - `"ci"`: Extend the rule to the confidence interval of the mean.
@@ -9962,8 +10068,8 @@ pub struct ErrorBarConfig {
     ///
     /// __Default value:__ `"stderr"`.
     pub extent: Option<ErrorbandExtent>,
-    pub rule: Option<Box>,
-    pub ticks: Option<Box>,
+    pub rule: Option<DefBox>,
+    pub ticks: Option<DefBox>,
 }
 
 /// Header configuration, which determines default properties for all
@@ -9989,7 +10095,8 @@ pub struct ErrorBarConfig {
 ///
 /// For a full list of header configuration options, please see the [corresponding section of
 /// in the header documentation](https://vega.github.io/vega-lite/docs/header.html#config).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct HeaderConfig {
     /// The text formatting pattern for labels of guides (axes, legends, headers) and text
     /// marks.
@@ -10127,7 +10234,8 @@ pub struct HeaderConfig {
 /// [legends](https://vega.github.io/vega-lite/docs/legend.html). For a full list of legend
 /// configuration options, please see the [corresponding section of in the legend
 /// documentation](https://vega.github.io/vega-lite/docs/legend.html#config).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct LegendConfig {
     /// The height in pixels to clip symbol legend entries and limit their size.
     #[serde(rename = "clipHeight")]
@@ -10431,7 +10539,8 @@ pub struct LegendConfig {
 }
 
 /// Legend orient group layout parameters.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct LegendLayout {
     /// The anchor point for legend orient group layout.
     pub anchor: Option<AnchorUnion>,
@@ -10459,12 +10568,14 @@ pub struct LegendLayout {
     pub top_right: Option<BaseLegendLayout>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct PurpleSignalRef {
     pub signal: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct BaseLegendLayout {
     /// The anchor point for legend orient group layout.
     pub anchor: Option<AnchorUnion>,
@@ -10483,7 +10594,8 @@ pub struct BaseLegendLayout {
 /// Line-Specific Config
 ///
 /// Trail-Specific Config
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct LineConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
     /// of `"left"`, `"right"`, `"center"`.
@@ -10776,7 +10888,8 @@ pub struct LineConfig {
     pub y2: Option<YUnion>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct PaddingClass {
     pub bottom: Option<f64>,
     pub left: Option<f64>,
@@ -10788,7 +10901,8 @@ pub struct PaddingClass {
 /// For a full list of scale range configuration options, please see the [corresponding
 /// section of the scale
 /// documentation](https://vega.github.io/vega-lite/docs/scale.html#config).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct RangeConfig {
     /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for categorical data.
     pub category: Option<CategoryUnion>,
@@ -10808,7 +10922,8 @@ pub struct RangeConfig {
     pub symbol: Option<Vec<String>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct CategorySignalRef {
     pub signal: Option<String>,
     pub count: Option<MarginUnion>,
@@ -10816,7 +10931,8 @@ pub struct CategorySignalRef {
     pub scheme: Option<ColorScheme>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct DivergingSignalRef {
     pub signal: Option<String>,
     pub count: Option<MarginUnion>,
@@ -10824,7 +10940,8 @@ pub struct DivergingSignalRef {
     pub scheme: Option<ColorScheme>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct HeatmapSignalRef {
     pub signal: Option<String>,
     pub count: Option<MarginUnion>,
@@ -10832,7 +10949,8 @@ pub struct HeatmapSignalRef {
     pub scheme: Option<ColorScheme>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct OrdinalSignalRef {
     pub signal: Option<String>,
     pub count: Option<MarginUnion>,
@@ -10840,7 +10958,8 @@ pub struct OrdinalSignalRef {
     pub scheme: Option<ColorScheme>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct RampSignalRef {
     pub signal: Option<String>,
     pub count: Option<MarginUnion>,
@@ -10852,7 +10971,8 @@ pub struct RampSignalRef {
 /// [scales](https://vega.github.io/vega-lite/docs/scale.html). For a full list of scale
 /// configuration options, please see the [corresponding section of the scale
 /// documentation](https://vega.github.io/vega-lite/docs/scale.html#config).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ScaleConfig {
     /// Default inner padding for `x` and `y` band-ordinal scales.
     ///
@@ -10976,7 +11096,8 @@ pub struct ScaleConfig {
 }
 
 /// An object hash for defining default properties for each type of selections.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct SelectionConfig {
     /// The default definition for an
     /// [`interval`](https://vega.github.io/vega-lite/docs/selection.html#type) selection. All
@@ -11011,7 +11132,8 @@ pub struct SelectionConfig {
 ///
 /// For instance, setting `interval` to `{"translate": false}` disables the ability to move
 /// interval selections by default.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct IntervalSelectionConfig {
     /// Establishes a two-way binding between the interval selection and the scales
     /// used within the same view. This allows a user to interactively pan and
@@ -11096,7 +11218,8 @@ pub struct IntervalSelectionConfig {
 ///
 /// For instance, setting `multi` to `{"toggle": "event.altKey"}` adds additional values to
 /// multi selections when clicking with the alt-key pressed by default.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct MultiSelectionConfig {
     /// When set, a selection is populated by interacting with the corresponding legend. Direct
     /// manipulation interaction is disabled by default;
@@ -11163,7 +11286,8 @@ pub struct MultiSelectionConfig {
     pub toggle: Option<Translate>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct LegendStreamBinding {
     pub legend: LegendUnion,
 }
@@ -11175,7 +11299,8 @@ pub struct LegendStreamBinding {
 ///
 /// For instance, setting `single` to `{"on": "dblclick"}` populates single selections on
 /// double-click by default.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct SingleSelectionConfig {
     /// When set, a selection is populated by input elements (also known as dynamic query
     /// widgets)
@@ -11241,7 +11366,8 @@ pub struct SingleSelectionConfig {
     pub resolve: Option<SelectionResolution>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct FluffyBinding {
     pub debounce: Option<f64>,
     pub element: Option<String>,
@@ -11267,7 +11393,8 @@ pub struct FluffyBinding {
     pub merge: Option<Vec<Stream>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct BaseMarkConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
     /// of `"left"`, `"right"`, `"center"`.
@@ -11489,7 +11616,8 @@ pub struct BaseMarkConfig {
 }
 
 /// Tick-Specific Config
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct TickConfig {
     /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
     /// of `"left"`, `"right"`, `"center"`.
@@ -11782,7 +11910,8 @@ pub struct TickConfig {
 /// [titles](https://vega.github.io/vega-lite/docs/title.html). For a full list of title
 /// configuration options, please see the [corresponding section of the title
 /// documentation](https://vega.github.io/vega-lite/docs/title.html#config).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ExcludeMappedValueRefBaseTitle {
     /// Horizontal text alignment for title text. One of `"left"`, `"center"`, or `"right"`.
     pub align: Option<Align>,
@@ -11854,7 +11983,8 @@ pub struct ExcludeMappedValueRefBaseTitle {
 
 /// Default properties for [single view
 /// plots](https://vega.github.io/vega-lite/docs/spec.html#single).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct ViewConfig {
     /// Whether the view should be clipped.
     pub clip: Option<bool>,
@@ -11938,12 +12068,14 @@ pub struct ViewConfig {
     pub width: Option<f64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct DiscreteHeightClass {
     pub step: f64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
 pub struct DiscreteWidthClass {
     pub step: f64,
 }
@@ -11963,8 +12095,9 @@ pub struct DiscreteWidthClass {
 /// used to supply different alignments for rows and columns.
 ///
 /// __Default value:__ `"all"`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum AlignUnion {
     Enum(LayoutAlign),
     RowColLayoutAlign(RowColLayoutAlign),
@@ -11976,31 +12109,35 @@ pub enum AlignUnion {
 /// resizing.
 ///
 /// __Default value__: `pad`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum AutosizeType {
     AutoSizeParams(AutoSizeParams),
     Enum(Type),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum VegaliteCenter {
     Bool(bool),
     RowColBoolean(RowColBoolean),
 }
 
 /// Generate graticule GeoJSON data for geographic reference lines.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Graticule {
     Bool(bool),
     GraticuleParams(GraticuleParams),
 }
 
 /// Generate sphere GeoJSON data for the full globe.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum SphereUnion {
     Bool(bool),
     SphereClass(SphereClass),
@@ -12010,17 +12147,20 @@ pub enum SphereUnion {
 /// an object, or a string.
 /// Arrays of primitive values are ingested as objects with a `data` property. Strings are
 /// parsed according to the specified format type.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum UrlDataInlineDataset {
     AnythingMap(HashMap<String, Option<serde_json::Value>>),
     String(String),
-    UnionArray(Vec<InlineDataset>),
+    UnionArray(Vec<serde_json::value::Value>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum InlineDataset {
+#[derive(From)]
+#[allow(unused)]
+enum UnusedInlineDataset {
     AnythingMap(HashMap<String, Option<serde_json::Value>>),
     Bool(bool),
     Double(f64),
@@ -12034,31 +12174,35 @@ pub enum InlineDataset {
 ///
 /// __See also:__ [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html)
 /// documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Aggregate {
     ArgmDef(ArgmDef),
     Enum(NonArgAggregateOp),
 }
 
 /// An object indicating bin properties, or simply `true` for using default bin parameters.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum PurpleBin {
     BinParams(BinParams),
     Bool(bool),
 }
 
 /// A two-element (`[min, max]`) array indicating the range of desired bin values.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum BinExtent {
     BinExtentClass(BinExtentClass),
     DoubleArray(Vec<f64>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ColorCondition {
     ConditionalPredicateValueDefGradientStringNullClass(
         ConditionalPredicateValueDefGradientStringNullClass,
@@ -12070,8 +12214,9 @@ pub enum ColorCondition {
 ///
 /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
 /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum SelectionOperandElement {
     Selection(Selection),
     String(String),
@@ -12081,8 +12226,9 @@ pub enum SelectionOperandElement {
 ///
 /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
 /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum PurpleSelectionOperand {
     Selection(Selection),
     String(String),
@@ -12109,8 +12255,9 @@ pub enum PurpleSelectionOperand {
 /// predicate](https://vega.github.io/vega-lite/docs/filter.html#selection-predicate)
 ///
 /// 4) a logical operand that combines (1), (2), or (3).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum LogicalOperandPredicateElement {
     Predicate(Box<Predicate>),
     String(String),
@@ -12137,15 +12284,17 @@ pub enum LogicalOperandPredicateElement {
 /// predicate](https://vega.github.io/vega-lite/docs/filter.html#selection-predicate)
 ///
 /// 4) a logical operand that combines (1), (2), or (3).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum PurpleLogicalOperandPredicate {
     Predicate(Box<Predicate>),
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum SelectionInit {
     Bool(bool),
     DateTime(DateTime),
@@ -12160,8 +12309,9 @@ pub enum SelectionInit {
 ///
 /// **Warning:** A DateTime definition object with `day`** should not be combined with
 /// `year`, `quarter`, `month`, or `date`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Day {
     Double(f64),
     String(String),
@@ -12171,23 +12321,26 @@ pub enum Day {
 /// (1) integer value representing the month from `1`-`12`. `1` represents January;
 /// (2) case-insensitive month name (e.g., `"January"`);
 /// (3) case-insensitive, 3-character short month name (e.g., `"Jan"`).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Month {
     Double(f64),
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Lt {
     DateTime(DateTime),
     Double(f64),
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Equal {
     Bool(bool),
     DateTime(DateTime),
@@ -12195,15 +12348,17 @@ pub enum Equal {
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum PurpleRange {
     DateTime(DateTime),
     Double(f64),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ValueUnion {
     String(String),
     ValueLinearGradient(ValueLinearGradient),
@@ -12228,8 +12383,9 @@ pub enum ValueUnion {
 ///
 /// __Default value:__ If unspecified, defaults to the field specified in the outer data
 /// reference.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Field {
     RepeatRef(RepeatRef),
     String(String),
@@ -12262,8 +12418,9 @@ pub enum Field {
 /// Font weight for subtitle text.
 /// This can be either a string (e.g `"bold"`, `"normal"`) or a number (`100`, `200`, `300`,
 /// ..., `900` where `"normal"` = `400` and `"bold"` = `700`).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum FontWeight {
     Double(f64),
     Enum(FontWeightEnum),
@@ -12293,15 +12450,17 @@ pub enum FontWeight {
 /// better for log-scaled axes).
 ///
 /// __Default value:__ `true`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum LabelOverlap {
     Bool(bool),
     Enum(LabelOverlapEnum),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum TickCount {
     Double(f64),
     Enum(TimeInterval),
@@ -12346,8 +12505,9 @@ pub enum TickCount {
 ///
 /// __Default value:__ `"cell"`
 /// __Note:__ Any specified view background properties will augment the default style.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum PurpleText {
     String(String),
     StringArray(Vec<String>),
@@ -12372,8 +12532,9 @@ pub enum PurpleText {
 /// The `selection` property can be used to [interactively
 /// determine](https://vega.github.io/vega-lite/docs/selection.html#scale-domains) the scale
 /// domain.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum DomainUnion {
     DomainClass(DomainClass),
     Enum(Domain),
@@ -12390,8 +12551,9 @@ pub enum DomainUnion {
 /// documentation](https://github.com/d3/d3-interpolate).
 ///
 /// * __Default value:__ `hcl`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum InterpolateUnion {
     Enum(ScaleInterpolate),
     ScaleInterpolateParams(ScaleInterpolateParams),
@@ -12416,8 +12578,9 @@ pub enum InterpolateUnion {
 /// snap to quarter (Jan, Apr, Jul, Oct) boundaries.
 ///
 /// __Default value:__ `true` for unbinned _quantitative_ fields; `false` otherwise.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum NiceUnion {
     Bool(bool),
     Double(f64),
@@ -12448,15 +12611,17 @@ pub enum NiceUnion {
 /// 2) Any directly specified `range` for `x` and `y` channels will be ignored. Range can be
 /// customized via the view's corresponding
 /// [size](https://vega.github.io/vega-lite/docs/size.html) (`width` and `height`).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ScaleRange {
     Enum(RangeEnum),
     UnionArray(Vec<RangeRange>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum RangeRange {
     Double(f64),
     String(String),
@@ -12474,8 +12639,9 @@ pub enum RangeRange {
 ///
 /// For the full list of supported schemes, please refer to the [Vega
 /// Scheme](https://vega.github.io/vega/docs/schemes/#reference) reference.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Scheme {
     SchemeParams(SchemeParams),
     String(String),
@@ -12502,7 +12668,7 @@ pub enum Scheme {
 /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
 /// sort order will obey the values in the array, followed by any unspecified values in their
 /// original order. For discrete time field, values in the sort array can be [date-time
-/// definition objects](types#datetime). In addition, for time units `"month"` and `"day"`,
+/// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
 /// the values can be the month or day names (case insensitive) or their 3-letter initials
 /// (e.g., `"Mon"`, `"Tue"`).
 /// - `null` indicating no sort.
@@ -12512,67 +12678,76 @@ pub enum Scheme {
 /// __Note:__ `null` and sorting by another channel is not supported for `row` and `column`.
 ///
 /// __See also:__ [`sort`](https://vega.github.io/vega-lite/docs/sort.html) documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum SortUnion {
     EncodingSortField(EncodingSortField),
     Enum(Sort),
     UnionArray(Vec<Equal>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum SortArray {
     Enum(SortOrder),
     SortEncodingSortField(SortEncodingSortField),
     UnionArray(Vec<Equal>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Detail {
     TypedFieldDef(TypedFieldDef),
     TypedFieldDefArray(Vec<TypedFieldDef>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum FluffyBin {
     BinParams(BinParams),
     Bool(bool),
     Enum(BinEnum),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Spacing {
     Double(f64),
     RowColNumber(RowColNumber),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ConditionUnion {
     ConditionalDef(ConditionalDef),
     ConditionalNumberValueDefArray(Vec<ConditionalNumberValueDef>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum HrefCondition {
     ConditionElementArray(Vec<ConditionElement>),
     ConditionalPredicateValueDefStringClass(ConditionalPredicateValueDefStringClass),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Order {
     OrderFieldDefArray(Vec<OrderFieldDef>),
     OrderFieldDefClass(OrderFieldDefClass),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ShapeCondition {
     ConditionalPredicateMarkPropFieldDefTypeForShapeClass(
         ConditionalPredicateMarkPropFieldDefTypeForShapeClass,
@@ -12580,8 +12755,9 @@ pub enum ShapeCondition {
     ConditionalStringValueDefArray(Vec<ConditionalStringValueDef>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum TextCondition {
     ConditionalPredicateValueDefTextClass(ConditionalPredicateValueDefTextClass),
     ConditionalValueDefTextArray(Vec<ConditionalValueDefText>),
@@ -12626,57 +12802,65 @@ pub enum TextCondition {
 ///
 /// __Default value:__ `"cell"`
 /// __Note:__ Any specified view background properties will augment the default style.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ConditionalValueDefTextText {
     String(String),
     StringArray(Vec<String>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Tooltip {
     FieldDefWithConditionStringFieldDefString(FieldDefWithConditionStringFieldDefString),
     StringFieldDefArray(Vec<StringFieldDef>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Color {
     ConditionalAxisPropertyColorNull(ConditionalAxisPropertyColorNull),
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ConditionalAxisPropertyColorNullCondition {
     ConditionalPredicateValueDefColorNull(ConditionalPredicateValueDefColorNull),
     ConditionalPredicateValueDefColorNullArray(Vec<ConditionalPredicateValueDefColorNull>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Dash {
     ConditionalAxisPropertyNumberNull(ConditionalAxisPropertyNumberNull),
     DoubleArray(Vec<f64>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ConditionalAxisPropertyNumberNullCondition {
     ConditionalPredicateValueDefNumberNull(ConditionalPredicateValueDefNumberNull),
     ConditionalPredicateValueDefNumberNullArray(Vec<ConditionalPredicateValueDefNumberNull>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum GridDashOffset {
     ConditionalAxisPropertyNumberNullClass(ConditionalAxisPropertyNumberNullClass),
     Double(f64),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ConditionalAxisPropertyNumberNullConditionUnion {
     ConditionalPredicateValueDefNumberNullElement(ConditionalPredicateValueDefNumberNullElement),
     ConditionalPredicateValueDefNumberNullElementArray(
@@ -12684,36 +12868,41 @@ pub enum ConditionalAxisPropertyNumberNullConditionUnion {
     ),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum GridOpacity {
     ConditionalAxisPropertyNumberNullClass(ConditionalAxisPropertyNumberNullClass),
     Double(f64),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum GridWidth {
     ConditionalAxisPropertyNumberNullClass(ConditionalAxisPropertyNumberNullClass),
     Double(f64),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum LabelAlign {
     ConditionalAxisPropertyNumberNullClass(ConditionalAxisPropertyNumberNullClass),
     Enum(Align),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum TextBaseline {
     ConditionalAxisPropertyTextBaselineNull(ConditionalAxisPropertyTextBaselineNull),
     Enum(Baseline),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ConditionalAxisPropertyTextBaselineNullCondition {
     ConditionalPredicateValueDefTextBaselineNull(ConditionalPredicateValueDefTextBaselineNull),
     ConditionalPredicateValueDefTextBaselineNullArray(
@@ -12738,51 +12927,58 @@ pub enum ConditionalAxisPropertyTextBaselineNullCondition {
 /// can sometimes help the labels better visually group with corresponding axis ticks.
 ///
 /// __Default value:__ `true` for axis of a continuous x-scale. Otherwise, `false`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Label {
     Bool(bool),
     Double(f64),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum LabelFont {
     ConditionalAxisPropertyStringNull(ConditionalAxisPropertyStringNull),
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ConditionalAxisPropertyStringNullCondition {
     ConditionalPredicateStringValueDef(ConditionalPredicateStringValueDef),
     ConditionalPredicateStringValueDefArray(Vec<ConditionalPredicateStringValueDef>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum LabelFontStyle {
     ConditionalAxisPropertyFontStyleNull(ConditionalAxisPropertyFontStyleNull),
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ConditionalAxisPropertyFontStyleNullCondition {
     ConditionalPredicateValueDefFontStyleNull(ConditionalPredicateValueDefFontStyleNull),
     ConditionalPredicateValueDefFontStyleNullArray(Vec<ConditionalPredicateValueDefFontStyleNull>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum LabelFontWeightUnion {
     ConditionalAxisPropertyFontWeightNull(ConditionalAxisPropertyFontWeightNull),
     Double(f64),
     Enum(FontWeightEnum),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ConditionalAxisPropertyFontWeightNullCondition {
     ConditionalPredicateValueDefFontWeightNull(ConditionalPredicateValueDefFontWeightNull),
     ConditionalPredicateValueDefFontWeightNullArray(
@@ -12790,8 +12986,9 @@ pub enum ConditionalAxisPropertyFontWeightNullCondition {
     ),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Keyvals {
     AnythingArray(Vec<Option<serde_json::Value>>),
     ImputeSequence(ImputeSequence),
@@ -12820,29 +13017,33 @@ pub enum Keyvals {
 /// different from x and y. Otherwise, `null` by default.
 ///
 /// __See also:__ [`stack`](https://vega.github.io/vega-lite/docs/stack.html) documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Stack {
     Bool(bool),
     Enum(StackOffset),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum XUnion {
     Double(f64),
     Enum(PurpleValue),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum YUnion {
     Double(f64),
     Enum(FluffyValue),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum HeightUnion {
     Double(f64),
     Enum(HeightEnum),
@@ -12853,16 +13054,18 @@ pub enum HeightUnion {
 /// `"line"`,
 /// `"area"`, `"point"`, `"rule"`, `"geoshape"`, and `"text"`) or a [mark definition
 /// object](https://vega.github.io/vega-lite/docs/mark.html#mark-def).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum AnyMark {
-    BoxPlotDefClass(BoxPlotDefClass),
-    Enum(BoxPlot),
+    MarkDefClass(MarkDefClass),
+    Enum(Mark),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum Box {
+#[derive(From)]
+pub enum DefBox {
     Bool(bool),
     MarkConfig(MarkConfig),
 }
@@ -12876,22 +13079,25 @@ pub enum Box {
 /// config](https://vega.github.io/vega-lite/docs/mark.html#style-config).
 /// - The `fill` and `stroke` properties have higher precedence than `color` and will
 /// override `color`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ColorUnion {
     ColorLinearGradient(ColorLinearGradient),
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum FillUnion {
     FillLinearGradient(FillLinearGradient),
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Value {
     Bool(bool),
     Double(f64),
@@ -12899,37 +13105,42 @@ pub enum Value {
     TooltipContent(TooltipContent),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum BoxPlotDefExtent {
     Double(f64),
     Enum(ExtentExtent),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Line {
     Bool(bool),
     OverlayMarkDef(OverlayMarkDef),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum PointUnion {
     Bool(bool),
     Enum(PointEnum),
     OverlayMarkDef(OverlayMarkDef),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum BindUnion {
     Enum(PurpleLegendBinding),
     UnionMap(HashMap<String, PurpleStream>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum PurpleStream {
     AnythingArray(Vec<Option<serde_json::Value>>),
     Double(f64),
@@ -12937,23 +13148,26 @@ pub enum PurpleStream {
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ClearUnion {
     Bool(bool),
     ClearDerivedStream(ClearDerivedStream),
     String(String),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Init {
     UnionMap(HashMap<String, Option<InitValue>>),
     UnionMapArray(Vec<HashMap<String, Option<SelectionInit>>>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum InitValue {
     Bool(bool),
     DateTime(DateTime),
@@ -12962,8 +13176,9 @@ pub enum InitValue {
     UnionArray(Vec<Equal>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum OnUnion {
     OnDerivedStream(OnDerivedStream),
     String(String),
@@ -12998,16 +13213,18 @@ pub enum OnUnion {
 /// data values are toggled when a user interacts with the shift-key pressed).
 ///
 /// __See also:__ [`toggle`](https://vega.github.io/vega-lite/docs/toggle.html) documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Translate {
     Bool(bool),
     String(String),
 }
 
 /// Title for the plot.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Text {
     String(String),
     StringArray(Vec<String>),
@@ -13020,8 +13237,9 @@ pub enum Text {
 /// 2) An object that mapped `"row"` and/or `"column"` to the listed of fields to be repeated
 /// along the particular orientations. The objects `{"repeat": "row"}` and `{"repeat":
 /// "column"}` can be used to refer to the repeated field respectively.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum RepeatUnion {
     RepeatMapping(RepeatMapping),
     StringArray(Vec<String>),
@@ -13035,46 +13253,52 @@ pub enum RepeatUnion {
 /// are the first and third quartiles while _IQR_ is the interquartile range (_Q3-Q1_).
 ///
 /// __Default value:__ `1.5`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum BoxplotExtent {
     Double(f64),
     Enum(ExtentEnum),
 }
 
 /// The anchor point for legend orient group layout.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum AnchorUnion {
     Enum(TitleAnchorEnum),
     PurpleSignalRef(PurpleSignalRef),
 }
 
 /// The bounds calculation to use for legend orient group layout.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum LayoutBounds {
     Enum(BoundsEnum),
     PurpleSignalRef(PurpleSignalRef),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum BottomCenter {
     Bool(bool),
     PurpleSignalRef(PurpleSignalRef),
 }
 
 /// The layout direction for legend orient group layout.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Direction {
     Enum(Orientation),
     PurpleSignalRef(PurpleSignalRef),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum MarginUnion {
     Double(f64),
     PurpleSignalRef(PurpleSignalRef),
@@ -13086,24 +13310,27 @@ pub enum MarginUnion {
 /// "bottom": 5}` to specify padding for each side of the visualization.
 ///
 /// __Default value__: `5`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Padding {
     Double(f64),
     PaddingClass(PaddingClass),
 }
 
 /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for categorical data.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum CategoryUnion {
     CategorySignalRef(CategorySignalRef),
     Enum(RangeEnum),
     UnionArray(Vec<Option<RangeRaw>>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum RangeRaw {
     Bool(bool),
     Double(f64),
@@ -13112,22 +13339,25 @@ pub enum RangeRaw {
     UnionArray(Vec<RangeRawArrayElement>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum RangeRawArrayElement {
     Double(f64),
     PurpleSignalRef(PurpleSignalRef),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum SignalRefExtent {
     PurpleSignalRef(PurpleSignalRef),
     UnionArray(Vec<RangeRawArrayElement>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum ColorScheme {
     PurpleSignalRef(PurpleSignalRef),
     String(String),
@@ -13136,8 +13366,9 @@ pub enum ColorScheme {
 
 /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for diverging
 /// quantitative ramps.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum DivergingUnion {
     DivergingSignalRef(DivergingSignalRef),
     Enum(RangeEnum),
@@ -13146,8 +13377,9 @@ pub enum DivergingUnion {
 
 /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for quantitative
 /// heatmaps.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum HeatmapUnion {
     Enum(RangeEnum),
     HeatmapSignalRef(HeatmapSignalRef),
@@ -13155,8 +13387,9 @@ pub enum HeatmapUnion {
 }
 
 /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for rank-ordered data.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum OrdinalUnion {
     Enum(RangeEnum),
     OrdinalSignalRef(OrdinalSignalRef),
@@ -13165,8 +13398,9 @@ pub enum OrdinalUnion {
 
 /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for sequential
 /// quantitative ramps.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum RampUnion {
     Enum(RangeEnum),
     RampSignalRef(RampSignalRef),
@@ -13180,15 +13414,17 @@ pub enum RampUnion {
 /// property.
 ///
 /// Legend bindings are restricted to selections that only specify a single field or encoding.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum LegendBinding {
     Enum(LegendBindingEnum),
     LegendStreamBinding(LegendStreamBinding),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum LegendUnion {
     OnDerivedStream(OnDerivedStream),
     String(String),
@@ -13210,15 +13446,17 @@ pub enum LegendUnion {
 /// or can be a mapping between projected field/encodings and binding definitions.
 ///
 /// __See also:__ [`bind`](https://vega.github.io/vega-lite/docs/bind.html) documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum Binding {
     Enum(LegendBindingEnum),
     UnionMap(HashMap<String, FluffyStream>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum FluffyStream {
     AnythingArray(Vec<Option<serde_json::Value>>),
     Double(f64),
@@ -13229,8 +13467,9 @@ pub enum FluffyStream {
 /// The default height when the plot has either a discrete y-field or no y-field.
 ///
 /// __Default value:__ a step size based on `config.view.step`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum DiscreteHeightUnion {
     DiscreteHeightClass(DiscreteHeightClass),
     Double(f64),
@@ -13239,8 +13478,9 @@ pub enum DiscreteHeightUnion {
 /// The default width when the plot has either a discrete x-field or no x-field.
 ///
 /// __Default value:__ a step size based on `config.view.step`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum DiscreteWidthUnion {
     DiscreteWidthClass(DiscreteWidthClass),
     Double(f64),
@@ -13250,12 +13490,13 @@ pub enum DiscreteWidthUnion {
 /// an object, or a string.
 /// Arrays of primitive values are ingested as objects with a `data` property. Strings are
 /// parsed according to the specified format type.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+#[derive(From)]
 pub enum InlineDatasetValue {
     AnythingMap(HashMap<String, Option<serde_json::Value>>),
     String(String),
-    UnionArray(Vec<InlineDataset>),
+    UnionArray(Vec<serde_json::value::Value>),
 }
 
 /// The alignment to apply to symbol legends rows and columns. The supported string values
@@ -13276,7 +13517,7 @@ pub enum InlineDatasetValue {
 /// both grid rows and columns.
 ///
 /// __Default value:__ `"all"`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum LayoutAlign {
     #[serde(rename = "all")]
     All,
@@ -13291,7 +13532,7 @@ pub enum LayoutAlign {
 /// documentation for descriptions of each.
 ///
 /// __Default value__: `"pad"`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "fit")]
     Fit,
@@ -13312,7 +13553,7 @@ pub enum Type {
 /// width and height settings indicate the **total** intended size of the view.
 ///
 /// __Default value__: `"content"`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Contains {
     #[serde(rename = "content")]
     Content,
@@ -13330,7 +13571,7 @@ pub enum Contains {
 /// or legends into a uniform grid structure.
 ///
 /// __Default value:__ `"full"`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BoundsEnum {
     #[serde(rename = "flush")]
     Flush,
@@ -13343,7 +13584,7 @@ pub enum BoundsEnum {
 /// __Default value:__  The default format type is determined by the extension of the file
 /// URL.
 /// If no extension is detected, `"json"` will be used by default.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum DataFormatType {
     #[serde(rename = "csv")]
     Csv,
@@ -13367,7 +13608,7 @@ pub enum DataFormatType {
 /// [aggregate](https://vega.github.io/vega-lite/docs/aggregate.html#ops).
 ///
 /// __Default value:__ `"sum"` for stacked plots. Otherwise, `"mean"`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum NonArgAggregateOp {
     #[serde(rename = "average")]
     Average,
@@ -13414,7 +13655,7 @@ pub enum NonArgAggregateOp {
 /// The encoding channel to extract selected values for, when a selection is
 /// [projected](https://vega.github.io/vega-lite/docs/project.html)
 /// over multiple fields or encodings.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum SingleDefUnitChannel {
     #[serde(rename = "color")]
     Color,
@@ -13472,7 +13713,7 @@ pub enum SingleDefUnitChannel {
 /// documentation.
 ///
 /// The timeUnit.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum TimeUnit {
     #[serde(rename = "date")]
     Date,
@@ -13571,7 +13812,7 @@ pub enum TimeUnit {
 /// The type of gradient. Use `"linear"` for a linear gradient.
 ///
 /// The type of gradient. Use `"radial"` for a radial gradient.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Gradient {
     #[serde(rename = "linear")]
     Linear,
@@ -13610,7 +13851,7 @@ pub enum Gradient {
 /// have exactly the same type as their primary channels (e.g., `x`, `y`).
 ///
 /// __See also:__ [`type`](https://vega.github.io/vega-lite/docs/type.html) documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum StandardType {
     #[serde(rename = "nominal")]
     Nominal,
@@ -13622,7 +13863,7 @@ pub enum StandardType {
     Temporal,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum RepeatEnum {
     #[serde(rename = "column")]
     Column,
@@ -13670,7 +13911,7 @@ pub enum RepeatEnum {
 ///
 /// Orientation of the error band. This is normally automatically determined, but can be
 /// specified when the orientation is ambiguous and cannot be automatically determined.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Orientation {
     #[serde(rename = "horizontal")]
     Horizontal,
@@ -13684,7 +13925,7 @@ pub enum Orientation {
 /// - `"time"` for temporal fields and ordinal and nomimal fields with `timeUnit`.
 /// - `"number"` for quantitative fields as well as ordinal and nomimal fields without
 /// `timeUnit`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum FormatType {
     #[serde(rename = "number")]
     Number,
@@ -13711,7 +13952,7 @@ pub enum FormatType {
 /// __Default value:__ `"left"`.
 ///
 /// Horizontal text alignment for title text. One of `"left"`, `"center"`, or `"right"`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Align {
     #[serde(rename = "center")]
     Center,
@@ -13746,7 +13987,7 @@ pub enum Align {
 ///
 /// Vertical text baseline for title and subtitle text. One of `"top"`, `"middle"`,
 /// `"bottom"`, or `"alphabetic"`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Baseline {
     #[serde(rename = "alphabetic")]
     Alphabetic,
@@ -13758,7 +13999,7 @@ pub enum Baseline {
     Top,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum FontWeightEnum {
     #[serde(rename = "bold")]
     Bold,
@@ -13770,7 +14011,7 @@ pub enum FontWeightEnum {
     Normal,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum LabelOverlapEnum {
     #[serde(rename = "greedy")]
     Greedy,
@@ -13783,7 +14024,7 @@ pub enum LabelOverlapEnum {
 ///
 /// __Default value:__ `"gradient"` for non-binned quantitative fields and temporal fields;
 /// `"symbol"` otherwise.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum LegendType {
     #[serde(rename = "gradient")]
     Gradient,
@@ -13802,7 +14043,7 @@ pub enum LegendType {
 /// `"bottom-left"`, `"bottom-right"`, `"none"`.
 ///
 /// __Default value:__ `"right"`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum LegendOrient {
     #[serde(rename = "bottom")]
     Bottom,
@@ -13824,7 +14065,7 @@ pub enum LegendOrient {
     TopRight,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum TimeInterval {
     #[serde(rename = "day")]
     Day,
@@ -13844,7 +14085,7 @@ pub enum TimeInterval {
     Year,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum TitleAnchorEnum {
     #[serde(rename = "end")]
     End,
@@ -13865,7 +14106,7 @@ pub enum TitleAnchorEnum {
 /// towards the right edge of the chart).
 ///
 /// __Default value:__ `"bottom"` for x-axes and `"left"` for y-axes.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Orient {
     #[serde(rename = "bottom")]
     Bottom,
@@ -13877,13 +14118,13 @@ pub enum Orient {
     Top,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Domain {
     #[serde(rename = "unaggregated")]
     Unaggregated,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ScaleInterpolateParamsType {
     #[serde(rename = "cubehelix")]
     Cubehelix,
@@ -13893,7 +14134,7 @@ pub enum ScaleInterpolateParamsType {
     Rgb,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ScaleInterpolate {
     #[serde(rename = "cubehelix")]
     Cubehelix,
@@ -13913,7 +14154,7 @@ pub enum ScaleInterpolate {
     Rgb,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum NiceTime {
     #[serde(rename = "day")]
     Day,
@@ -13931,7 +14172,7 @@ pub enum NiceTime {
     Year,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum RangeEnum {
     #[serde(rename = "category")]
     Category,
@@ -13979,7 +14220,7 @@ pub enum RangeEnum {
 ///
 /// __Default value:__ please see the [scale type
 /// table](https://vega.github.io/vega-lite/docs/scale.html#type).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ScaleType {
     #[serde(rename = "band")]
     Band,
@@ -14013,7 +14254,7 @@ pub enum ScaleType {
 
 /// The [encoding channel](https://vega.github.io/vega-lite/docs/encoding.html#channels) to
 /// sort by (e.g., `"x"`, `"y"`)
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum SortByChannel {
     #[serde(rename = "color")]
     Color,
@@ -14042,7 +14283,7 @@ pub enum SortByChannel {
 }
 
 /// The sort order. One of `"ascending"` (default) or `"descending"`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum SortOrder {
     #[serde(rename = "ascending")]
     Ascending,
@@ -14054,7 +14295,7 @@ pub enum SortOrder {
 ///
 /// The [encoding channel](https://vega.github.io/vega-lite/docs/encoding.html#channels) to
 /// sort by (e.g., `"x"`, `"y"`)
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Sort {
     #[serde(rename = "ascending")]
     Ascending,
@@ -14110,7 +14351,7 @@ pub enum Sort {
     Y,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BinEnum {
     #[serde(rename = "binned")]
     Binned,
@@ -14147,7 +14388,7 @@ pub enum BinEnum {
 /// have exactly the same type as their primary channels (e.g., `x`, `y`).
 ///
 /// __See also:__ [`type`](https://vega.github.io/vega-lite/docs/type.html) documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum LatitudeType {
     #[serde(rename = "quantitative")]
     Quantitative,
@@ -14184,7 +14425,7 @@ pub enum LatitudeType {
 /// have exactly the same type as their primary channels (e.g., `x`, `y`).
 ///
 /// __See also:__ [`type`](https://vega.github.io/vega-lite/docs/type.html) documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum TypeForShape {
     #[serde(rename = "geojson")]
     Geojson,
@@ -14196,7 +14437,7 @@ pub enum TypeForShape {
 
 /// For band scales, indicates if ticks and grid lines should be placed at the center of a
 /// band (default) or at the band extents to indicate intervals.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum TickBand {
     #[serde(rename = "center")]
     Center,
@@ -14208,7 +14449,7 @@ pub enum TickBand {
 /// One of `"value"`, `"mean"`, `"median"`, `"max"` or `"min"`.
 ///
 /// __Default value:__  `"value"`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ImputeParamsMethod {
     #[serde(rename = "max")]
     Max,
@@ -14228,7 +14469,7 @@ pub enum ImputeParamsMethod {
 /// with output values in the range `[0,1]`.
 ///
 /// __Default value:__ `"zero"`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum StackOffset {
     #[serde(rename = "center")]
     Center,
@@ -14238,19 +14479,19 @@ pub enum StackOffset {
     Zero,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PurpleValue {
     #[serde(rename = "width")]
     Width,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum FluffyValue {
     #[serde(rename = "height")]
     Height,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum HeightEnum {
     #[serde(rename = "container")]
     Container,
@@ -14258,7 +14499,7 @@ pub enum HeightEnum {
 
 /// The mouse cursor used over the mark. Any valid [CSS cursor
 /// type](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor#Values) can be used.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Cursor {
     #[serde(rename = "alias")]
     Alias,
@@ -14338,7 +14579,7 @@ pub enum Cursor {
 /// This property determines on which side is truncated in response to the limit parameter.
 ///
 /// __Default value:__ `"ltr"`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Dir {
     #[serde(rename = "ltr")]
     Ltr,
@@ -14385,7 +14626,7 @@ pub enum Dir {
 /// - `"bundle"`: equivalent to basis, except the tension parameter is used to straighten the
 /// spline.
 /// - `"monotone"`: cubic interpolation that preserves monotonicity in y.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Interpolate {
     #[serde(rename = "basis")]
     Basis,
@@ -14419,7 +14660,7 @@ pub enum Interpolate {
     StepBefore,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Invalid {
     #[serde(rename = "filter")]
     Filter,
@@ -14428,7 +14669,7 @@ pub enum Invalid {
 /// The stroke cap for line ending style. One of `"butt"`, `"round"`, or `"square"`.
 ///
 /// __Default value:__ `"square"`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum StrokeCap {
     #[serde(rename = "butt")]
     Butt,
@@ -14441,7 +14682,7 @@ pub enum StrokeCap {
 /// The stroke line join method. One of `"miter"`, `"round"` or `"bevel"`.
 ///
 /// __Default value:__ `"miter"`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum StrokeJoin {
     #[serde(rename = "bevel")]
     Bevel,
@@ -14451,7 +14692,7 @@ pub enum StrokeJoin {
     Round,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Content {
     #[serde(rename = "data")]
     Data,
@@ -14465,8 +14706,8 @@ pub enum Content {
 /// or a composite mark type (`"boxplot"`, `"errorband"`, `"errorbar"`).
 ///
 /// All types of primitive marks.
-#[derive(Debug, Serialize, Deserialize)]
-pub enum BoxPlot {
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum Mark {
     #[serde(rename = "area")]
     Area,
     #[serde(rename = "bar")]
@@ -14520,7 +14761,7 @@ pub enum BoxPlot {
 /// - `"iqr"`: Extend the rule to the q1 and q3.
 ///
 /// __Default value:__ `"stderr"`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ExtentExtent {
     #[serde(rename = "ci")]
     Ci,
@@ -14534,7 +14775,7 @@ pub enum ExtentExtent {
     Stdev,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PointEnum {
     #[serde(rename = "transparent")]
     Transparent,
@@ -14546,7 +14787,7 @@ pub enum PointEnum {
 /// documentation](https://vega.github.io/vega-lite/docs/projection.html#projection-types).
 ///
 /// __Default value:__ `mercator`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ProjectionType {
     #[serde(rename = "albers")]
     Albers,
@@ -14582,7 +14823,7 @@ pub enum ProjectionType {
     TransverseMercator,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ResolveMode {
     #[serde(rename = "independent")]
     Independent,
@@ -14595,7 +14836,7 @@ pub enum ResolveMode {
 /// zoom the view.
 ///
 /// __See also:__ [`bind`](https://vega.github.io/vega-lite/docs/bind.html) documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PurpleLegendBinding {
     #[serde(rename = "legend")]
     Legend,
@@ -14603,7 +14844,7 @@ pub enum PurpleLegendBinding {
     Scales,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum MarkType {
     #[serde(rename = "arc")]
     Arc,
@@ -14631,7 +14872,7 @@ pub enum MarkType {
     Trail,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Source {
     #[serde(rename = "scope")]
     Scope,
@@ -14643,7 +14884,7 @@ pub enum Source {
 
 /// By default, `all` data values are considered to lie within an empty selection.
 /// When set to `none`, empty selections contain no data values.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Empty {
     #[serde(rename = "all")]
     All,
@@ -14657,7 +14898,7 @@ pub enum Empty {
 ///
 /// __See also:__ [`resolve`](https://vega.github.io/vega-lite/docs/selection-resolve.html)
 /// documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum SelectionResolution {
     #[serde(rename = "global")]
     Global,
@@ -14674,7 +14915,7 @@ pub enum SelectionResolution {
 /// - `"multi"` -- to select multiple discrete data value; the first value is selected on
 /// `click` and additional values toggled on shift-`click`.
 /// - `"interval"` -- to select a continuous range of data values on `drag`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum SelectionDefType {
     #[serde(rename = "interval")]
     Interval,
@@ -14685,7 +14926,7 @@ pub enum SelectionDefType {
 }
 
 /// Default title orientation (`"top"`, `"bottom"`, `"left"`, or `"right"`)
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum TitleOrient {
     #[serde(rename = "bottom")]
     Bottom,
@@ -14708,7 +14949,7 @@ pub enum TitleOrient {
 /// The aggregation operation to apply (e.g., `"sum"`, `"average"` or `"count"`). See the
 /// list of all supported operations
 /// [here](https://vega.github.io/vega-lite/docs/aggregate.html#ops).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum AggregateOp {
     #[serde(rename = "argmax")]
     Argmax,
@@ -14765,7 +15006,7 @@ pub enum AggregateOp {
 /// `"pow"`, `"quad"`, or `"poly"`.
 ///
 /// __Default value:__ `"linear"`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum TransformMethod {
     #[serde(rename = "exp")]
     Exp,
@@ -14804,7 +15045,7 @@ pub enum TransformMethod {
 /// The aggregation operation to apply (e.g., `"sum"`, `"average"` or `"count"`). See the
 /// list of all supported operations
 /// [here](https://vega.github.io/vega-lite/docs/aggregate.html#ops).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Op {
     #[serde(rename = "argmax")]
     Argmax,
@@ -14874,7 +15115,7 @@ pub enum Op {
     Variancep,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ExtentEnum {
     #[serde(rename = "min-max")]
     MinMax,
@@ -14899,7 +15140,7 @@ pub enum ExtentEnum {
 /// - `"iqr"`: Extend the rule to the q1 and q3.
 ///
 /// __Default value:__ `"stderr"`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ErrorbandExtent {
     #[serde(rename = "ci")]
     Ci,
@@ -14918,7 +15159,7 @@ pub enum ErrorbandExtent {
 /// "SUM(field)", "YEARMONTH(date)", "BIN(field)").
 /// - `"plain"` - displays only the field name without functions (e.g., "field", "date",
 /// "field").
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum FieldTitle {
     #[serde(rename = "functional")]
     Functional,
@@ -14933,13 +15174,13 @@ pub enum FieldTitle {
 /// zoom the view.
 ///
 /// __See also:__ [`bind`](https://vega.github.io/vega-lite/docs/bind.html) documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Bind {
     #[serde(rename = "scales")]
     Scales,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum LegendBindingEnum {
     #[serde(rename = "legend")]
     Legend,
