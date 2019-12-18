@@ -8,6 +8,11 @@ changes = [
         'to': r'pub spec: Option<Box<SpecClass>>'
     },
     {
+        'struct': 'Stream',
+        'from': r'pub stream: Box<Option<Stream>>',
+        'to': r'pub stream: Option<Box<Stream>>'
+    },
+    {
         'struct': 'ViewConfig',
         'from': r'pub stroke: Option<String>',
         'to': r'#[serde(default, skip_serializing_if = "RemovableValue::is_default")] #[builder(default)] pub stroke: RemovableValue<String>'
