@@ -50,6 +50,8 @@ macro_rules! from_into_string{
     };
 }
 
+// enum that have a `String(String)`variant
+// `grep -B 5 "String(String)" src/schema.rs | grep "pub enum" | sort | sed 's/pub enum \(.*\) {/\1/'`
 from_into_string!(
     ClearUnion,
     Color,
@@ -84,6 +86,58 @@ from_into_string!(
     UrlDataInlineDataset,
     Value,
     ValueUnion,
+);
+
+// for every enum with a variant that takes a vec of an enum with a String(String) variant
+// could be better with const generics : https://github.com/rust-lang/rust/issues/44580
+// as in https://github.com/rust-lang/rust/issues/61415. For now, macro will generate impl for arrays up to size 32
+macro_rules! from_into_array_of_str{
+    ( $( $e:ident::$v:ident(Vec<$t:ident>) ),* $(,)? ) => {
+        from_into_array_of_str!($( $e::$v(Vec<$t>), )*, 32,31,30,29,28,27,26,25,24,23,
+        22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0);
+    };
+    ( $( $e:ident::$v:ident(Vec<$t:ident>) ,)*, $end:expr ) => {
+        // implementations for Vec
+        $(
+            impl From<Vec<&str>> for $e
+            {
+                fn from(v: Vec<&str>) -> Self {
+                    $e::$v(v.iter().map(|s| $t::String(s.to_string())).collect())
+                }
+            }
+            impl From<Vec<String>> for $e
+            {
+                fn from(v: Vec<String>) -> Self {
+                    $e::$v(v.into_iter().map(|s| $t::String(s)).collect())
+                }
+            }
+        )*
+    };
+    ( $( $e:ident::$v:ident(Vec<$t:ident>) ,)*, $i:expr, $($tail:expr),+ ) => {
+            // implementations for array of size $i
+            $(
+                impl From<[&str; $i]> for $e
+                {
+                    fn from(v: [&str; $i]) -> Self {
+                        $e::$v(v.iter().map(|s| $t::String(s.to_string())).collect())
+                    }
+                }
+            )*
+            from_into_array_of_str!($( $e::$v(Vec<$t>), )*, $($tail),*);
+    };
+}
+
+// enums that have a variant that take a Vec of an enum with a `String` variant
+// grep -B 5 "String(String)" src/schema.rs | grep "pub enum" | sort | sed 's/pub enum \(.*\) {/\1/' | \
+//   xargs -I % sh -c "grep '(Vec<%>),' src/schema.rs | \
+//   xargs -I {} sh -c 'grep -B 5 \"{}\" src/schema.rs | grep \"pub enum\" | sed \"s/pub enum \(.*\) {/\1/\" | \
+//     xargs -I $ sh -c \"echo \\\"$::{}\\\"\"'" | sort | uniq
+from_into_array_of_str!(
+    DomainUnion::UnionArray(Vec<Equal>),
+    InitValue::UnionArray(Vec<Equal>),
+    ScaleRange::UnionArray(Vec<RangeRange>),
+    SortArray::UnionArray(Vec<Equal>),
+    SortUnion::UnionArray(Vec<Equal>),
 );
 
 // #[cfg(test)]

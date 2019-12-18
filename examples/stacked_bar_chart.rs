@@ -24,19 +24,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .color(DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                     .field("weather")
                     .scale(ScaleBuilder::default()
-                        .domain(vec![
-                            Equal::String("sun".to_string()),
-                            Equal::String("fog".to_string()),
-                            Equal::String("drizzle".to_string()),
-                            Equal::String("rain".to_string()),
-                            Equal::String("snow".to_string()),
+                        .domain([
+                            "sun",
+                            "fog",
+                            "drizzle",
+                            "rain",
+                            "snow",
                         ])
-                        .range(vec![
-                            RangeRange::String("#e7ba52".to_string()),
-                            RangeRange::String("#c7c7c7".to_string()),
-                            RangeRange::String("#aec7e8".to_string()),
-                            RangeRange::String("#1f77b4".to_string()),
-                            RangeRange::String("#9467bd".to_string()),
+                        .range([
+                            "#e7ba52",
+                            "#c7c7c7",
+                            "#aec7e8",
+                            "#1f77b4",
+                            "#9467bd",
                         ])
                         .build()?)
                     .build()?)
