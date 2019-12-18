@@ -19,17 +19,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .title("Month of the year")
                     .build()?)
                 .y(YClassBuilder::default()
-                    .aggregate(AggregateOp::Count)
+                    .aggregate(NonArgAggregateOp::Count)
                     .build()?)
-                .color(DefWithConditionMarkPropFieldDefStringNullBuilder::default()
+                .color(DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                     .field("weather")
                     .scale(ScaleBuilder::default()
                         .domain(vec![
-                            SelectionInitIntervalElement::String("sun".to_string()),
-                            SelectionInitIntervalElement::String("fog".to_string()),
-                            SelectionInitIntervalElement::String("drizzle".to_string()),
-                            SelectionInitIntervalElement::String("rain".to_string()),
-                            SelectionInitIntervalElement::String("snow".to_string()),
+                            Equal::String("sun".to_string()),
+                            Equal::String("fog".to_string()),
+                            Equal::String("drizzle".to_string()),
+                            Equal::String("rain".to_string()),
+                            Equal::String("snow".to_string()),
                         ])
                         .range(vec![
                             RangeRange::String("#e7ba52".to_string()),

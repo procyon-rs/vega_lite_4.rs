@@ -35,7 +35,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .def_type(StandardType::Quantitative)
                     .build()?)
                 .color(
-                    DefWithConditionMarkPropFieldDefStringNullBuilder::default()
+                    DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                         .field("cluster")
                         .build()?,
                 )
