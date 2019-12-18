@@ -15,7 +15,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::fmt;
 use std::marker::PhantomData;
 
-// use crate::schema::*;
+use crate::schema::*;
 
 /// Wrapper for a field that can be either the default value, null or specified
 #[derive(Clone, Debug)]
@@ -69,6 +69,40 @@ macro_rules! from_into_with_removable{
 
 from_into_with_removable! {
     &str => String,
+
+    &str => ClearUnion,
+    &str => Color,
+    &str => ColorScheme,
+    &str => ColorUnion,
+    &str => ConditionalValueDefTextText,
+    &str => Day,
+    &str => Equal,
+    &str => Field,
+    &str => FillUnion,
+    &str => FluffyStream,
+    &str => InitValue,
+    &str => InlineDatasetValue,
+    &str => LabelFont,
+    &str => LabelFontStyle,
+    &str => LegendUnion,
+    &str => LogicalOperandPredicateElement,
+    &str => Lt,
+    &str => Month,
+    &str => OnUnion,
+    &str => PurpleLogicalOperandPredicate,
+    &str => PurpleSelectionOperand,
+    &str => PurpleStream,
+    &str => PurpleText,
+    &str => RangeRange,
+    &str => RangeRaw,
+    &str => Scheme,
+    &str => SelectionInit,
+    &str => SelectionOperandElement,
+    &str => Text,
+    &str => Translate,
+    &str => UrlDataInlineDataset,
+    &str => Value,
+    &str => ValueUnion,
 
     // SortOrder => Sort,
     // EncodingSortField => Sort,
