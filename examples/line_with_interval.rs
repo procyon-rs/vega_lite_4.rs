@@ -4,9 +4,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // the chart
     let chart = VegaliteBuilder::default()
         .title("Line Chart with Confidence Interval Band")
-        .autosize(AutosizeType::Fit)
-        //.height(200)
-        //.width(300)
+        .height(200.)
+        .width(300.)
         .data(
             UrlDataBuilder::default()
                 .url("https://raw.githubusercontent.com/vega/vega-datasets/master/data/cars.json")
@@ -30,7 +29,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .y(YClassBuilder::default()
                             .field("Miles_per_Gallon")
                             .def_type(StandardType::Quantitative)
-                            .aggregate(AggregateOp::Mean)
+                            .aggregate(NonArgAggregateOp::Mean)
                             .build()?)
                         .build()?,
                 )
