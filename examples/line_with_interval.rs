@@ -1,6 +1,7 @@
 use vega_lite_4::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // The chart
     let chart = VegaliteBuilder::default()
         .title("Line Chart with Confidence Interval Band")
         .height(200.)
