@@ -108,7 +108,7 @@ macro_rules! from_into_array_of_str{
             impl From<Vec<String>> for $e
             {
                 fn from(v: Vec<String>) -> Self {
-                    $e::$v(v.into_iter().map(|s| $t::String(s)).collect())
+                    $e::$v(v.into_iter().map($t::String).collect())
                 }
             }
         )*
