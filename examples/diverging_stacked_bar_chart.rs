@@ -7,8 +7,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .data(UrlDataBuilder::default().url(
             "https://raw.githubusercontent.com/vega/vega-datasets/master/data/population.json"
         ).build()?)
-        .height(200)
-        .width(300)
+        .height(200.)
+        .width(300.)
         .transform(vec![
             TransformBuilder::default().filter("datum.year == 2000").build()?,
             TransformBuilder::default().calculate("datum.sex == 2 ? 'Female' : 'Male'").transform_as("gender").build()?,
@@ -17,7 +17,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .mark(Mark::Bar)
         .encoding(EncodingBuilder::default()
             .x(XClassBuilder::default()
-                .aggregate(AggregateOp::Sum)
+                .aggregate(NonArgAggregateOp::Sum)
                 .field("signed_people")
                 .def_type(StandardType::Quantitative)
                 .axis(AxisBuilder::default().title("population").format("s").build()?)
@@ -25,12 +25,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .y(YClassBuilder::default()
                 .field("age")
                 .def_type(StandardType::Ordinal)
-                .sort(SortOrder::Descending)
+                .sort(Sort::Descending)
                 .axis(RemovableValue::Remove)
                 .build()?)
-            .color(DefWithConditionMarkPropFieldDefStringNullBuilder::default()
+            .color(DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                 .field("gender")
-                .def_with_condition_mark_prop_field_def_string_null_type(StandardType::Nominal)
+                .def_with_condition_mark_prop_field_def_gradient_string_null_type(StandardType::Nominal)
                 .scale(ScaleBuilder::default().range(vec![
                     RangeRange::String("#e377c2".to_string()),
                     RangeRange::String("#1f77b4".to_string())

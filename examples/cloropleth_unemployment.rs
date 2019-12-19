@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .mark(Mark::Geoshape)
         .transform(vec![TransformBuilder::default()
             .lookup("id")
-            .from(LookupDataBuilder::default()
+            .from(LookupBuilder::default()
                 .data(DataBuilder::default()
                     .url("https://raw.githubusercontent.com/vega/vega-datasets/master/data/unemployment.tsv")
                     .build()?)
@@ -30,9 +30,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .encoding(
             EncodingBuilder::default()
                 .color(
-                    DefWithConditionMarkPropFieldDefStringNullBuilder::default()
+                    DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                         .field("rate")
-                        .def_with_condition_mark_prop_field_def_string_null_type(StandardType::Quantitative)
+                        .def_with_condition_mark_prop_field_def_gradient_string_null_type(StandardType::Quantitative)
                         .build()?,
                 )
                 .build()?,

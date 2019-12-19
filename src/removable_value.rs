@@ -104,8 +104,8 @@ from_into_with_removable! {
     &str => Value,
     &str => ValueUnion,
 
-    // SortOrder => Sort,
-    // EncodingSortField => Sort,
+    Sort => SortUnion,
+    EncodingSortField => SortUnion,
     // Vec<SelectionInitIntervalElement> => Sort,
 
     // DefWithConditionTextFieldDefValue => Tooltip,

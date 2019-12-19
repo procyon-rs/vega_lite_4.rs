@@ -2,24 +2,24 @@ use std::collections::HashMap;
 use vega_lite_4::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut selector_1 = HashMap::new();
-    selector_1.insert(
-        "brush".to_string(),
-        SelectionDefBuilder::default()
-            .encodings(vec![SingleDefUnitChannel::X])
-            .selection_def_type(SelectionDefType::Interval)
-            .build()?,
-    );
-    let mut selector_2 = HashMap::new();
-    selector_2.insert(
-        "click".to_string(),
-        SelectionDefBuilder::default()
-            .encodings(vec![SingleDefUnitChannel::Color])
-            .selection_def_type(SelectionDefType::Multi)
-            .build()?,
-    );
+  let mut selector_1 = HashMap::new();
+  selector_1.insert(
+    "brush".to_string(),
+    SelectionDefBuilder::default()
+      .encodings(vec![SingleDefUnitChannel::X])
+      .selection_def_type(SelectionDefType::Interval)
+      .build()?,
+  );
+  let mut selector_2 = HashMap::new();
+  selector_2.insert(
+    "click".to_string(),
+    SelectionDefBuilder::default()
+      .encodings(vec![SingleDefUnitChannel::Color])
+      .selection_def_type(SelectionDefType::Multi)
+      .build()?,
+  );
 
-    let chart = VegaliteBuilder::default()
+  let chart = VegaliteBuilder::default()
     .title("Seattle Weather, 2012-2015")
     .data(
       UrlDataBuilder::default()
@@ -30,41 +30,29 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
       SpecBuilder::default()
         .selection(selector_1)
         .transform(vec![TransformBuilder::default()
-          .filter(PurpleLogicalOperandPredicate::Predicate(
+          .filter(PurpleLogicalOperandPredicate::Predicate(Box::new(
             PredicateBuilder::default()
               .selection(PurpleSelectionOperand::String("click".to_string()))
               .build()?,
-          ))
+          )))
           .build()?])
         .mark(Mark::Point)
-        .width(600)
-        .height(300)
+        .width(600.)
+        .height(300.)
         .encoding(
           EncodingBuilder::default()
             .color(
-              DefWithConditionMarkPropFieldDefStringNullBuilder::default()
+              DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                 .condition(
-                  ConditionalPredicateStringValueDefClassBuilder::default()
+                  ConditionalPredicateValueDefGradientStringNullClassBuilder::default()
                     .selection(PurpleSelectionOperand::String("brush".to_string()))
-                    .conditional_def_type(StandardType::Nominal)
+                    .conditional_type(StandardType::Nominal)
                     .field("weather")
                     .title("Weather")
                     .scale(
                       ScaleBuilder::default()
-                        .domain(vec![
-                          SelectionInitIntervalElement::String("sun".to_string()),
-                          SelectionInitIntervalElement::String("fog".to_string()),
-                          SelectionInitIntervalElement::String("drizzle".to_string()),
-                          SelectionInitIntervalElement::String("rain".to_string()),
-                          SelectionInitIntervalElement::String("snow".to_string()),
-                        ])
-                        .range(vec![
-                          RangeRange::String("#e7ba52".to_string()),
-                          RangeRange::String("#c7c7c7".to_string()),
-                          RangeRange::String("#aec7e8".to_string()),
-                          RangeRange::String("#1f77b4".to_string()),
-                          RangeRange::String("#9467bd".to_string()),
-                        ])
+                        .domain(["sun", "fog", "drizzle", "rain", "snow"])
+                        .range(["#e7ba52", "#c7c7c7", "#aec7e8", "#1f77b4", "#9467bd"])
                         .build()?,
                     )
                     .build()?,
@@ -86,10 +74,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .def_type(StandardType::Quantitative)
                 .scale(
                   ScaleBuilder::default()
-                    .domain(vec![
-                      SelectionInitIntervalElement::Double(-5.0),
-                      SelectionInitIntervalElement::Double(40.0),
-                    ])
+                    .domain(vec![Equal::Double(-5.0), 40.0.into()])
                     .build()?,
                 )
                 .axis(
@@ -106,10 +91,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .def_with_condition_mark_prop_field_def_number_type(StandardType::Quantitative)
                 .scale(
                   ScaleBuilder::default()
-                    .domain(vec![
-                      SelectionInitIntervalElement::Double(-1.0),
-                      SelectionInitIntervalElement::Double(50.0),
-                    ])
+                    .domain(vec![Equal::Double(-1.0), 50.0.into()])
                     .build()?,
                 )
                 .build()?,
@@ -118,24 +100,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .build()?,
       SpecBuilder::default()
-        .width(600)
+        .width(600.)
         .mark(Mark::Bar)
         .selection(selector_2)
         .transform(vec![TransformBuilder::default()
-          .filter(PurpleLogicalOperandPredicate::Predicate(
+          .filter(PurpleLogicalOperandPredicate::Predicate(Box::new(
             PredicateBuilder::default()
               .selection(PurpleSelectionOperand::String("brush".to_string()))
               .build()?,
-          ))
+          )))
           .build()?])
         .encoding(
           EncodingBuilder::default()
             .color(
-              DefWithConditionMarkPropFieldDefStringNullBuilder::default()
+              DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                 .condition(
-                  ConditionalPredicateStringValueDefClassBuilder::default()
+                  ConditionalPredicateValueDefGradientStringNullClassBuilder::default()
                     .selection(PurpleSelectionOperand::String("click".to_string()))
-                    .conditional_def_type(StandardType::Nominal)
+                    .conditional_type(StandardType::Nominal)
                     .field("weather")
                     .title("Weather")
                     .build()?,
@@ -144,7 +126,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             )
             .x(
               XClassBuilder::default()
-                .aggregate(AggregateOp::Count)
+                .aggregate(NonArgAggregateOp::Count)
                 .def_type(StandardType::Quantitative)
                 .build()?,
             )
@@ -161,11 +143,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     ])
     .build()?;
 
-    // display the chart using `showata`
-    chart.show()?;
+  // display the chart using `showata`
+  chart.show()?;
 
-    // print the vega lite spec
-    eprint!("{}", chart.to_string()?);
+  // print the vega lite spec
+  eprint!("{}", chart.to_string()?);
 
-    Ok(())
+  Ok(())
 }
