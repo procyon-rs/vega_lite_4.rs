@@ -18,12 +18,12 @@ use showata::Showable;
 
 impl Showable for Vegalite {
     fn to_content_info(&self) -> Result<ContentInfo, Error> {
-        // vega3-extension: .vg, .vl, .vg.json, .vl.json, .vega, .vegalite
+        // vega4-extension: .vg, .vl, .vg.json, .vl.json, .vega, .vegalite
         // mime-types: 	application/vnd.vega.v3+json, application/vnd.vegalite.v2+json
         let content = serde_json::to_string(self)?;
         Ok(ContentInfo {
             content,
-            mime_type: "application/vnd.vegalite.v3+json".into(),
+            mime_type: "application/vnd.vegalite.v4+json".into(),
         })
     }
 
@@ -41,11 +41,11 @@ const VEGA_EMBED_HTML_TEMPLATE: &str = r#"
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <!-- Import Vega 5 & Vega-Lite 3 (does not have to be from CDN) -->
+  <!-- Import Vega 5 & Vega-Lite 4 (does not have to be from CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
   <!-- Import vega-embed -->
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
 
