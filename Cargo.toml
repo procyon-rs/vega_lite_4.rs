@@ -1,7 +1,7 @@
 [package]
 name = "vega_lite_4"
 version = "0.4.2-dev"
-authors = ["David Bernard <david.bernard.31@gmail.com>", "François Mockers <mockersf@gmail.com>", "Thomas Aubry <github.thomaub@gmail.com"]
+authors = ["David Bernard <david.bernard.31@gmail.com>", "François Mockers <mockersf@gmail.com>", "Thomas Aubry <github.thomaub@gmail.com>"]
 edition = "2018"
 license = "Apache-2.0"
 description = "rust api for vega-lite v4"
