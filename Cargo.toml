@@ -1,13 +1,13 @@
 [package]
 name = "vega_lite_4"
 version = "0.1.0-dev"
-authors = ["David Bernard <david.bernard.31@gmail.com>", "François Mockers <mockersf@gmail.com>", "Thomas Aubry"]
+authors = ["David Bernard <david.bernard.31@gmail.com>", "François Mockers <mockersf@gmail.com>", "Thomas Aubry <github.thomaub@gmail.com"]
 edition = "2018"
 license = "Apache-2.0"
 description = "rust api for vega-lite v4"
 repository = "https://github.com/procyon-rs/vega_lite_4.rs"
 readme = "README.md"
-#category = ["visualization"]
+categories = ["visualization"]
 keywords = ["visualization", "plot", "vega", "graphs", "charts"]
 
 [dependencies]
