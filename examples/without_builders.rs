@@ -10,7 +10,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             ..Default::default()
         }),
         transform: Some(vec![Transform {
-            filter: Some(PurpleLogicalOperandPredicate::String("datum.symbol==='GOOG'".to_string())),
+            filter: Some(ConditionalValueDefGradientStringNullLogicalOperandPredicate::String("datum.symbol==='GOOG'".to_string())),
             ..Default::default()
         }]),
         mark: Some(AnyMark::Enum(Mark::Line)),

@@ -3,6 +3,7 @@
 file=${1:-"src/schema.rs"}
 
 npm install -g quicktype
+quicktype --version
 
 url=https://vega.github.io/schema/vega-lite/v4.0.2.json
 escaped_url=$(echo $url | sed 's#/#\\\/#g')
@@ -43,7 +44,8 @@ cat $file >>tmp_schema.rs
 mv tmp_schema.rs $file
 
 echo '-- fix serde import'
-sed -i 's/extern crate serde_json;/use serde::{Deserialize, Serialize};/' $file
+# sed -i 's/extern crate serde_json;/use serde::{Deserialize, Serialize};/' $file
+sed -i 's/extern crate serde_derive;/use serde::{Deserialize, Serialize};/' $file
 
 echo '-- set fields that have special meaning for null'
 sed -i '/use serde::/i\
@@ -84,7 +86,7 @@ sed -i 's/<BoxPlot>/<Mark>/' $file
 sed -i 's/pub enum BoxPlot /pub enum Mark /' $file
 
 sed -i 's/pub \(\w*\): Box<Option<\(\S*\)>>/#[serde(skip_serializing_if = "Option::is_none")] #[builder(default)] pub \1: Option<\2>/' $file
-sed -i 's/pub filter: Option<Box<PurpleLogicalOperandPredicate>>,/pub filter: Option<PurpleLogicalOperandPredicate>,/' $file
+sed -i 's/pub filter: Option<Box<ConditionalValueDefGradientStringNullLogicalOperandPredicatePredicate>>,/pub filter: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicatePredicate>,/' $file
 
 echo '-- From for enums'
 sed -i '/use serde::/i\

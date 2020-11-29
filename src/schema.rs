@@ -12,7 +12,6 @@
 
 #![allow(missing_docs, clippy::large_enum_variant)]
 
-
 use crate::removable_value::RemovableValue;
 use derive_builder::Builder;
 use derive_more::From;
@@ -1315,7 +1314,7 @@ pub struct DefWithConditionMarkPropFieldDefGradientStringNull {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// One or more value definition(s) with [a selection or a test
     /// predicate](https://vega.github.io/vega-lite/docs/condition.html).
     ///
@@ -1435,7 +1434,7 @@ pub struct DefWithConditionMarkPropFieldDefGradientStringNull {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -1581,7 +1580,7 @@ pub struct ConditionalValueDefGradientStringNull {
     /// Predicate for triggering the condition
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub test: Option<PurpleLogicalOperandPredicate>,
+    pub test: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -1592,7 +1591,7 @@ pub struct ConditionalValueDefGradientStringNull {
     /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
@@ -1600,7 +1599,7 @@ pub struct ConditionalValueDefGradientStringNull {
 pub struct Selection {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub not: Option<Box<PurpleSelectionOperand>>,
+    pub not: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub and: Option<Vec<SelectionOperandElement>>,
@@ -1614,7 +1613,7 @@ pub struct Selection {
 pub struct Predicate {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub not: Option<PurpleLogicalOperandPredicate>,
+    pub not: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub and: Option<Vec<LogicalOperandPredicateElement>>,
@@ -1638,7 +1637,7 @@ pub struct Predicate {
     /// for a field value of a data item to be included in the filtered data.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub range: Option<Vec<Option<PurpleRange>>>,
+    pub range: Option<Vec<Option<LogicalNotPredicateRange>>>,
     /// A set of values that the `field`'s value should be a member of,
     /// for a data item included in the filtered data.
     #[serde(rename = "oneOf")]
@@ -1669,7 +1668,7 @@ pub struct Predicate {
     /// Filter using a selection name.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
 }
 
 /// Object for defining datetime in Vega-Lite Filter.
@@ -1824,7 +1823,7 @@ pub struct ConditionalPredicateValueDefGradientStringNullClass {
     /// Predicate for triggering the condition
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub test: Option<PurpleLogicalOperandPredicate>,
+    pub test: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -1835,7 +1834,7 @@ pub struct ConditionalPredicateValueDefGradientStringNullClass {
     /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
     ///
@@ -1865,7 +1864,7 @@ pub struct ConditionalPredicateValueDefGradientStringNullClass {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -1974,7 +1973,7 @@ pub struct ConditionalPredicateValueDefGradientStringNullClass {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -2366,7 +2365,7 @@ pub struct Legend {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// Horizontal text alignment for legend titles.
     ///
     /// __Default value:__ `"left"`.
@@ -2848,7 +2847,7 @@ pub struct RowColumnEncodingFieldDef {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// Boolean flag indicating if facet's subviews should be centered relative to their
     /// respective rows or columns.
     ///
@@ -2943,7 +2942,7 @@ pub struct RowColumnEncodingFieldDef {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -3110,7 +3109,7 @@ pub struct Header {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// Horizontal text alignment (to the anchor) of header titles.
     #[serde(rename = "titleAlign")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3260,7 +3259,7 @@ pub struct TypedFieldDef {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<FluffyBin>,
+    pub bin: Option<TypedFieldDefBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -3311,7 +3310,7 @@ pub struct TypedFieldDef {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -3402,7 +3401,7 @@ pub struct FacetEncodingFieldDef {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// The bounds calculation method to use for determining the extent of a sub-plot. One of
     /// `full` (the default) or `flush`.
     ///
@@ -3533,7 +3532,7 @@ pub struct FacetEncodingFieldDef {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -3650,7 +3649,7 @@ pub struct DefWithConditionMarkPropFieldDefNumber {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// One or more value definition(s) with [a selection or a test
     /// predicate](https://vega.github.io/vega-lite/docs/condition.html).
     ///
@@ -3770,7 +3769,7 @@ pub struct DefWithConditionMarkPropFieldDefNumber {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -3820,7 +3819,7 @@ pub struct ConditionalNumberValueDef {
     /// Predicate for triggering the condition
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub test: Option<PurpleLogicalOperandPredicate>,
+    pub test: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -3831,7 +3830,7 @@ pub struct ConditionalNumberValueDef {
     /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
@@ -3840,7 +3839,7 @@ pub struct ConditionalDef {
     /// Predicate for triggering the condition
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub test: Option<PurpleLogicalOperandPredicate>,
+    pub test: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -3851,7 +3850,7 @@ pub struct ConditionalDef {
     /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
     ///
@@ -3881,7 +3880,7 @@ pub struct ConditionalDef {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -3990,7 +3989,7 @@ pub struct ConditionalDef {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -4070,7 +4069,7 @@ pub struct HrefClass {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<FluffyBin>,
+    pub bin: Option<TypedFieldDefBin>,
     /// One or more value definition(s) with [a selection or a test
     /// predicate](https://vega.github.io/vega-lite/docs/condition.html).
     ///
@@ -4170,7 +4169,7 @@ pub struct HrefClass {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -4220,7 +4219,7 @@ pub struct ConditionElement {
     /// Predicate for triggering the condition
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub test: Option<PurpleLogicalOperandPredicate>,
+    pub test: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -4231,7 +4230,7 @@ pub struct ConditionElement {
     /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
@@ -4240,7 +4239,7 @@ pub struct ConditionalPredicateValueDefStringClass {
     /// Predicate for triggering the condition
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub test: Option<PurpleLogicalOperandPredicate>,
+    pub test: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -4251,7 +4250,7 @@ pub struct ConditionalPredicateValueDefStringClass {
     /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
     ///
@@ -4281,7 +4280,7 @@ pub struct ConditionalPredicateValueDefStringClass {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -4390,7 +4389,7 @@ pub struct ConditionalPredicateValueDefStringClass {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -4517,7 +4516,7 @@ pub struct LatitudeClass {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -4665,7 +4664,7 @@ pub struct Latitude2Class {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -4706,7 +4705,7 @@ pub struct OrderFieldDef {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<FluffyBin>,
+    pub bin: Option<TypedFieldDefBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -4761,7 +4760,7 @@ pub struct OrderFieldDef {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -4833,7 +4832,7 @@ pub struct OrderFieldDefClass {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<FluffyBin>,
+    pub bin: Option<TypedFieldDefBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -4888,7 +4887,7 @@ pub struct OrderFieldDefClass {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -4988,7 +4987,7 @@ pub struct DefWithConditionMarkPropFieldDefTypeForShapeStringNull {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// One or more value definition(s) with [a selection or a test
     /// predicate](https://vega.github.io/vega-lite/docs/condition.html).
     ///
@@ -5108,7 +5107,7 @@ pub struct DefWithConditionMarkPropFieldDefTypeForShapeStringNull {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -5159,7 +5158,7 @@ pub struct ConditionalStringValueDef {
     /// Predicate for triggering the condition
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub test: Option<PurpleLogicalOperandPredicate>,
+    pub test: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -5170,7 +5169,7 @@ pub struct ConditionalStringValueDef {
     /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
@@ -5179,7 +5178,7 @@ pub struct ConditionalPredicateMarkPropFieldDefTypeForShapeClass {
     /// Predicate for triggering the condition
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub test: Option<PurpleLogicalOperandPredicate>,
+    pub test: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -5190,7 +5189,7 @@ pub struct ConditionalPredicateMarkPropFieldDefTypeForShapeClass {
     /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
     ///
@@ -5220,7 +5219,7 @@ pub struct ConditionalPredicateMarkPropFieldDefTypeForShapeClass {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -5329,7 +5328,7 @@ pub struct ConditionalPredicateMarkPropFieldDefTypeForShapeClass {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -5407,7 +5406,7 @@ pub struct DefWithConditionStringFieldDefText {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<FluffyBin>,
+    pub bin: Option<TypedFieldDefBin>,
     /// One or more value definition(s) with [a selection or a test
     /// predicate](https://vega.github.io/vega-lite/docs/condition.html).
     ///
@@ -5507,7 +5506,7 @@ pub struct DefWithConditionStringFieldDefText {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -5548,7 +5547,7 @@ pub struct DefWithConditionStringFieldDefText {
     /// between `0` to `1` for opacity).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub value: Option<PurpleText>,
+    pub value: Option<LegendText>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
@@ -5557,7 +5556,7 @@ pub struct ConditionalValueDefText {
     /// Predicate for triggering the condition
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub test: Option<PurpleLogicalOperandPredicate>,
+    pub test: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -5568,7 +5567,7 @@ pub struct ConditionalValueDefText {
     /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
@@ -5577,18 +5576,18 @@ pub struct ConditionalPredicateValueDefTextClass {
     /// Predicate for triggering the condition
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub test: Option<PurpleLogicalOperandPredicate>,
+    pub test: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub value: Option<PurpleText>,
+    pub value: Option<LegendText>,
     /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
     /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub selection: Option<Box<PurpleSelectionOperand>>,
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionOperand>>,
     /// Aggregation function for the field
     /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
     ///
@@ -5618,7 +5617,7 @@ pub struct ConditionalPredicateValueDefTextClass {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<FluffyBin>,
+    pub bin: Option<TypedFieldDefBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -5707,7 +5706,7 @@ pub struct ConditionalPredicateValueDefTextClass {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -5777,7 +5776,7 @@ pub struct StringFieldDef {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<FluffyBin>,
+    pub bin: Option<TypedFieldDefBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -5866,7 +5865,7 @@ pub struct StringFieldDef {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -5942,7 +5941,7 @@ pub struct FieldDefWithConditionStringFieldDefString {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<FluffyBin>,
+    pub bin: Option<TypedFieldDefBin>,
     /// One or more value definition(s) with [a selection or a test
     /// predicate](https://vega.github.io/vega-lite/docs/condition.html).
     ///
@@ -6042,7 +6041,7 @@ pub struct FieldDefWithConditionStringFieldDefString {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -6147,7 +6146,7 @@ pub struct XClass {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<FluffyBin>,
+    pub bin: Option<TypedFieldDefBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -6282,7 +6281,7 @@ pub struct XClass {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -6692,7 +6691,7 @@ pub struct Axis {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// Horizontal text alignment of axis titles.
     #[serde(rename = "titleAlign")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7144,7 +7143,7 @@ pub struct X2Class {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -7214,7 +7213,7 @@ pub struct YClass {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<FluffyBin>,
+    pub bin: Option<TypedFieldDefBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -7349,7 +7348,7 @@ pub struct YClass {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -7486,7 +7485,7 @@ pub struct Y2Class {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
     /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
     /// between `0` to `1` for opacity).
@@ -7536,7 +7535,7 @@ pub struct Facet {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -7616,7 +7615,7 @@ pub struct Facet {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -7697,7 +7696,7 @@ pub struct FacetFieldDef {
     /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -7777,7 +7776,7 @@ pub struct FacetFieldDef {
     /// axis/header/legend title will be used.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
-    pub title: RemovableValue<PurpleText>,
+    pub title: RemovableValue<LegendText>,
     /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
     /// `"nominal"`).
     /// It can also be a `"geojson"` type for encoding
@@ -8628,11 +8627,11 @@ pub struct MarkDefClass {
     /// specified style `"foo"` has higher precedence).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub style: Option<PurpleText>,
+    pub style: Option<LegendText>,
     /// Placeholder text if the `text` channel is not specified
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub text: Option<PurpleText>,
+    pub text: Option<LegendText>,
     /// Polar coordinate angle, in radians, of the text label from the origin determined by the
     /// `x` and `y` properties. Values for `theta` follow the same convention of `arc` mark
     /// `startAngle` and `endAngle` properties: angles are measured in radians, with `0`
@@ -9057,7 +9056,7 @@ pub struct MarkConfig {
     /// Placeholder text if the `text` channel is not specified
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub text: Option<PurpleText>,
+    pub text: Option<LegendText>,
     /// Polar coordinate angle, in radians, of the text label from the origin determined by the
     /// `x` and `y` properties. Values for `theta` follow the same convention of `arc` mark
     /// `startAngle` and `endAngle` properties: angles are measured in radians, with `0`
@@ -9610,7 +9609,7 @@ pub struct OverlayMarkDef {
     /// specified style `"foo"` has higher precedence).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub style: Option<PurpleText>,
+    pub style: Option<LegendText>,
     /// Depending on the interpolation type, sets the tension parameter (for line and area marks).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -9618,7 +9617,7 @@ pub struct OverlayMarkDef {
     /// Placeholder text if the `text` channel is not specified
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub text: Option<PurpleText>,
+    pub text: Option<LegendText>,
     /// Polar coordinate angle, in radians, of the text label from the origin determined by the
     /// `x` and `y` properties. Values for `theta` follow the same convention of `arc` mark
     /// `startAngle` and `endAngle` properties: angles are measured in radians, with `0`
@@ -10146,7 +10145,7 @@ pub struct PurpleBinding {
     pub consume: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub filter: Option<PurpleText>,
+    pub filter: Option<LegendText>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub markname: Option<String>,
@@ -10181,7 +10180,7 @@ pub struct Stream {
     pub debounce: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub filter: Option<PurpleText>,
+    pub filter: Option<LegendText>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub markname: Option<String>,
@@ -10220,7 +10219,7 @@ pub struct ClearDerivedStream {
     pub debounce: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub filter: Option<PurpleText>,
+    pub filter: Option<LegendText>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub markname: Option<String>,
@@ -10310,7 +10309,7 @@ pub struct OnDerivedStream {
     pub debounce: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub filter: Option<PurpleText>,
+    pub filter: Option<LegendText>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub markname: Option<String>,
@@ -10429,11 +10428,11 @@ pub struct TitleParams {
     /// __Default value:__ `"group-title"`.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub style: Option<PurpleText>,
+    pub style: Option<LegendText>,
     /// The subtitle Text.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub subtitle: Option<PurpleText>,
+    pub subtitle: Option<LegendText>,
     /// Text color for subtitle text.
     #[serde(rename = "subtitleColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10555,11 +10554,11 @@ pub struct Transform {
     #[serde(rename = "as")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub transform_as: Option<PurpleText>,
+    pub transform_as: Option<LegendText>,
     /// An object indicating bin properties, or simply `true` for using default bin parameters.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bin: Option<PurpleBin>,
+    pub bin: Option<ColorBin>,
     /// The data field to bin.
     ///
     /// The data field to apply time unit.
@@ -10647,7 +10646,7 @@ pub struct Transform {
     /// 4) a logical operand that combines (1), (2), or (3).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub filter: Option<PurpleLogicalOperandPredicate>,
+    pub filter: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicate>,
     /// An array of one or more data fields containing arrays to flatten.
     /// If multiple fields are specified, their array values should have a parallel structure,
     /// ideally with the same length.
@@ -11098,7 +11097,7 @@ pub struct ViewBackground {
     /// __Note:__ Any specified view background properties will augment the default style.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub style: Option<PurpleText>,
+    pub style: Option<LegendText>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
@@ -11729,7 +11728,7 @@ pub struct AreaConfig {
     /// Placeholder text if the `text` channel is not specified
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub text: Option<PurpleText>,
+    pub text: Option<LegendText>,
     /// Polar coordinate angle, in radians, of the text label from the origin determined by the
     /// `x` and `y` properties. Values for `theta` follow the same convention of `arc` mark
     /// `startAngle` and `endAngle` properties: angles are measured in radians, with `0`
@@ -12518,7 +12517,7 @@ pub struct RectConfig {
     /// Placeholder text if the `text` channel is not specified
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub text: Option<PurpleText>,
+    pub text: Option<LegendText>,
     /// Polar coordinate angle, in radians, of the text label from the origin determined by the
     /// `x` and `y` properties. Values for `theta` follow the same convention of `arc` mark
     /// `startAngle` and `endAngle` properties: angles are measured in radians, with `0`
@@ -13457,7 +13456,7 @@ pub struct LegendLayout {
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
-pub struct PurpleSignalRef {
+pub struct AnchorSignalRef {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub signal: Option<String>,
@@ -13823,7 +13822,7 @@ pub struct LineConfig {
     /// Placeholder text if the `text` channel is not specified
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub text: Option<PurpleText>,
+    pub text: Option<LegendText>,
     /// Polar coordinate angle, in radians, of the text label from the origin determined by the
     /// `x` and `y` properties. Values for `theta` follow the same convention of `arc` mark
     /// `startAngle` and `endAngle` properties: angles are measured in radians, with `0`
@@ -14593,7 +14592,7 @@ pub struct FluffyBinding {
     pub consume: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub filter: Option<PurpleText>,
+    pub filter: Option<LegendText>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub markname: Option<String>,
@@ -14882,7 +14881,7 @@ pub struct BaseMarkConfig {
     /// Placeholder text if the `text` channel is not specified
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub text: Option<PurpleText>,
+    pub text: Option<LegendText>,
     /// Polar coordinate angle, in radians, of the text label from the origin determined by the
     /// `x` and `y` properties. Values for `theta` follow the same convention of `arc` mark
     /// `startAngle` and `endAngle` properties: angles are measured in radians, with `0`
@@ -15251,7 +15250,7 @@ pub struct TickConfig {
     /// Placeholder text if the `text` channel is not specified
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub text: Option<PurpleText>,
+    pub text: Option<LegendText>,
     /// Polar coordinate angle, in radians, of the text label from the origin determined by the
     /// `x` and `y` properties. Values for `theta` follow the same convention of `arc` mark
     /// `startAngle` and `endAngle` properties: angles are measured in radians, with `0`
@@ -15699,7 +15698,7 @@ pub enum Aggregate {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
-pub enum PurpleBin {
+pub enum ColorBin {
     BinParams(BinParams),
     Bool(bool),
 }
@@ -15742,7 +15741,7 @@ pub enum SelectionOperandElement {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
-pub enum PurpleSelectionOperand {
+pub enum ConditionalValueDefGradientStringNullSelectionOperand {
     Selection(Selection),
     String(String),
 }
@@ -15800,7 +15799,7 @@ pub enum LogicalOperandPredicateElement {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
-pub enum PurpleLogicalOperandPredicate {
+pub enum ConditionalValueDefGradientStringNullLogicalOperandPredicate {
     Predicate(Box<Predicate>),
     String(String),
 }
@@ -15864,7 +15863,7 @@ pub enum Equal {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
-pub enum PurpleRange {
+pub enum LogicalNotPredicateRange {
     DateTime(DateTime),
     Double(f64),
 }
@@ -16021,7 +16020,7 @@ pub enum TickCount {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
-pub enum PurpleText {
+pub enum LegendText {
     String(String),
     StringArray(Vec<String>),
 }
@@ -16220,7 +16219,7 @@ pub enum Detail {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
-pub enum FluffyBin {
+pub enum TypedFieldDefBin {
     BinParams(BinParams),
     Bool(bool),
     Enum(BinEnum),
@@ -16543,7 +16542,7 @@ pub enum Stack {
 #[derive(From)]
 pub enum XUnion {
     Double(f64),
-    Enum(PurpleValue),
+    Enum(XEnum),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -16551,7 +16550,7 @@ pub enum XUnion {
 #[derive(From)]
 pub enum YUnion {
     Double(f64),
-    Enum(FluffyValue),
+    Enum(YEnum),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -16779,8 +16778,8 @@ pub enum BoxplotExtent {
 #[serde(untagged)]
 #[derive(From)]
 pub enum AnchorUnion {
+    AnchorSignalRef(AnchorSignalRef),
     Enum(TitleAnchorEnum),
-    PurpleSignalRef(PurpleSignalRef),
 }
 
 /// The bounds calculation to use for legend orient group layout.
@@ -16788,16 +16787,16 @@ pub enum AnchorUnion {
 #[serde(untagged)]
 #[derive(From)]
 pub enum LayoutBounds {
+    AnchorSignalRef(AnchorSignalRef),
     Enum(BoundsEnum),
-    PurpleSignalRef(PurpleSignalRef),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
 pub enum BottomCenter {
+    AnchorSignalRef(AnchorSignalRef),
     Bool(bool),
-    PurpleSignalRef(PurpleSignalRef),
 }
 
 /// The layout direction for legend orient group layout.
@@ -16805,16 +16804,16 @@ pub enum BottomCenter {
 #[serde(untagged)]
 #[derive(From)]
 pub enum Direction {
+    AnchorSignalRef(AnchorSignalRef),
     Enum(Orientation),
-    PurpleSignalRef(PurpleSignalRef),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
 pub enum MarginUnion {
+    AnchorSignalRef(AnchorSignalRef),
     Double(f64),
-    PurpleSignalRef(PurpleSignalRef),
 }
 
 /// The default visualization padding, in pixels, from the edge of the visualization canvas
@@ -16845,9 +16844,9 @@ pub enum CategoryUnion {
 #[serde(untagged)]
 #[derive(From)]
 pub enum RangeRaw {
+    AnchorSignalRef(AnchorSignalRef),
     Bool(bool),
     Double(f64),
-    PurpleSignalRef(PurpleSignalRef),
     String(String),
     UnionArray(Vec<RangeRawArrayElement>),
 }
@@ -16856,15 +16855,15 @@ pub enum RangeRaw {
 #[serde(untagged)]
 #[derive(From)]
 pub enum RangeRawArrayElement {
+    AnchorSignalRef(AnchorSignalRef),
     Double(f64),
-    PurpleSignalRef(PurpleSignalRef),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
 pub enum SignalRefExtent {
-    PurpleSignalRef(PurpleSignalRef),
+    AnchorSignalRef(AnchorSignalRef),
     UnionArray(Vec<RangeRawArrayElement>),
 }
 
@@ -16872,7 +16871,7 @@ pub enum SignalRefExtent {
 #[serde(untagged)]
 #[derive(From)]
 pub enum ColorScheme {
-    PurpleSignalRef(PurpleSignalRef),
+    AnchorSignalRef(AnchorSignalRef),
     String(String),
     StringArray(Vec<String>),
 }
@@ -17993,13 +17992,13 @@ pub enum StackOffset {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum PurpleValue {
+pub enum XEnum {
     #[serde(rename = "width")]
     Width,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum FluffyValue {
+pub enum YEnum {
     #[serde(rename = "height")]
     Height,
 }

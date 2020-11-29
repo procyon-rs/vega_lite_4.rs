@@ -30,9 +30,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
       SpecBuilder::default()
         .selection(selector_1)
         .transform(vec![TransformBuilder::default()
-          .filter(PurpleLogicalOperandPredicate::Predicate(Box::new(
+          .filter(ConditionalValueDefGradientStringNullLogicalOperandPredicate::Predicate(Box::new(
             PredicateBuilder::default()
-              .selection(PurpleSelectionOperand::String("click".to_string()))
+              .selection(ConditionalValueDefGradientStringNullSelectionOperand::String("click".to_string()))
               .build()?,
           )))
           .build()?])
@@ -45,7 +45,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
               DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                 .condition(
                   ConditionalPredicateValueDefGradientStringNullClassBuilder::default()
-                    .selection(PurpleSelectionOperand::String("brush".to_string()))
+                    .selection(ConditionalValueDefGradientStringNullSelectionOperand::String("brush".to_string()))
                     .conditional_type(StandardType::Nominal)
                     .field("weather")
                     .title("Weather")
@@ -104,9 +104,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .mark(Mark::Bar)
         .selection(selector_2)
         .transform(vec![TransformBuilder::default()
-          .filter(PurpleLogicalOperandPredicate::Predicate(Box::new(
+          .filter(ConditionalValueDefGradientStringNullLogicalOperandPredicate::Predicate(Box::new(
             PredicateBuilder::default()
-              .selection(PurpleSelectionOperand::String("brush".to_string()))
+              .selection(ConditionalValueDefGradientStringNullSelectionOperand::String("brush".to_string()))
               .build()?,
           )))
           .build()?])
@@ -116,7 +116,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
               DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                 .condition(
                   ConditionalPredicateValueDefGradientStringNullClassBuilder::default()
-                    .selection(PurpleSelectionOperand::String("click".to_string()))
+                    .selection(ConditionalValueDefGradientStringNullSelectionOperand::String("click".to_string()))
                     .conditional_type(StandardType::Nominal)
                     .field("weather")
                     .title("Weather")
