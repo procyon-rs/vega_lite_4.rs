@@ -53,12 +53,14 @@ macro_rules! from_into_string{
 // enum that have a `String(String)`variant
 // `grep -B 5 "String(String)" src/schema.rs | grep "pub enum" | sort | sed 's/pub enum \(.*\) {/\1/'`
 from_into_string!(
-    CategoryText,
     ClearUnion,
     Color,
     ColorUnion,
+    ConditionalValueDefGradientStringNullPredicateComposition,
+    ConditionalValueDefGradientStringNullSelectionComposition,
+    ConditionalValueDefTextText,
     Day,
-    EqualUnion,
+    EqualElement,
     Field,
     FillUnion,
     FluffyStream,
@@ -68,7 +70,6 @@ from_into_string!(
     LabelFontStyle,
     LegendText,
     LegendUnion,
-    LogicalNotPredicateSelectionComposition,
     Lt,
     MarkConfigTooltip,
     Month,
@@ -76,13 +77,11 @@ from_into_string!(
     PredicateCompositionElement,
     PurpleStream,
     RangeRange,
-    RangeRaw,
     Scheme,
     SelectionCompositionElement,
     SelectionInit,
     SelectionInitIntervalElement,
     Text,
-    TransformPredicateComposition,
     Translate,
     UrlDataInlineDataset,
     ValueUnion,
@@ -127,18 +126,55 @@ macro_rules! from_into_array_of_str{
     };
 }
 
+macro_rules! from_into_array_of_str_opt{
+
+    ( $( $e:ident::$v:ident(Vec<Option<$t:ident>>) ),* $(,)? ) => {
+        from_into_array_of_str_opt!($( $e::$v(Vec<Option<$t>>), )*, 32,31,30,29,28,27,26,25,24,23,
+        22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0);
+    };
+    ( $( $e:ident::$v:ident(Vec<Option<$t:ident>>) ,)*, $end:expr ) => {
+        // implementations for Vec
+        $(
+            impl From<Vec<&str>> for $e
+            {
+                fn from(v: Vec<&str>) -> Self {
+                    $e::$v(v.iter().map(|s| Some($t::String(s.to_string()))).collect())
+                }
+            }
+            impl From<Vec<String>> for $e
+            {
+                fn from(v: Vec<String>) -> Self {
+                    $e::$v(v.into_iter().map($t::String).map(|v| Some(v)).collect())
+                }
+            }
+        )*
+    };
+    ( $( $e:ident::$v:ident(Vec<Option<$t:ident>>) ,)*, $i:expr, $($tail:expr),+ ) => {
+            // implementations for array of size $i
+            $(
+                impl From<[&str; $i]> for $e
+                {
+                    fn from(v: [&str; $i]) -> Self {
+                        $e::$v(v.iter().map(|s| Some($t::String(s.to_string()))).collect())
+                    }
+                }
+            )*
+            from_into_array_of_str_opt!($( $e::$v(Vec<Option<$t>>), )*, $($tail),*);
+    };
+}
+
 // enums that have a variant that take a Vec of an enum with a `String` variant
 // grep -B 5 "String(String)" src/schema.rs | grep "pub enum" | sort | sed 's/pub enum \(.*\) {/\1/' | \
 //   xargs -I % sh -c "grep '(Vec<%>),' src/schema.rs | \
 //   xargs -I {} sh -c 'grep -B 5 \"{}\" src/schema.rs | grep \"pub enum\" | sed \"s/pub enum \(.*\) {/\1/\" | \
 //     xargs -I $ sh -c \"echo \\\"$::{}\\\"\"'" | sort | uniq
 from_into_array_of_str!(
-    DomainUnion::UnionArray(Vec<SelectionInitIntervalElement>),
     InitValue::UnionArray(Vec<SelectionInitIntervalElement>),
     ScaleRange::UnionArray(Vec<RangeRange>),
     SortArray::UnionArray(Vec<SelectionInitIntervalElement>),
     SortUnion::UnionArray(Vec<SelectionInitIntervalElement>),
 );
+from_into_array_of_str_opt!(DomainUnion::UnionArray(Vec<Option<EqualElement>>),);
 
 // #[cfg(test)]
 // mod tests {

@@ -22,7 +22,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .build()?,
         )
         .layer(vec![
-            LayerSpecBuilder::default()
+            LayerElementBuilder::default()
                 .mark(Mark::Line)
                 .encoding(
                     LayerEncodingBuilder::default()
@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .build()?,
                 )
                 .build()?,
-            LayerSpecBuilder::default()
+            LayerElementBuilder::default()
                 .mark(
                     MarkDefClassBuilder::default()
                         .def_type(Mark::Errorband)

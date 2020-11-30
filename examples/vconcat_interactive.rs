@@ -30,9 +30,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
       SpecBuilder::default()
         .selection(selector_1)
         .transform(vec![TransformBuilder::default()
-          .filter(ConditionalValueDefGradientStringNullLogicalOperandPredicate::Predicate(Box::new(
+          .filter(ConditionalValueDefGradientStringNullPredicateComposition::Predicate(Box::new(
             PredicateBuilder::default()
-              .selection(ConditionalValueDefGradientStringNullSelectionOperand::String("click".to_string()))
+              .selection(ConditionalValueDefGradientStringNullSelectionComposition::String("click".to_string()))
               .build()?,
           )))
           .build()?])
@@ -45,7 +45,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
               DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                 .condition(
                   ConditionalPredicateValueDefGradientStringNullClassBuilder::default()
-                    .selection(ConditionalValueDefGradientStringNullSelectionOperand::String("brush".to_string()))
+                    .selection(ConditionalValueDefGradientStringNullSelectionComposition::String("brush".to_string()))
                     .conditional_type(StandardType::Nominal)
                     .field("weather")
                     .title("Weather")
@@ -74,7 +74,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .def_type(StandardType::Quantitative)
                 .scale(
                   ScaleBuilder::default()
-                    .domain(vec![Equal::Double(-5.0), 40.0.into()])
+                    .domain(vec![Some(EqualElement::Double(-5.0)), Some(EqualElement::Double(40.0))])
                     .build()?,
                 )
                 .axis(
@@ -85,13 +85,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .build()?,
             )
             .size(
-              DefWithConditionMarkPropFieldDefNumberBuilder::default()
+              FillOpacityClassBuilder::default()
                 .title("Precipitation")
                 .field("precipitation")
                 .def_with_condition_mark_prop_field_def_number_type(StandardType::Quantitative)
                 .scale(
                   ScaleBuilder::default()
-                    .domain(vec![Equal::Double(-1.0), 50.0.into()])
+                    .domain(vec![Some(EqualElement::Double(-1.0)), Some(EqualElement::Double(50.0))])
                     .build()?,
                 )
                 .build()?,
@@ -104,9 +104,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .mark(Mark::Bar)
         .selection(selector_2)
         .transform(vec![TransformBuilder::default()
-          .filter(ConditionalValueDefGradientStringNullLogicalOperandPredicate::Predicate(Box::new(
+          .filter(ConditionalValueDefGradientStringNullPredicateComposition::Predicate(Box::new(
             PredicateBuilder::default()
-              .selection(ConditionalValueDefGradientStringNullSelectionOperand::String("brush".to_string()))
+              .selection(ConditionalValueDefGradientStringNullSelectionComposition::String("brush".to_string()))
               .build()?,
           )))
           .build()?])
@@ -116,7 +116,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
               DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
                 .condition(
                   ConditionalPredicateValueDefGradientStringNullClassBuilder::default()
-                    .selection(ConditionalValueDefGradientStringNullSelectionOperand::String("click".to_string()))
+                    .selection(ConditionalValueDefGradientStringNullSelectionComposition::String("click".to_string()))
                     .conditional_type(StandardType::Nominal)
                     .field("weather")
                     .title("Weather")

@@ -31,7 +31,7 @@ pub struct Vegalite {
     #[serde(rename = "$schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(
-        default = "Some(\"https://vega.github.io/schema/vega-lite/v4.2.0.json\".to_string())"
+        default = "Some(\"https://vega.github.io/schema/vega-lite/v4.5.0.json\".to_string())"
     )]
     pub schema: Option<String>,
     /// How the visualization size should be determined. If a string, should be one of `"pad"`,
@@ -271,7 +271,7 @@ pub struct Vegalite {
     /// facet.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub layer: Option<Vec<LayerSpec>>,
+    pub layer: Option<Vec<LayerElement>>,
     /// Definition for fields to be repeated. One of:
     /// 1) An array of fields to be repeated. If `"repeat"` is an array, the field can be
     /// referred using `{"repeat": "repeat"}`
@@ -415,7 +415,7 @@ pub struct SpecSpec {
     /// facet.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub layer: Option<Vec<LayerSpec>>,
+    pub layer: Option<Vec<LayerElement>>,
     /// Name of the visualization for later reference.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -731,7 +731,7 @@ pub struct Spec {
     /// facet.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub layer: Option<Vec<LayerSpec>>,
+    pub layer: Option<Vec<LayerElement>>,
     /// The alignment to apply to grid rows and columns.
     /// The supported string values are `"all"`, `"each"`, and `"none"`.
     ///
@@ -1332,7 +1332,7 @@ pub struct DefWithConditionMarkPropFieldDefGradientStringNull {
     /// A field definition or one or more value definition(s) with a selection predicate.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub condition: Option<serde_json::Value>,
+    pub condition: Option<ValueConditionGradientStringNull>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -1581,6 +1581,465 @@ pub struct BinExtentClass {
     pub encoding: Option<SingleDefUnitChannel>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalValueDefGradientStringNull {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<ValueUnion>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct Selection {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub not: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub and: Option<Vec<SelectionCompositionElement>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub or: Option<Vec<SelectionCompositionElement>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct Predicate {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub not: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub and: Option<Vec<PredicateCompositionElement>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub or: Option<Vec<PredicateCompositionElement>>,
+    /// The value that the field should be equal to.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub equal: Option<EqualElement>,
+    /// Field to be tested.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub field: Option<String>,
+    /// Time unit for the field to be tested.
+    #[serde(rename = "timeUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub time_unit: Option<TimeUnitUnion>,
+    /// An array of inclusive minimum and maximum values
+    /// for a field value of a data item to be included in the filtered data.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub range: Option<Vec<Option<LogicalNotPredicateRange>>>,
+    /// A set of values that the `field`'s value should be a member of,
+    /// for a data item included in the filtered data.
+    #[serde(rename = "oneOf")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub one_of: Option<Vec<SelectionInitIntervalElement>>,
+    /// The value that the field should be less than.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub lt: Option<Lt>,
+    /// The value that the field should be greater than.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub gt: Option<Lt>,
+    /// The value that the field should be less than or equals to.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub lte: Option<Lt>,
+    /// The value that the field should be greater than or equals to.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub gte: Option<Lt>,
+    /// If set to true the field's value has to be valid, meaning both not `null` and not
+    /// [`NaN`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub valid: Option<bool>,
+    /// Filter using a selection name or a logical composition of selection names.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+}
+
+/// Object for defining datetime in Vega-Lite Filter.
+/// If both month and quarter are provided, month has higher precedence.
+/// `day` cannot be combined with other date.
+/// We accept string for month and day names.
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct DateTime {
+    /// Integer value representing the date (day of the month) from 1-31.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub date: Option<f64>,
+    /// Value representing the day of a week. This can be one of:
+    /// (1) integer value -- `1` represents Monday;
+    /// (2) case-insensitive day name (e.g., `"Monday"`);
+    /// (3) case-insensitive, 3-character short day name (e.g., `"Mon"`).
+    ///
+    /// **Warning:** A DateTime definition object with `day`** should not be combined with
+    /// `year`, `quarter`, `month`, or `date`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub day: Option<Day>,
+    /// Integer value representing the hour of a day from 0-23.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub hours: Option<f64>,
+    /// Integer value representing the millisecond segment of time.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub milliseconds: Option<f64>,
+    /// Integer value representing the minute segment of time from 0-59.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub minutes: Option<f64>,
+    /// One of:
+    /// (1) integer value representing the month from `1`-`12`. `1` represents January;
+    /// (2) case-insensitive month name (e.g., `"January"`);
+    /// (3) case-insensitive, 3-character short month name (e.g., `"Jan"`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub month: Option<Month>,
+    /// Integer value representing the quarter of the year (from 1-4).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub quarter: Option<f64>,
+    /// Integer value representing the second segment (0-59) of a time value
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub seconds: Option<f64>,
+    /// A boolean flag indicating if date time is in utc time. If false, the date time is in
+    /// local time
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub utc: Option<bool>,
+    /// Integer value representing the year.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub year: Option<f64>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct TimeUnitParams {
+    /// If no `unit` is specified, maxbins is used to infer time units.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub maxbins: Option<f64>,
+    /// The number of steps between bins, in terms of the least
+    /// significant unit provided.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub step: Option<f64>,
+    /// Defines how date-time values should be binned.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub unit: Option<TimeUnit>,
+    /// True to use UTC timezone. Equivalent to using a `utc` prefixed `TimeUnit`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub utc: Option<bool>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ValueLinearGradient {
+    /// The type of gradient. Use `"linear"` for a linear gradient.
+    ///
+    /// The type of gradient. Use `"radial"` for a radial gradient.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub gradient: Option<Gradient>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub id: Option<String>,
+    /// An array of gradient stops defining the gradient color sequence.
+    pub stops: Vec<GradientStop>,
+    /// The starting x-coordinate, in normalized [0, 1] coordinates, of the linear gradient.
+    ///
+    /// __Default value:__ `0`
+    ///
+    /// The x-coordinate, in normalized [0, 1] coordinates, for the center of the inner circle
+    /// for the gradient.
+    ///
+    /// __Default value:__ `0.5`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub x1: Option<f64>,
+    /// The ending x-coordinate, in normalized [0, 1] coordinates, of the linear gradient.
+    ///
+    /// __Default value:__ `1`
+    ///
+    /// The x-coordinate, in normalized [0, 1] coordinates, for the center of the outer circle
+    /// for the gradient.
+    ///
+    /// __Default value:__ `0.5`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub x2: Option<f64>,
+    /// The starting y-coordinate, in normalized [0, 1] coordinates, of the linear gradient.
+    ///
+    /// __Default value:__ `0`
+    ///
+    /// The y-coordinate, in normalized [0, 1] coordinates, for the center of the inner circle
+    /// for the gradient.
+    ///
+    /// __Default value:__ `0.5`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub y1: Option<f64>,
+    /// The ending y-coordinate, in normalized [0, 1] coordinates, of the linear gradient.
+    ///
+    /// __Default value:__ `0`
+    ///
+    /// The y-coordinate, in normalized [0, 1] coordinates, for the center of the outer circle
+    /// for the gradient.
+    ///
+    /// __Default value:__ `0.5`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub y2: Option<f64>,
+    /// The radius length, in normalized [0, 1] coordinates, of the inner circle for the
+    /// gradient.
+    ///
+    /// __Default value:__ `0`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub r1: Option<f64>,
+    /// The radius length, in normalized [0, 1] coordinates, of the outer circle for the
+    /// gradient.
+    ///
+    /// __Default value:__ `0.5`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub r2: Option<f64>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct GradientStop {
+    /// The color value at this point in the gradient.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub color: Option<String>,
+    /// The offset fraction for the color stop, indicating its position within the gradient.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub offset: Option<f64>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalPredicateValueDefGradientStringNullClass {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<ValueUnion>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+    /// Aggregation function for the field
+    /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html)
+    /// documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub aggregate: Option<Aggregate>,
+    /// A flag for binning a `quantitative` field, [an object defining binning
+    /// parameters](https://vega.github.io/vega-lite/docs/bin.html#params), or indicating that
+    /// the data for `x` or `y` channel are binned before they are imported into Vega-Lite
+    /// (`"binned"`).
+    ///
+    /// - If `true`, default [binning parameters](https://vega.github.io/vega-lite/docs/bin.html)
+    /// will be applied.
+    ///
+    /// - If `"binned"`, this indicates that the data for the `x` (or `y`) channel are already
+    /// binned. You can map the bin-start field to `x` (or `y`) and the bin-end field to `x2` (or
+    /// `y2`). The scale and axis will be formatted similar to binning in Vega-Lite.  To adjust
+    /// the axis ticks based on the bin step, you can also set the axis's
+    /// [`tickMinStep`](https://vega.github.io/vega-lite/docs/axis.html#ticks) property.
+    ///
+    /// __Default value:__ `false`
+    ///
+    /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub bin: Option<ColorBin>,
+    /// __Required.__ A string defining the name of the field from which to pull a data value
+    /// or an object defining iterated values from the
+    /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
+    ///
+    /// __See also:__ [`field`](https://vega.github.io/vega-lite/docs/field.html) documentation.
+    ///
+    /// __Notes:__
+    /// 1)  Dots (`.`) and brackets (`[` and `]`) can be used to access nested objects (e.g.,
+    /// `"field": "foo.bar"` and `"field": "foo['bar']"`).
+    /// If field names contain dots or brackets but are not nested, you can use `\\` to escape
+    /// dots and brackets (e.g., `"a\\.b"` and `"a\\[0\\]"`).
+    /// See more details about escaping in the [field
+    /// documentation](https://vega.github.io/vega-lite/docs/field.html).
+    /// 2) `field` is not required if `aggregate` is `count`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub field: Option<Field>,
+    /// An object defining properties of the legend.
+    /// If `null`, the legend for the encoding channel will be removed.
+    ///
+    /// __Default value:__ If undefined, default [legend
+    /// properties](https://vega.github.io/vega-lite/docs/legend.html) are applied.
+    ///
+    /// __See also:__ [`legend`](https://vega.github.io/vega-lite/docs/legend.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub legend: RemovableValue<Legend>,
+    /// An object defining properties of the channel's scale, which is the function that
+    /// transforms values in the data domain (numbers, dates, strings, etc) to visual values
+    /// (pixels, colors, sizes) of the encoding channels.
+    ///
+    /// If `null`, the scale will be [disabled and the data value will be directly
+    /// encoded](https://vega.github.io/vega-lite/docs/scale.html#disable).
+    ///
+    /// __Default value:__ If undefined, default [scale
+    /// properties](https://vega.github.io/vega-lite/docs/scale.html) are applied.
+    ///
+    /// __See also:__ [`scale`](https://vega.github.io/vega-lite/docs/scale.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub scale: RemovableValue<Scale>,
+    /// Sort order for the encoded field.
+    ///
+    /// For continuous fields (quantitative or temporal), `sort` can be either `"ascending"` or
+    /// `"descending"`.
+    ///
+    /// For discrete fields, `sort` can be one of the following:
+    /// - `"ascending"` or `"descending"` -- for sorting by the values' natural order in
+    /// JavaScript.
+    /// - [A string indicating an encoding channel name to sort
+    /// by](https://vega.github.io/vega-lite/docs/sort.html#sort-by-encoding) (e.g., `"x"` or
+    /// `"y"`) with an optional minus prefix for descending sort (e.g., `"-x"` to sort by
+    /// x-field, descending). This channel string is short-form of [a sort-by-encoding
+    /// definition](https://vega.github.io/vega-lite/docs/sort.html#sort-by-encoding). For
+    /// example, `"sort": "-x"` is equivalent to `"sort": {"encoding": "x", "order":
+    /// "descending"}`.
+    /// - [A sort field definition](https://vega.github.io/vega-lite/docs/sort.html#sort-field)
+    /// for sorting by another field.
+    /// - [An array specifying the field values in preferred
+    /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
+    /// sort order will obey the values in the array, followed by any unspecified values in their
+    /// original order. For discrete time field, values in the sort array can be [date-time
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
+    /// the values can be the month or day names (case insensitive) or their 3-letter initials
+    /// (e.g., `"Mon"`, `"Tue"`).
+    /// - `null` indicating no sort.
+    ///
+    /// __Default value:__ `"ascending"`
+    ///
+    /// __Note:__ `null` and sorting by another channel is not supported for `row` and `column`.
+    ///
+    /// __See also:__ [`sort`](https://vega.github.io/vega-lite/docs/sort.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub sort: RemovableValue<SortUnion>,
+    /// Time unit (e.g., `year`, `yearmonth`, `month`, `hours`) for a temporal field.
+    /// or [a temporal field that gets casted as
+    /// ordinal](https://vega.github.io/vega-lite/docs/type.html#cast).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html)
+    /// documentation.
+    #[serde(rename = "timeUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub time_unit: Option<TimeUnitUnion>,
+    /// A title for the field. If `null`, the title will be removed.
+    ///
+    /// __Default value:__  derived from the field's name and transformation function
+    /// (`aggregate`, `bin` and `timeUnit`). If the field has an aggregate function, the function
+    /// is displayed as part of the title (e.g., `"Sum of Profit"`). If the field is binned or
+    /// has a time unit applied, the applied function is shown in parentheses (e.g., `"Profit
+    /// (binned)"`, `"Transaction Date (year-month)"`). Otherwise, the title is simply the field
+    /// name.
+    ///
+    /// __Notes__:
+    ///
+    /// 1) You can customize the default field title format by providing the
+    /// [`fieldTitle`](https://vega.github.io/vega-lite/docs/config.html#top-level-config)
+    /// property in the [config](https://vega.github.io/vega-lite/docs/config.html) or
+    /// [`fieldTitle` function via the `compile` function's
+    /// options](https://vega.github.io/vega-lite/docs/compile.html#field-title).
+    ///
+    /// 2) If both field definition's `title` and axis, header, or legend `title` are defined,
+    /// axis/header/legend title will be used.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub title: RemovableValue<LegendText>,
+    /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
+    /// `"nominal"`).
+    /// It can also be a `"geojson"` type for encoding
+    /// ['geoshape'](https://vega.github.io/vega-lite/docs/geoshape.html).
+    ///
+    ///
+    /// __Note:__
+    ///
+    /// - Data values for a temporal field can be either a date-time string (e.g., `"2015-03-07
+    /// 12:32:17"`, `"17:01"`, `"2015-03-16"`. `"2015"`) or a timestamp number (e.g.,
+    /// `1552199579097`).
+    /// - Data `type` describes the semantics of the data rather than the primitive data types
+    /// (number, string, etc.). The same primitive data type can have different types of
+    /// measurement. For example, numeric data can represent quantitative, ordinal, or nominal
+    /// data.
+    /// - When using with [`bin`](https://vega.github.io/vega-lite/docs/bin.html), the `type`
+    /// property can be either `"quantitative"` (for using a linear bin scale) or [`"ordinal"`
+    /// (for using an ordinal bin
+    /// scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html), the
+    /// `type` property can be either `"temporal"` (for using a temporal scale) or [`"ordinal"`
+    /// (for using an ordinal scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html),
+    /// the `type` property refers to the post-aggregation data type. For example, we can
+    /// calculate count `distinct` of a categorical field `"cat"` using `{"aggregate":
+    /// "distinct", "field": "cat", "type": "quantitative"}`. The `"type"` of the aggregate
+    /// output is `"quantitative"`.
+    /// - Secondary channels (e.g., `x2`, `y2`, `xError`, `yError`) do not have `type` as they
+    /// have exactly the same type as their primary channels (e.g., `x`, `y`).
+    ///
+    /// __See also:__ [`type`](https://vega.github.io/vega-lite/docs/type.html) documentation.
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub conditional_type: Option<StandardType>,
+}
+
 /// Reference to a repeated value.
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
@@ -1625,7 +2084,7 @@ pub struct Legend {
     /// `"vertical"` for symbol legends.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub direction: Option<Orientation>,
+    pub direction: Option<GradientDirectionEnum>,
     /// Background fill color for the full legend.
     #[serde(rename = "fillColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2032,65 +2491,6 @@ pub struct Legend {
     pub zindex: Option<f64>,
 }
 
-/// Object for defining datetime in Vega-Lite Filter.
-/// If both month and quarter are provided, month has higher precedence.
-/// `day` cannot be combined with other date.
-/// We accept string for month and day names.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
-#[builder(setter(into, strip_option))]
-pub struct DateTime {
-    /// Integer value representing the date (day of the month) from 1-31.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub date: Option<f64>,
-    /// Value representing the day of a week. This can be one of:
-    /// (1) integer value -- `1` represents Monday;
-    /// (2) case-insensitive day name (e.g., `"Monday"`);
-    /// (3) case-insensitive, 3-character short day name (e.g., `"Mon"`).
-    ///
-    /// **Warning:** A DateTime definition object with `day`** should not be combined with
-    /// `year`, `quarter`, `month`, or `date`.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub day: Option<Day>,
-    /// Integer value representing the hour of a day from 0-23.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub hours: Option<f64>,
-    /// Integer value representing the millisecond segment of time.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub milliseconds: Option<f64>,
-    /// Integer value representing the minute segment of time from 0-59.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub minutes: Option<f64>,
-    /// One of:
-    /// (1) integer value representing the month from `1`-`12`. `1` represents January;
-    /// (2) case-insensitive month name (e.g., `"January"`);
-    /// (3) case-insensitive, 3-character short month name (e.g., `"Jan"`).
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub month: Option<Month>,
-    /// Integer value representing the quarter of the year (from 1-4).
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub quarter: Option<f64>,
-    /// Integer value representing the second segment (0-59) of a time value
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub seconds: Option<f64>,
-    /// A boolean flag indicating if date time is in utc time. If false, the date time is in
-    /// local time
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub utc: Option<bool>,
-    /// Integer value representing the year.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub year: Option<f64>,
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Scale {
@@ -2108,11 +2508,19 @@ pub struct Scale {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub base: Option<f64>,
-    /// An array of bin boundaries over the scale domain. If provided, axes and legends will use
-    /// the bin boundaries to inform the choice of tick marks and text labels.
+    /// Bin boundaries can be provided to scales as either an explicit array of bin boundaries or
+    /// as a bin specification object. The legal values are:
+    /// - An [array](../types/#Array) literal of bin boundary values. For example, `[0, 5, 10,
+    /// 15, 20]`. The array must include both starting and ending boundaries. The previous
+    /// example uses five values to indicate a total of four bin intervals: [0-5), [5-10),
+    /// [10-15), [15-20]. Array literals may include signal references as elements.
+    /// - A [bin specification object](https://vega.github.io/vega-lite/docs/scale.html#bins)
+    /// that indicates the bin _step_ size, and optionally the _start_ and _stop_ boundaries.
+    /// - An array of bin boundaries over the scale domain. If provided, axes and legends will
+    /// use the bin boundaries to inform the choice of tick marks and text labels.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub bins: Option<Vec<f64>>,
+    pub bins: Option<ScaleBins>,
     /// If `true`, values that exceed the data domain are clamped to either the minimum or
     /// maximum range value
     ///
@@ -2129,24 +2537,34 @@ pub struct Scale {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub constant: Option<f64>,
-    /// Customized domain values.
+    /// Customized domain values in the form of constant values or dynamic values driven by a
+    /// selection.
     ///
-    /// For _quantitative_ fields, `domain` can take the form of a two-element array with minimum
-    /// and maximum values. [Piecewise
-    /// scales](https://vega.github.io/vega-lite/docs/scale.html#piecewise) can be created by
-    /// providing a `domain` with more than two entries.
-    /// If the input field is aggregated, `domain` can also be a string value `"unaggregated"`,
-    /// indicating that the domain should include the raw data values prior to the aggregation.
+    /// 1) Constant `domain` for _quantitative_ fields can take one of the following forms:
     ///
-    /// For _temporal_ fields, `domain` can be a two-element array minimum and maximum values, in
-    /// the form of either timestamps or the [DateTime definition
+    /// - A two-element array with minimum and maximum values. To create a diverging scale, this
+    /// two-element array can be combined with the `domainMid` property.
+    /// - An array with more than two entries, for [Piecewise quantitative
+    /// scales](https://vega.github.io/vega-lite/docs/scale.html#piecewise).
+    /// - A string value `"unaggregated"`, if the input field is aggregated, to indicate that the
+    /// domain should include the raw data values prior to the aggregation.
+    ///
+    /// 2) Constant `domain` for _temporal_ fields can be a two-element array with minimum and
+    /// maximum values, in the form of either timestamps or the [DateTime definition
     /// objects](https://vega.github.io/vega-lite/docs/types.html#datetime).
     ///
-    /// For _ordinal_ and _nominal_ fields, `domain` can be an array that lists valid input
-    /// values.
+    /// 3) Constant `domain` for _ordinal_ and _nominal_ fields can be an array that lists valid
+    /// input values.
     ///
-    /// The `selection` property can be used to [interactively
-    /// determine](https://vega.github.io/vega-lite/docs/selection.html#scale-domains) the scale
+    /// 4) To combine (union) specified constant domain with the field's values, `domain` can be
+    /// an object with a `unionWith` property that specify constant domain to be combined. For
+    /// example, `domain: {unionWith: [0, 100]}` for a quantitative scale means that the scale
+    /// domain always includes `[0, 100]`, but will include other values in the fields beyond
+    /// `[0, 100]`.
+    ///
+    /// 5) Domain can also takes an object defining a field or encoding of a selection that
+    /// [interactively
+    /// determines](https://vega.github.io/vega-lite/docs/selection.html#scale-domains) the scale
     /// domain.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -2198,7 +2616,7 @@ pub struct Scale {
     /// __Default value:__ `true` for unbinned _quantitative_ fields; `false` otherwise.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub nice: Option<NiceUnion>,
+    pub nice: Option<Nice>,
     /// For _[continuous](https://vega.github.io/vega-lite/docs/scale.html#continuous)_ scales,
     /// expands the scale domain to accommodate the specified number of pixels on each of the
     /// scale range. The scale range must represent pixels for this parameter to function as
@@ -2268,6 +2686,11 @@ pub struct Scale {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub range: Option<ScaleRange>,
+    /// If true, reverses the order of the scale range.
+    /// __Default value:__ `false`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub reverse: Option<bool>,
     /// If `true`, rounds numeric output values to integers. This can be helpful for snapping to
     /// the pixel grid.
     ///
@@ -2335,7 +2758,28 @@ pub struct Scale {
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
-pub struct DomainClass {
+pub struct ScaleBinParams {
+    /// The starting (lowest-valued) bin boundary.
+    ///
+    /// __Default value:__ The lowest value of the scale domain will be used.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub start: Option<f64>,
+    /// The step size defining the bin interval width.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub step: Option<f64>,
+    /// The stopping (highest-valued) bin boundary.
+    ///
+    /// __Default value:__ The highest value of the scale domain will be used.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub stop: Option<f64>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct DomainUnionWith {
     /// The field name to extract selected values for, when a selection is
     /// [projected](https://vega.github.io/vega-lite/docs/project.html)
     /// over multiple fields or encodings.
@@ -2352,6 +2796,27 @@ pub struct DomainClass {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub encoding: Option<SingleDefUnitChannel>,
+    /// Customized domain values to be union with the field's values.
+    ///
+    /// 1) `domain` for _quantitative_ fields can take one of the following forms:
+    ///
+    /// - a two-element array with minimum and maximum values.
+    /// - an array with more than two entries, for [Piecewise  quantitative
+    /// scales](https://vega.github.io/vega-lite/docs/scale.html#piecewise). (Alternatively, the
+    /// `domainMid` property can be set for a diverging scale.)
+    /// - a string value `"unaggregated"`, if the input field is aggregated, to indicate that the
+    /// domain should include the raw data values prior to the aggregation.
+    ///
+    /// 2) `domain` for _temporal_ fields can be a two-element array minimum and maximum values,
+    /// in the form of either timestamps or the [DateTime definition
+    /// objects](https://vega.github.io/vega-lite/docs/types.html#datetime).
+    ///
+    /// 3) `domain` for _ordinal_ and _nominal_ fields can be an array that lists valid input
+    /// values.
+    #[serde(rename = "unionWith")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub union_with: Option<Vec<SelectionInitIntervalElement>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
@@ -2368,10 +2833,10 @@ pub struct ScaleInterpolateParams {
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
-pub struct NiceClass {
+pub struct TimeIntervalStep {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub interval: Option<String>,
+    pub interval: Option<TimeInterval>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub step: Option<f64>,
@@ -2420,7 +2885,7 @@ pub struct EncodingSortField {
     /// For a full list of operations, please see the documentation for
     /// [aggregate](https://vega.github.io/vega-lite/docs/aggregate.html#ops).
     ///
-    /// __Default value:__ `"sum"` for stacked plots. Otherwise, `"mean"`.
+    /// __Default value:__ `"sum"` for stacked plots. Otherwise, `"min"`.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub op: Option<NonArgAggregateOp>,
@@ -2433,115 +2898,6 @@ pub struct EncodingSortField {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub encoding: Option<SortByChannel>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
-#[builder(setter(into, strip_option))]
-pub struct TimeUnitParams {
-    /// If no `unit` is specified, maxbins is used to infer time units.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub maxbins: Option<f64>,
-    /// The number of steps between bins, in terms of the least
-    /// significant unit provided.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub step: Option<f64>,
-    /// Defines how date-time values should be binned.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub unit: Option<TimeUnit>,
-    /// True to use UTC timezone. Equivalent to using a `utc` prefixed `TimeUnit`.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub utc: Option<bool>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
-#[builder(setter(into, strip_option))]
-pub struct ValueLinearGradient {
-    /// The type of gradient. Use `"linear"` for a linear gradient.
-    ///
-    /// The type of gradient. Use `"radial"` for a radial gradient.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub gradient: Option<Gradient>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub id: Option<String>,
-    /// An array of gradient stops defining the gradient color sequence.
-    pub stops: Vec<GradientStop>,
-    /// The starting x-coordinate, in normalized [0, 1] coordinates, of the linear gradient.
-    ///
-    /// __Default value:__ `0`
-    ///
-    /// The x-coordinate, in normalized [0, 1] coordinates, for the center of the inner circle
-    /// for the gradient.
-    ///
-    /// __Default value:__ `0.5`
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub x1: Option<f64>,
-    /// The ending x-coordinate, in normalized [0, 1] coordinates, of the linear gradient.
-    ///
-    /// __Default value:__ `1`
-    ///
-    /// The x-coordinate, in normalized [0, 1] coordinates, for the center of the outer circle
-    /// for the gradient.
-    ///
-    /// __Default value:__ `0.5`
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub x2: Option<f64>,
-    /// The starting y-coordinate, in normalized [0, 1] coordinates, of the linear gradient.
-    ///
-    /// __Default value:__ `0`
-    ///
-    /// The y-coordinate, in normalized [0, 1] coordinates, for the center of the inner circle
-    /// for the gradient.
-    ///
-    /// __Default value:__ `0.5`
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub y1: Option<f64>,
-    /// The ending y-coordinate, in normalized [0, 1] coordinates, of the linear gradient.
-    ///
-    /// __Default value:__ `0`
-    ///
-    /// The y-coordinate, in normalized [0, 1] coordinates, for the center of the outer circle
-    /// for the gradient.
-    ///
-    /// __Default value:__ `0.5`
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub y2: Option<f64>,
-    /// The radius length, in normalized [0, 1] coordinates, of the inner circle for the
-    /// gradient.
-    ///
-    /// __Default value:__ `0`
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub r1: Option<f64>,
-    /// The radius length, in normalized [0, 1] coordinates, of the outer circle for the
-    /// gradient.
-    ///
-    /// __Default value:__ `0.5`
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub r2: Option<f64>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
-#[builder(setter(into, strip_option))]
-pub struct GradientStop {
-    /// The color value at this point in the gradient.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub color: Option<String>,
-    /// The offset fraction for the color stop, indicating its position within the gradient.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub offset: Option<f64>,
 }
 
 /// A field definition for the horizontal facet of trellis plots.
@@ -2957,7 +3313,7 @@ pub struct SortEncodingSortField {
     /// For a full list of operations, please see the documentation for
     /// [aggregate](https://vega.github.io/vega-lite/docs/aggregate.html#ops).
     ///
-    /// __Default value:__ `"sum"` for stacked plots. Otherwise, `"mean"`.
+    /// __Default value:__ `"sum"` for stacked plots. Otherwise, `"min"`.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub op: Option<NonArgAggregateOp>,
@@ -3407,7 +3763,7 @@ pub struct FillOpacityClass {
     /// A field definition or one or more value definition(s) with a selection predicate.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub condition: Option<serde_json::Value>,
+    pub condition: Option<ValueConditionNumber>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -3560,6 +3916,220 @@ pub struct FillOpacityClass {
     pub value: Option<f64>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalNumberValueDef {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<f64>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalDef {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<f64>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+    /// Aggregation function for the field
+    /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html)
+    /// documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub aggregate: Option<Aggregate>,
+    /// A flag for binning a `quantitative` field, [an object defining binning
+    /// parameters](https://vega.github.io/vega-lite/docs/bin.html#params), or indicating that
+    /// the data for `x` or `y` channel are binned before they are imported into Vega-Lite
+    /// (`"binned"`).
+    ///
+    /// - If `true`, default [binning parameters](https://vega.github.io/vega-lite/docs/bin.html)
+    /// will be applied.
+    ///
+    /// - If `"binned"`, this indicates that the data for the `x` (or `y`) channel are already
+    /// binned. You can map the bin-start field to `x` (or `y`) and the bin-end field to `x2` (or
+    /// `y2`). The scale and axis will be formatted similar to binning in Vega-Lite.  To adjust
+    /// the axis ticks based on the bin step, you can also set the axis's
+    /// [`tickMinStep`](https://vega.github.io/vega-lite/docs/axis.html#ticks) property.
+    ///
+    /// __Default value:__ `false`
+    ///
+    /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub bin: Option<ColorBin>,
+    /// __Required.__ A string defining the name of the field from which to pull a data value
+    /// or an object defining iterated values from the
+    /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
+    ///
+    /// __See also:__ [`field`](https://vega.github.io/vega-lite/docs/field.html) documentation.
+    ///
+    /// __Notes:__
+    /// 1)  Dots (`.`) and brackets (`[` and `]`) can be used to access nested objects (e.g.,
+    /// `"field": "foo.bar"` and `"field": "foo['bar']"`).
+    /// If field names contain dots or brackets but are not nested, you can use `\\` to escape
+    /// dots and brackets (e.g., `"a\\.b"` and `"a\\[0\\]"`).
+    /// See more details about escaping in the [field
+    /// documentation](https://vega.github.io/vega-lite/docs/field.html).
+    /// 2) `field` is not required if `aggregate` is `count`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub field: Option<Field>,
+    /// An object defining properties of the legend.
+    /// If `null`, the legend for the encoding channel will be removed.
+    ///
+    /// __Default value:__ If undefined, default [legend
+    /// properties](https://vega.github.io/vega-lite/docs/legend.html) are applied.
+    ///
+    /// __See also:__ [`legend`](https://vega.github.io/vega-lite/docs/legend.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub legend: RemovableValue<Legend>,
+    /// An object defining properties of the channel's scale, which is the function that
+    /// transforms values in the data domain (numbers, dates, strings, etc) to visual values
+    /// (pixels, colors, sizes) of the encoding channels.
+    ///
+    /// If `null`, the scale will be [disabled and the data value will be directly
+    /// encoded](https://vega.github.io/vega-lite/docs/scale.html#disable).
+    ///
+    /// __Default value:__ If undefined, default [scale
+    /// properties](https://vega.github.io/vega-lite/docs/scale.html) are applied.
+    ///
+    /// __See also:__ [`scale`](https://vega.github.io/vega-lite/docs/scale.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub scale: RemovableValue<Scale>,
+    /// Sort order for the encoded field.
+    ///
+    /// For continuous fields (quantitative or temporal), `sort` can be either `"ascending"` or
+    /// `"descending"`.
+    ///
+    /// For discrete fields, `sort` can be one of the following:
+    /// - `"ascending"` or `"descending"` -- for sorting by the values' natural order in
+    /// JavaScript.
+    /// - [A string indicating an encoding channel name to sort
+    /// by](https://vega.github.io/vega-lite/docs/sort.html#sort-by-encoding) (e.g., `"x"` or
+    /// `"y"`) with an optional minus prefix for descending sort (e.g., `"-x"` to sort by
+    /// x-field, descending). This channel string is short-form of [a sort-by-encoding
+    /// definition](https://vega.github.io/vega-lite/docs/sort.html#sort-by-encoding). For
+    /// example, `"sort": "-x"` is equivalent to `"sort": {"encoding": "x", "order":
+    /// "descending"}`.
+    /// - [A sort field definition](https://vega.github.io/vega-lite/docs/sort.html#sort-field)
+    /// for sorting by another field.
+    /// - [An array specifying the field values in preferred
+    /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
+    /// sort order will obey the values in the array, followed by any unspecified values in their
+    /// original order. For discrete time field, values in the sort array can be [date-time
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
+    /// the values can be the month or day names (case insensitive) or their 3-letter initials
+    /// (e.g., `"Mon"`, `"Tue"`).
+    /// - `null` indicating no sort.
+    ///
+    /// __Default value:__ `"ascending"`
+    ///
+    /// __Note:__ `null` and sorting by another channel is not supported for `row` and `column`.
+    ///
+    /// __See also:__ [`sort`](https://vega.github.io/vega-lite/docs/sort.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub sort: RemovableValue<SortUnion>,
+    /// Time unit (e.g., `year`, `yearmonth`, `month`, `hours`) for a temporal field.
+    /// or [a temporal field that gets casted as
+    /// ordinal](https://vega.github.io/vega-lite/docs/type.html#cast).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html)
+    /// documentation.
+    #[serde(rename = "timeUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub time_unit: Option<TimeUnitUnion>,
+    /// A title for the field. If `null`, the title will be removed.
+    ///
+    /// __Default value:__  derived from the field's name and transformation function
+    /// (`aggregate`, `bin` and `timeUnit`). If the field has an aggregate function, the function
+    /// is displayed as part of the title (e.g., `"Sum of Profit"`). If the field is binned or
+    /// has a time unit applied, the applied function is shown in parentheses (e.g., `"Profit
+    /// (binned)"`, `"Transaction Date (year-month)"`). Otherwise, the title is simply the field
+    /// name.
+    ///
+    /// __Notes__:
+    ///
+    /// 1) You can customize the default field title format by providing the
+    /// [`fieldTitle`](https://vega.github.io/vega-lite/docs/config.html#top-level-config)
+    /// property in the [config](https://vega.github.io/vega-lite/docs/config.html) or
+    /// [`fieldTitle` function via the `compile` function's
+    /// options](https://vega.github.io/vega-lite/docs/compile.html#field-title).
+    ///
+    /// 2) If both field definition's `title` and axis, header, or legend `title` are defined,
+    /// axis/header/legend title will be used.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub title: RemovableValue<LegendText>,
+    /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
+    /// `"nominal"`).
+    /// It can also be a `"geojson"` type for encoding
+    /// ['geoshape'](https://vega.github.io/vega-lite/docs/geoshape.html).
+    ///
+    ///
+    /// __Note:__
+    ///
+    /// - Data values for a temporal field can be either a date-time string (e.g., `"2015-03-07
+    /// 12:32:17"`, `"17:01"`, `"2015-03-16"`. `"2015"`) or a timestamp number (e.g.,
+    /// `1552199579097`).
+    /// - Data `type` describes the semantics of the data rather than the primitive data types
+    /// (number, string, etc.). The same primitive data type can have different types of
+    /// measurement. For example, numeric data can represent quantitative, ordinal, or nominal
+    /// data.
+    /// - When using with [`bin`](https://vega.github.io/vega-lite/docs/bin.html), the `type`
+    /// property can be either `"quantitative"` (for using a linear bin scale) or [`"ordinal"`
+    /// (for using an ordinal bin
+    /// scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html), the
+    /// `type` property can be either `"temporal"` (for using a temporal scale) or [`"ordinal"`
+    /// (for using an ordinal scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html),
+    /// the `type` property refers to the post-aggregation data type. For example, we can
+    /// calculate count `distinct` of a categorical field `"cat"` using `{"aggregate":
+    /// "distinct", "field": "cat", "type": "quantitative"}`. The `"type"` of the aggregate
+    /// output is `"quantitative"`.
+    /// - Secondary channels (e.g., `x2`, `y2`, `xError`, `yError`) do not have `type` as they
+    /// have exactly the same type as their primary channels (e.g., `x`, `y`).
+    ///
+    /// __See also:__ [`type`](https://vega.github.io/vega-lite/docs/type.html) documentation.
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub conditional_def_type: Option<StandardType>,
+}
+
 /// A URL to load upon mouse click.
 ///
 /// The URL of an image mark.
@@ -3613,7 +4183,7 @@ pub struct HrefClass {
     /// A field definition or one or more value definition(s) with a selection predicate.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub condition: Option<serde_json::Value>,
+    pub condition: Option<ValueConditionString>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -3744,6 +4314,220 @@ pub struct HrefClass {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub value: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct Conditional {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<String>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalPredicateValueDefStringClass {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<String>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+    /// Aggregation function for the field
+    /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html)
+    /// documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub aggregate: Option<Aggregate>,
+    /// A flag for binning a `quantitative` field, [an object defining binning
+    /// parameters](https://vega.github.io/vega-lite/docs/bin.html#params), or indicating that
+    /// the data for `x` or `y` channel are binned before they are imported into Vega-Lite
+    /// (`"binned"`).
+    ///
+    /// - If `true`, default [binning parameters](https://vega.github.io/vega-lite/docs/bin.html)
+    /// will be applied.
+    ///
+    /// - If `"binned"`, this indicates that the data for the `x` (or `y`) channel are already
+    /// binned. You can map the bin-start field to `x` (or `y`) and the bin-end field to `x2` (or
+    /// `y2`). The scale and axis will be formatted similar to binning in Vega-Lite.  To adjust
+    /// the axis ticks based on the bin step, you can also set the axis's
+    /// [`tickMinStep`](https://vega.github.io/vega-lite/docs/axis.html#ticks) property.
+    ///
+    /// __Default value:__ `false`
+    ///
+    /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub bin: Option<ColorBin>,
+    /// __Required.__ A string defining the name of the field from which to pull a data value
+    /// or an object defining iterated values from the
+    /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
+    ///
+    /// __See also:__ [`field`](https://vega.github.io/vega-lite/docs/field.html) documentation.
+    ///
+    /// __Notes:__
+    /// 1)  Dots (`.`) and brackets (`[` and `]`) can be used to access nested objects (e.g.,
+    /// `"field": "foo.bar"` and `"field": "foo['bar']"`).
+    /// If field names contain dots or brackets but are not nested, you can use `\\` to escape
+    /// dots and brackets (e.g., `"a\\.b"` and `"a\\[0\\]"`).
+    /// See more details about escaping in the [field
+    /// documentation](https://vega.github.io/vega-lite/docs/field.html).
+    /// 2) `field` is not required if `aggregate` is `count`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub field: Option<Field>,
+    /// An object defining properties of the legend.
+    /// If `null`, the legend for the encoding channel will be removed.
+    ///
+    /// __Default value:__ If undefined, default [legend
+    /// properties](https://vega.github.io/vega-lite/docs/legend.html) are applied.
+    ///
+    /// __See also:__ [`legend`](https://vega.github.io/vega-lite/docs/legend.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub legend: RemovableValue<Legend>,
+    /// An object defining properties of the channel's scale, which is the function that
+    /// transforms values in the data domain (numbers, dates, strings, etc) to visual values
+    /// (pixels, colors, sizes) of the encoding channels.
+    ///
+    /// If `null`, the scale will be [disabled and the data value will be directly
+    /// encoded](https://vega.github.io/vega-lite/docs/scale.html#disable).
+    ///
+    /// __Default value:__ If undefined, default [scale
+    /// properties](https://vega.github.io/vega-lite/docs/scale.html) are applied.
+    ///
+    /// __See also:__ [`scale`](https://vega.github.io/vega-lite/docs/scale.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub scale: RemovableValue<Scale>,
+    /// Sort order for the encoded field.
+    ///
+    /// For continuous fields (quantitative or temporal), `sort` can be either `"ascending"` or
+    /// `"descending"`.
+    ///
+    /// For discrete fields, `sort` can be one of the following:
+    /// - `"ascending"` or `"descending"` -- for sorting by the values' natural order in
+    /// JavaScript.
+    /// - [A string indicating an encoding channel name to sort
+    /// by](https://vega.github.io/vega-lite/docs/sort.html#sort-by-encoding) (e.g., `"x"` or
+    /// `"y"`) with an optional minus prefix for descending sort (e.g., `"-x"` to sort by
+    /// x-field, descending). This channel string is short-form of [a sort-by-encoding
+    /// definition](https://vega.github.io/vega-lite/docs/sort.html#sort-by-encoding). For
+    /// example, `"sort": "-x"` is equivalent to `"sort": {"encoding": "x", "order":
+    /// "descending"}`.
+    /// - [A sort field definition](https://vega.github.io/vega-lite/docs/sort.html#sort-field)
+    /// for sorting by another field.
+    /// - [An array specifying the field values in preferred
+    /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
+    /// sort order will obey the values in the array, followed by any unspecified values in their
+    /// original order. For discrete time field, values in the sort array can be [date-time
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
+    /// the values can be the month or day names (case insensitive) or their 3-letter initials
+    /// (e.g., `"Mon"`, `"Tue"`).
+    /// - `null` indicating no sort.
+    ///
+    /// __Default value:__ `"ascending"`
+    ///
+    /// __Note:__ `null` and sorting by another channel is not supported for `row` and `column`.
+    ///
+    /// __See also:__ [`sort`](https://vega.github.io/vega-lite/docs/sort.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub sort: RemovableValue<SortUnion>,
+    /// Time unit (e.g., `year`, `yearmonth`, `month`, `hours`) for a temporal field.
+    /// or [a temporal field that gets casted as
+    /// ordinal](https://vega.github.io/vega-lite/docs/type.html#cast).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html)
+    /// documentation.
+    #[serde(rename = "timeUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub time_unit: Option<TimeUnitUnion>,
+    /// A title for the field. If `null`, the title will be removed.
+    ///
+    /// __Default value:__  derived from the field's name and transformation function
+    /// (`aggregate`, `bin` and `timeUnit`). If the field has an aggregate function, the function
+    /// is displayed as part of the title (e.g., `"Sum of Profit"`). If the field is binned or
+    /// has a time unit applied, the applied function is shown in parentheses (e.g., `"Profit
+    /// (binned)"`, `"Transaction Date (year-month)"`). Otherwise, the title is simply the field
+    /// name.
+    ///
+    /// __Notes__:
+    ///
+    /// 1) You can customize the default field title format by providing the
+    /// [`fieldTitle`](https://vega.github.io/vega-lite/docs/config.html#top-level-config)
+    /// property in the [config](https://vega.github.io/vega-lite/docs/config.html) or
+    /// [`fieldTitle` function via the `compile` function's
+    /// options](https://vega.github.io/vega-lite/docs/compile.html#field-title).
+    ///
+    /// 2) If both field definition's `title` and axis, header, or legend `title` are defined,
+    /// axis/header/legend title will be used.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub title: RemovableValue<LegendText>,
+    /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
+    /// `"nominal"`).
+    /// It can also be a `"geojson"` type for encoding
+    /// ['geoshape'](https://vega.github.io/vega-lite/docs/geoshape.html).
+    ///
+    ///
+    /// __Note:__
+    ///
+    /// - Data values for a temporal field can be either a date-time string (e.g., `"2015-03-07
+    /// 12:32:17"`, `"17:01"`, `"2015-03-16"`. `"2015"`) or a timestamp number (e.g.,
+    /// `1552199579097`).
+    /// - Data `type` describes the semantics of the data rather than the primitive data types
+    /// (number, string, etc.). The same primitive data type can have different types of
+    /// measurement. For example, numeric data can represent quantitative, ordinal, or nominal
+    /// data.
+    /// - When using with [`bin`](https://vega.github.io/vega-lite/docs/bin.html), the `type`
+    /// property can be either `"quantitative"` (for using a linear bin scale) or [`"ordinal"`
+    /// (for using an ordinal bin
+    /// scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html), the
+    /// `type` property can be either `"temporal"` (for using a temporal scale) or [`"ordinal"`
+    /// (for using an ordinal scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html),
+    /// the `type` property refers to the post-aggregation data type. For example, we can
+    /// calculate count `distinct` of a categorical field `"cat"` using `{"aggregate":
+    /// "distinct", "field": "cat", "type": "quantitative"}`. The `"type"` of the aggregate
+    /// output is `"quantitative"`.
+    /// - Secondary channels (e.g., `x2`, `y2`, `xError`, `yError`) do not have `type` as they
+    /// have exactly the same type as their primary channels (e.g., `x`, `y`).
+    ///
+    /// __See also:__ [`type`](https://vega.github.io/vega-lite/docs/type.html) documentation.
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub conditional_type: Option<StandardType>,
 }
 
 /// Latitude position of geographically projected marks.
@@ -4317,7 +5101,7 @@ pub struct DefWithConditionMarkPropFieldDefTypeForShapeStringNull {
     /// A field definition or one or more value definition(s) with a selection predicate.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub condition: Option<serde_json::Value>,
+    pub condition: Option<ValueConditionStringNull>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -4471,6 +5255,220 @@ pub struct DefWithConditionMarkPropFieldDefTypeForShapeStringNull {
     pub value: Option<String>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalStringValueDef {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<String>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalPredicateMarkPropFieldDefTypeForShapeClass {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<String>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+    /// Aggregation function for the field
+    /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html)
+    /// documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub aggregate: Option<Aggregate>,
+    /// A flag for binning a `quantitative` field, [an object defining binning
+    /// parameters](https://vega.github.io/vega-lite/docs/bin.html#params), or indicating that
+    /// the data for `x` or `y` channel are binned before they are imported into Vega-Lite
+    /// (`"binned"`).
+    ///
+    /// - If `true`, default [binning parameters](https://vega.github.io/vega-lite/docs/bin.html)
+    /// will be applied.
+    ///
+    /// - If `"binned"`, this indicates that the data for the `x` (or `y`) channel are already
+    /// binned. You can map the bin-start field to `x` (or `y`) and the bin-end field to `x2` (or
+    /// `y2`). The scale and axis will be formatted similar to binning in Vega-Lite.  To adjust
+    /// the axis ticks based on the bin step, you can also set the axis's
+    /// [`tickMinStep`](https://vega.github.io/vega-lite/docs/axis.html#ticks) property.
+    ///
+    /// __Default value:__ `false`
+    ///
+    /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub bin: Option<ColorBin>,
+    /// __Required.__ A string defining the name of the field from which to pull a data value
+    /// or an object defining iterated values from the
+    /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
+    ///
+    /// __See also:__ [`field`](https://vega.github.io/vega-lite/docs/field.html) documentation.
+    ///
+    /// __Notes:__
+    /// 1)  Dots (`.`) and brackets (`[` and `]`) can be used to access nested objects (e.g.,
+    /// `"field": "foo.bar"` and `"field": "foo['bar']"`).
+    /// If field names contain dots or brackets but are not nested, you can use `\\` to escape
+    /// dots and brackets (e.g., `"a\\.b"` and `"a\\[0\\]"`).
+    /// See more details about escaping in the [field
+    /// documentation](https://vega.github.io/vega-lite/docs/field.html).
+    /// 2) `field` is not required if `aggregate` is `count`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub field: Option<Field>,
+    /// An object defining properties of the legend.
+    /// If `null`, the legend for the encoding channel will be removed.
+    ///
+    /// __Default value:__ If undefined, default [legend
+    /// properties](https://vega.github.io/vega-lite/docs/legend.html) are applied.
+    ///
+    /// __See also:__ [`legend`](https://vega.github.io/vega-lite/docs/legend.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub legend: RemovableValue<Legend>,
+    /// An object defining properties of the channel's scale, which is the function that
+    /// transforms values in the data domain (numbers, dates, strings, etc) to visual values
+    /// (pixels, colors, sizes) of the encoding channels.
+    ///
+    /// If `null`, the scale will be [disabled and the data value will be directly
+    /// encoded](https://vega.github.io/vega-lite/docs/scale.html#disable).
+    ///
+    /// __Default value:__ If undefined, default [scale
+    /// properties](https://vega.github.io/vega-lite/docs/scale.html) are applied.
+    ///
+    /// __See also:__ [`scale`](https://vega.github.io/vega-lite/docs/scale.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub scale: RemovableValue<Scale>,
+    /// Sort order for the encoded field.
+    ///
+    /// For continuous fields (quantitative or temporal), `sort` can be either `"ascending"` or
+    /// `"descending"`.
+    ///
+    /// For discrete fields, `sort` can be one of the following:
+    /// - `"ascending"` or `"descending"` -- for sorting by the values' natural order in
+    /// JavaScript.
+    /// - [A string indicating an encoding channel name to sort
+    /// by](https://vega.github.io/vega-lite/docs/sort.html#sort-by-encoding) (e.g., `"x"` or
+    /// `"y"`) with an optional minus prefix for descending sort (e.g., `"-x"` to sort by
+    /// x-field, descending). This channel string is short-form of [a sort-by-encoding
+    /// definition](https://vega.github.io/vega-lite/docs/sort.html#sort-by-encoding). For
+    /// example, `"sort": "-x"` is equivalent to `"sort": {"encoding": "x", "order":
+    /// "descending"}`.
+    /// - [A sort field definition](https://vega.github.io/vega-lite/docs/sort.html#sort-field)
+    /// for sorting by another field.
+    /// - [An array specifying the field values in preferred
+    /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
+    /// sort order will obey the values in the array, followed by any unspecified values in their
+    /// original order. For discrete time field, values in the sort array can be [date-time
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
+    /// the values can be the month or day names (case insensitive) or their 3-letter initials
+    /// (e.g., `"Mon"`, `"Tue"`).
+    /// - `null` indicating no sort.
+    ///
+    /// __Default value:__ `"ascending"`
+    ///
+    /// __Note:__ `null` and sorting by another channel is not supported for `row` and `column`.
+    ///
+    /// __See also:__ [`sort`](https://vega.github.io/vega-lite/docs/sort.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub sort: RemovableValue<SortUnion>,
+    /// Time unit (e.g., `year`, `yearmonth`, `month`, `hours`) for a temporal field.
+    /// or [a temporal field that gets casted as
+    /// ordinal](https://vega.github.io/vega-lite/docs/type.html#cast).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html)
+    /// documentation.
+    #[serde(rename = "timeUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub time_unit: Option<TimeUnitUnion>,
+    /// A title for the field. If `null`, the title will be removed.
+    ///
+    /// __Default value:__  derived from the field's name and transformation function
+    /// (`aggregate`, `bin` and `timeUnit`). If the field has an aggregate function, the function
+    /// is displayed as part of the title (e.g., `"Sum of Profit"`). If the field is binned or
+    /// has a time unit applied, the applied function is shown in parentheses (e.g., `"Profit
+    /// (binned)"`, `"Transaction Date (year-month)"`). Otherwise, the title is simply the field
+    /// name.
+    ///
+    /// __Notes__:
+    ///
+    /// 1) You can customize the default field title format by providing the
+    /// [`fieldTitle`](https://vega.github.io/vega-lite/docs/config.html#top-level-config)
+    /// property in the [config](https://vega.github.io/vega-lite/docs/config.html) or
+    /// [`fieldTitle` function via the `compile` function's
+    /// options](https://vega.github.io/vega-lite/docs/compile.html#field-title).
+    ///
+    /// 2) If both field definition's `title` and axis, header, or legend `title` are defined,
+    /// axis/header/legend title will be used.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub title: RemovableValue<LegendText>,
+    /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
+    /// `"nominal"`).
+    /// It can also be a `"geojson"` type for encoding
+    /// ['geoshape'](https://vega.github.io/vega-lite/docs/geoshape.html).
+    ///
+    ///
+    /// __Note:__
+    ///
+    /// - Data values for a temporal field can be either a date-time string (e.g., `"2015-03-07
+    /// 12:32:17"`, `"17:01"`, `"2015-03-16"`. `"2015"`) or a timestamp number (e.g.,
+    /// `1552199579097`).
+    /// - Data `type` describes the semantics of the data rather than the primitive data types
+    /// (number, string, etc.). The same primitive data type can have different types of
+    /// measurement. For example, numeric data can represent quantitative, ordinal, or nominal
+    /// data.
+    /// - When using with [`bin`](https://vega.github.io/vega-lite/docs/bin.html), the `type`
+    /// property can be either `"quantitative"` (for using a linear bin scale) or [`"ordinal"`
+    /// (for using an ordinal bin
+    /// scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html), the
+    /// `type` property can be either `"temporal"` (for using a temporal scale) or [`"ordinal"`
+    /// (for using an ordinal scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html),
+    /// the `type` property refers to the post-aggregation data type. For example, we can
+    /// calculate count `distinct` of a categorical field `"cat"` using `{"aggregate":
+    /// "distinct", "field": "cat", "type": "quantitative"}`. The `"type"` of the aggregate
+    /// output is `"quantitative"`.
+    /// - Secondary channels (e.g., `x2`, `y2`, `xError`, `yError`) do not have `type` as they
+    /// have exactly the same type as their primary channels (e.g., `x`, `y`).
+    ///
+    /// __See also:__ [`type`](https://vega.github.io/vega-lite/docs/type.html) documentation.
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub conditional_type: Option<TypeForShape>,
+}
+
 /// Stroke dash of the marks.
 ///
 /// __Default value:__ `[1,0]` (No dash).
@@ -4524,7 +5522,7 @@ pub struct StrokeDashClass {
     /// A field definition or one or more value definition(s) with a selection predicate.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub condition: Option<serde_json::Value>,
+    pub condition: Option<StrokeDashCondition>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -4677,6 +5675,218 @@ pub struct StrokeDashClass {
     pub value: Option<Vec<f64>>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalValueDefNumber {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    pub value: Vec<f64>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalPredicateValueDefNumberClass {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<Vec<f64>>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+    /// Aggregation function for the field
+    /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html)
+    /// documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub aggregate: Option<Aggregate>,
+    /// A flag for binning a `quantitative` field, [an object defining binning
+    /// parameters](https://vega.github.io/vega-lite/docs/bin.html#params), or indicating that
+    /// the data for `x` or `y` channel are binned before they are imported into Vega-Lite
+    /// (`"binned"`).
+    ///
+    /// - If `true`, default [binning parameters](https://vega.github.io/vega-lite/docs/bin.html)
+    /// will be applied.
+    ///
+    /// - If `"binned"`, this indicates that the data for the `x` (or `y`) channel are already
+    /// binned. You can map the bin-start field to `x` (or `y`) and the bin-end field to `x2` (or
+    /// `y2`). The scale and axis will be formatted similar to binning in Vega-Lite.  To adjust
+    /// the axis ticks based on the bin step, you can also set the axis's
+    /// [`tickMinStep`](https://vega.github.io/vega-lite/docs/axis.html#ticks) property.
+    ///
+    /// __Default value:__ `false`
+    ///
+    /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub bin: Option<ColorBin>,
+    /// __Required.__ A string defining the name of the field from which to pull a data value
+    /// or an object defining iterated values from the
+    /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
+    ///
+    /// __See also:__ [`field`](https://vega.github.io/vega-lite/docs/field.html) documentation.
+    ///
+    /// __Notes:__
+    /// 1)  Dots (`.`) and brackets (`[` and `]`) can be used to access nested objects (e.g.,
+    /// `"field": "foo.bar"` and `"field": "foo['bar']"`).
+    /// If field names contain dots or brackets but are not nested, you can use `\\` to escape
+    /// dots and brackets (e.g., `"a\\.b"` and `"a\\[0\\]"`).
+    /// See more details about escaping in the [field
+    /// documentation](https://vega.github.io/vega-lite/docs/field.html).
+    /// 2) `field` is not required if `aggregate` is `count`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub field: Option<Field>,
+    /// An object defining properties of the legend.
+    /// If `null`, the legend for the encoding channel will be removed.
+    ///
+    /// __Default value:__ If undefined, default [legend
+    /// properties](https://vega.github.io/vega-lite/docs/legend.html) are applied.
+    ///
+    /// __See also:__ [`legend`](https://vega.github.io/vega-lite/docs/legend.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub legend: RemovableValue<Legend>,
+    /// An object defining properties of the channel's scale, which is the function that
+    /// transforms values in the data domain (numbers, dates, strings, etc) to visual values
+    /// (pixels, colors, sizes) of the encoding channels.
+    ///
+    /// If `null`, the scale will be [disabled and the data value will be directly
+    /// encoded](https://vega.github.io/vega-lite/docs/scale.html#disable).
+    ///
+    /// __Default value:__ If undefined, default [scale
+    /// properties](https://vega.github.io/vega-lite/docs/scale.html) are applied.
+    ///
+    /// __See also:__ [`scale`](https://vega.github.io/vega-lite/docs/scale.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub scale: RemovableValue<Scale>,
+    /// Sort order for the encoded field.
+    ///
+    /// For continuous fields (quantitative or temporal), `sort` can be either `"ascending"` or
+    /// `"descending"`.
+    ///
+    /// For discrete fields, `sort` can be one of the following:
+    /// - `"ascending"` or `"descending"` -- for sorting by the values' natural order in
+    /// JavaScript.
+    /// - [A string indicating an encoding channel name to sort
+    /// by](https://vega.github.io/vega-lite/docs/sort.html#sort-by-encoding) (e.g., `"x"` or
+    /// `"y"`) with an optional minus prefix for descending sort (e.g., `"-x"` to sort by
+    /// x-field, descending). This channel string is short-form of [a sort-by-encoding
+    /// definition](https://vega.github.io/vega-lite/docs/sort.html#sort-by-encoding). For
+    /// example, `"sort": "-x"` is equivalent to `"sort": {"encoding": "x", "order":
+    /// "descending"}`.
+    /// - [A sort field definition](https://vega.github.io/vega-lite/docs/sort.html#sort-field)
+    /// for sorting by another field.
+    /// - [An array specifying the field values in preferred
+    /// order](https://vega.github.io/vega-lite/docs/sort.html#sort-array). In this case, the
+    /// sort order will obey the values in the array, followed by any unspecified values in their
+    /// original order. For discrete time field, values in the sort array can be [date-time
+    /// definition objects](struct.DateTime.html). In addition, for time units `"month"` and `"day"`,
+    /// the values can be the month or day names (case insensitive) or their 3-letter initials
+    /// (e.g., `"Mon"`, `"Tue"`).
+    /// - `null` indicating no sort.
+    ///
+    /// __Default value:__ `"ascending"`
+    ///
+    /// __Note:__ `null` and sorting by another channel is not supported for `row` and `column`.
+    ///
+    /// __See also:__ [`sort`](https://vega.github.io/vega-lite/docs/sort.html) documentation.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub sort: RemovableValue<SortUnion>,
+    /// Time unit (e.g., `year`, `yearmonth`, `month`, `hours`) for a temporal field.
+    /// or [a temporal field that gets casted as
+    /// ordinal](https://vega.github.io/vega-lite/docs/type.html#cast).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html)
+    /// documentation.
+    #[serde(rename = "timeUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub time_unit: Option<TimeUnitUnion>,
+    /// A title for the field. If `null`, the title will be removed.
+    ///
+    /// __Default value:__  derived from the field's name and transformation function
+    /// (`aggregate`, `bin` and `timeUnit`). If the field has an aggregate function, the function
+    /// is displayed as part of the title (e.g., `"Sum of Profit"`). If the field is binned or
+    /// has a time unit applied, the applied function is shown in parentheses (e.g., `"Profit
+    /// (binned)"`, `"Transaction Date (year-month)"`). Otherwise, the title is simply the field
+    /// name.
+    ///
+    /// __Notes__:
+    ///
+    /// 1) You can customize the default field title format by providing the
+    /// [`fieldTitle`](https://vega.github.io/vega-lite/docs/config.html#top-level-config)
+    /// property in the [config](https://vega.github.io/vega-lite/docs/config.html) or
+    /// [`fieldTitle` function via the `compile` function's
+    /// options](https://vega.github.io/vega-lite/docs/compile.html#field-title).
+    ///
+    /// 2) If both field definition's `title` and axis, header, or legend `title` are defined,
+    /// axis/header/legend title will be used.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub title: RemovableValue<LegendText>,
+    /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
+    /// `"nominal"`).
+    /// It can also be a `"geojson"` type for encoding
+    /// ['geoshape'](https://vega.github.io/vega-lite/docs/geoshape.html).
+    ///
+    ///
+    /// __Note:__
+    ///
+    /// - Data values for a temporal field can be either a date-time string (e.g., `"2015-03-07
+    /// 12:32:17"`, `"17:01"`, `"2015-03-16"`. `"2015"`) or a timestamp number (e.g.,
+    /// `1552199579097`).
+    /// - Data `type` describes the semantics of the data rather than the primitive data types
+    /// (number, string, etc.). The same primitive data type can have different types of
+    /// measurement. For example, numeric data can represent quantitative, ordinal, or nominal
+    /// data.
+    /// - When using with [`bin`](https://vega.github.io/vega-lite/docs/bin.html), the `type`
+    /// property can be either `"quantitative"` (for using a linear bin scale) or [`"ordinal"`
+    /// (for using an ordinal bin
+    /// scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html), the
+    /// `type` property can be either `"temporal"` (for using a temporal scale) or [`"ordinal"`
+    /// (for using an ordinal scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html),
+    /// the `type` property refers to the post-aggregation data type. For example, we can
+    /// calculate count `distinct` of a categorical field `"cat"` using `{"aggregate":
+    /// "distinct", "field": "cat", "type": "quantitative"}`. The `"type"` of the aggregate
+    /// output is `"quantitative"`.
+    /// - Secondary channels (e.g., `x2`, `y2`, `xError`, `yError`) do not have `type` as they
+    /// have exactly the same type as their primary channels (e.g., `x`, `y`).
+    ///
+    /// __See also:__ [`type`](https://vega.github.io/vega-lite/docs/type.html) documentation.
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub conditional_type: Option<StandardType>,
+}
+
 /// Text of the `text` mark.
 ///
 /// A FieldDef with Condition<ValueDef>
@@ -4728,7 +5938,7 @@ pub struct DefWithConditionStringFieldDefText {
     /// A field definition or one or more value definition(s) with a selection predicate.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub condition: Option<serde_json::Value>,
+    pub condition: Option<ValueConditionText>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -4859,6 +6069,200 @@ pub struct DefWithConditionStringFieldDefText {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub value: Option<LegendText>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalValueDefText {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<ConditionalValueDefTextText>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct ConditionalPredicateValueDefTextClass {
+    /// Predicate for triggering the condition
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub test: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
+    /// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+    /// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+    /// between `0` to `1` for opacity).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub value: Option<LegendText>,
+    /// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+    /// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub selection: Option<Box<ConditionalValueDefGradientStringNullSelectionComposition>>,
+    /// Aggregation function for the field
+    /// (e.g., `"mean"`, `"sum"`, `"median"`, `"min"`, `"max"`, `"count"`).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html)
+    /// documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub aggregate: Option<Aggregate>,
+    /// A flag for binning a `quantitative` field, [an object defining binning
+    /// parameters](https://vega.github.io/vega-lite/docs/bin.html#params), or indicating that
+    /// the data for `x` or `y` channel are binned before they are imported into Vega-Lite
+    /// (`"binned"`).
+    ///
+    /// - If `true`, default [binning parameters](https://vega.github.io/vega-lite/docs/bin.html)
+    /// will be applied.
+    ///
+    /// - If `"binned"`, this indicates that the data for the `x` (or `y`) channel are already
+    /// binned. You can map the bin-start field to `x` (or `y`) and the bin-end field to `x2` (or
+    /// `y2`). The scale and axis will be formatted similar to binning in Vega-Lite.  To adjust
+    /// the axis ticks based on the bin step, you can also set the axis's
+    /// [`tickMinStep`](https://vega.github.io/vega-lite/docs/axis.html#ticks) property.
+    ///
+    /// __Default value:__ `false`
+    ///
+    /// __See also:__ [`bin`](https://vega.github.io/vega-lite/docs/bin.html) documentation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub bin: Option<TypedFieldDefBin>,
+    /// __Required.__ A string defining the name of the field from which to pull a data value
+    /// or an object defining iterated values from the
+    /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
+    ///
+    /// __See also:__ [`field`](https://vega.github.io/vega-lite/docs/field.html) documentation.
+    ///
+    /// __Notes:__
+    /// 1)  Dots (`.`) and brackets (`[` and `]`) can be used to access nested objects (e.g.,
+    /// `"field": "foo.bar"` and `"field": "foo['bar']"`).
+    /// If field names contain dots or brackets but are not nested, you can use `\\` to escape
+    /// dots and brackets (e.g., `"a\\.b"` and `"a\\[0\\]"`).
+    /// See more details about escaping in the [field
+    /// documentation](https://vega.github.io/vega-lite/docs/field.html).
+    /// 2) `field` is not required if `aggregate` is `count`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub field: Option<Field>,
+    /// The text formatting pattern for labels of guides (axes, legends, headers) and text
+    /// marks.
+    ///
+    /// - If the format type is `"number"` (e.g., for quantitative fields), this is D3's [number
+    /// format pattern](https://github.com/d3/d3-format#locale_format).
+    /// - If the format type is `"time"` (e.g., for temporal fields), this is D3's [time format
+    /// pattern](https://github.com/d3/d3-time-format#locale_format).
+    ///
+    /// See the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for
+    /// more examples.
+    ///
+    /// __Default value:__  Derived from
+    /// [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for
+    /// number format and from
+    /// [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time
+    /// format.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub format: Option<String>,
+    /// The format type for labels (`"number"` or `"time"`).
+    ///
+    /// __Default value:__
+    /// - `"time"` for temporal fields and ordinal and nomimal fields with `timeUnit`.
+    /// - `"number"` for quantitative fields as well as ordinal and nomimal fields without
+    /// `timeUnit`.
+    #[serde(rename = "formatType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub format_type: Option<FormatType>,
+    /// [Vega expression](https://vega.github.io/vega/docs/expressions/) for customizing labels
+    /// text.
+    ///
+    /// __Note:__ The label text and value can be assessed via the `label` and `value` properties
+    /// of the axis's backing `datum` object.
+    #[serde(rename = "labelExpr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_expr: Option<String>,
+    /// Time unit (e.g., `year`, `yearmonth`, `month`, `hours`) for a temporal field.
+    /// or [a temporal field that gets casted as
+    /// ordinal](https://vega.github.io/vega-lite/docs/type.html#cast).
+    ///
+    /// __Default value:__ `undefined` (None)
+    ///
+    /// __See also:__ [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html)
+    /// documentation.
+    #[serde(rename = "timeUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub time_unit: Option<TimeUnitUnion>,
+    /// A title for the field. If `null`, the title will be removed.
+    ///
+    /// __Default value:__  derived from the field's name and transformation function
+    /// (`aggregate`, `bin` and `timeUnit`). If the field has an aggregate function, the function
+    /// is displayed as part of the title (e.g., `"Sum of Profit"`). If the field is binned or
+    /// has a time unit applied, the applied function is shown in parentheses (e.g., `"Profit
+    /// (binned)"`, `"Transaction Date (year-month)"`). Otherwise, the title is simply the field
+    /// name.
+    ///
+    /// __Notes__:
+    ///
+    /// 1) You can customize the default field title format by providing the
+    /// [`fieldTitle`](https://vega.github.io/vega-lite/docs/config.html#top-level-config)
+    /// property in the [config](https://vega.github.io/vega-lite/docs/config.html) or
+    /// [`fieldTitle` function via the `compile` function's
+    /// options](https://vega.github.io/vega-lite/docs/compile.html#field-title).
+    ///
+    /// 2) If both field definition's `title` and axis, header, or legend `title` are defined,
+    /// axis/header/legend title will be used.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub title: RemovableValue<LegendText>,
+    /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
+    /// `"nominal"`).
+    /// It can also be a `"geojson"` type for encoding
+    /// ['geoshape'](https://vega.github.io/vega-lite/docs/geoshape.html).
+    ///
+    ///
+    /// __Note:__
+    ///
+    /// - Data values for a temporal field can be either a date-time string (e.g., `"2015-03-07
+    /// 12:32:17"`, `"17:01"`, `"2015-03-16"`. `"2015"`) or a timestamp number (e.g.,
+    /// `1552199579097`).
+    /// - Data `type` describes the semantics of the data rather than the primitive data types
+    /// (number, string, etc.). The same primitive data type can have different types of
+    /// measurement. For example, numeric data can represent quantitative, ordinal, or nominal
+    /// data.
+    /// - When using with [`bin`](https://vega.github.io/vega-lite/docs/bin.html), the `type`
+    /// property can be either `"quantitative"` (for using a linear bin scale) or [`"ordinal"`
+    /// (for using an ordinal bin
+    /// scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html), the
+    /// `type` property can be either `"temporal"` (for using a temporal scale) or [`"ordinal"`
+    /// (for using an ordinal scale)](https://vega.github.io/vega-lite/docs/type.html#cast-bin).
+    /// - When using with [`aggregate`](https://vega.github.io/vega-lite/docs/aggregate.html),
+    /// the `type` property refers to the post-aggregation data type. For example, we can
+    /// calculate count `distinct` of a categorical field `"cat"` using `{"aggregate":
+    /// "distinct", "field": "cat", "type": "quantitative"}`. The `"type"` of the aggregate
+    /// output is `"quantitative"`.
+    /// - Secondary channels (e.g., `x2`, `y2`, `xError`, `yError`) do not have `type` as they
+    /// have exactly the same type as their primary channels (e.g., `x`, `y`).
+    ///
+    /// __See also:__ [`type`](https://vega.github.io/vega-lite/docs/type.html) documentation.
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub conditional_type: Option<StandardType>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
@@ -5069,7 +6473,7 @@ pub struct FieldDefWithConditionStringFieldDefString {
     /// A field definition or one or more value definition(s) with a selection predicate.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub condition: Option<serde_json::Value>,
+    pub condition: Option<ValueConditionString>,
     /// __Required.__ A string defining the name of the field from which to pull a data value
     /// or an object defining iterated values from the
     /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -5630,6 +7034,11 @@ pub struct Axis {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub label_limit: Option<f64>,
+    /// Position offset in pixels to apply to labels, in addition to tickOffset.
+    #[serde(rename = "labelOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_offset: Option<GridDashOffset>,
     #[serde(rename = "labelOpacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -5704,6 +7113,20 @@ pub struct Axis {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub position: Option<f64>,
+    /// A string or array of strings indicating the name of custom styles to apply to the axis. A
+    /// style is a named collection of axis property defined within the [style
+    /// configuration](https://vega.github.io/vega-lite/docs/mark.html#style-config). If style is
+    /// an array, later styles will override earlier styles. Any [axis
+    /// properties](https://vega.github.io/vega-lite/docs/encoding.html#mark-prop) explicitly
+    /// defined within the `encoding` will override a style default.
+    ///
+    /// __Default value:__ (none)
+    /// __Note:__ Any specified style will augment the default style. For example, an x-axis mark
+    /// with `"style": "foo"` will use `config.axisX` and `config.style.foo` (the specified style
+    /// `"foo"` has higher precedence).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub style: Option<LegendText>,
     /// For band scales, indicates if ticks and grid lines should be placed at the center of a
     /// band (default) or at the band extents to indicate intervals.
     #[serde(rename = "tickBand")]
@@ -5926,83 +7349,6 @@ pub struct ConditionalPredicateValueDefColorNull {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub value: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
-#[builder(setter(into, strip_option))]
-pub struct Predicate {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub not: Option<TransformPredicateComposition>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub and: Option<Vec<PredicateCompositionElement>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub or: Option<Vec<PredicateCompositionElement>>,
-    /// The value that the field should be equal to.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub equal: Option<EqualUnion>,
-    /// Field to be tested.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub field: Option<String>,
-    /// Time unit for the field to be tested.
-    #[serde(rename = "timeUnit")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub time_unit: Option<TimeUnitUnion>,
-    /// An array of inclusive minimum and maximum values
-    /// for a field value of a data item to be included in the filtered data.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub range: Option<Vec<Option<LogicalNotPredicateRange>>>,
-    /// A set of values that the `field`'s value should be a member of,
-    /// for a data item included in the filtered data.
-    #[serde(rename = "oneOf")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub one_of: Option<Vec<SelectionInitIntervalElement>>,
-    /// The value that the field should be less than.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub lt: Option<Lt>,
-    /// The value that the field should be greater than.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub gt: Option<Lt>,
-    /// The value that the field should be less than or equals to.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub lte: Option<Lt>,
-    /// The value that the field should be greater than or equals to.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub gte: Option<Lt>,
-    /// If set to true the field's value has to be valid, meaning both not `null` and not
-    /// [`NaN`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN).
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub valid: Option<bool>,
-    /// Filter using a selection name or a logical composition of selection names.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub selection: Option<Box<LogicalNotPredicateSelectionComposition>>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
-#[builder(setter(into, strip_option))]
-pub struct Selection {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub not: Option<Box<LogicalNotPredicateSelectionComposition>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub and: Option<Vec<SelectionCompositionElement>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub or: Option<Vec<SelectionCompositionElement>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
@@ -7045,11 +8391,9 @@ pub struct Step {
 ///
 /// A unit specification, which can contain either [primitive marks or composite
 /// marks](https://vega.github.io/vega-lite/docs/mark.html#types).
-///
-/// Base interface for a unit (single-view) specification.
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
-pub struct LayerSpec {
+pub struct LayerElement {
     /// An object describing the data source. Set to `null` to ignore the parent's data source.
     /// If no data is set, it is derived from the parent.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
@@ -7082,6 +8426,8 @@ pub struct LayerSpec {
     /// height of a single view and the `"container"` option cannot be used.
     ///
     /// __See also:__ [`height`](https://vega.github.io/vega-lite/docs/size.html) documentation.
+    ///
+    /// __Deprecated:__ Please avoid using width in a unit spec that's a part of a layer spec.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub height: Option<HeightUnion>,
@@ -7093,7 +8439,7 @@ pub struct LayerSpec {
     /// facet.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub layer: Option<Vec<LayerSpec>>,
+    pub layer: Option<Vec<LayerElement>>,
     /// Name of the visualization for later reference.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -7121,6 +8467,8 @@ pub struct LayerSpec {
     /// An object defining the view background's fill and stroke.
     ///
     /// __Default value:__ none (transparent)
+    ///
+    /// __Deprecated:__ Please avoid using width in a unit spec that's a part of a layer spec.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub view: Option<ViewBackground>,
@@ -7141,6 +8489,8 @@ pub struct LayerSpec {
     /// width of a single view and the `"container"` option cannot be used.
     ///
     /// __See also:__ [`width`](https://vega.github.io/vega-lite/docs/size.html) documentation.
+    ///
+    /// __Deprecated:__ Please avoid using width in a unit spec that's a part of a layer spec.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub width: Option<HeightUnion>,
@@ -7478,7 +8828,7 @@ pub struct MarkDefClass {
     /// therefore explicitly specified value will be ignored.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub orient: Option<Orientation>,
+    pub orient: Option<GradientDirectionEnum>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub outliers: Option<DefBox>,
@@ -7981,6 +9331,14 @@ pub struct MarkDefClass {
 ///
 /// Square-Specific Config
 ///
+/// Default style for chart subtitles
+///
+/// Default style for chart titles
+///
+/// Default style for axis, legend, and header labels.
+///
+/// Default style for axis, legend, and header titles.
+///
 /// Text-Specific Config
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
@@ -8206,7 +9564,7 @@ pub struct MarkConfig {
     /// therefore explicitly specified value will be ignored.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub orient: Option<Orientation>,
+    pub orient: Option<GradientDirectionEnum>,
     /// Polar coordinate radial offset, in pixels, of the text label from the origin determined
     /// by the `x` and `y` properties.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8760,7 +10118,7 @@ pub struct OverlayMarkDef {
     /// therefore explicitly specified value will be ignored.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub orient: Option<Orientation>,
+    pub orient: Option<GradientDirectionEnum>,
     /// Polar coordinate radial offset, in pixels, of the text label from the origin determined
     /// by the `x` and `y` properties.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8980,21 +10338,20 @@ pub struct OverlayMarkDef {
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct Projection {
-    /// The projection’s center to the specified center, a two-element array of longitude and
-    /// latitude in degrees.
+    /// The projection's center, a two-element array of longitude and latitude in degrees.
     ///
     /// __Default value:__ `[0, 0]`
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub center: Option<Vec<f64>>,
-    /// The projection’s clipping circle radius to the specified angle in degrees. If `null`,
+    /// The projection's clipping circle radius to the specified angle in degrees. If `null`,
     /// switches to [antimeridian](http://bl.ocks.org/mbostock/3788999) cutting rather than
     /// small-circle clipping.
     #[serde(rename = "clipAngle")]
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
     #[builder(default)]
     pub clip_angle: RemovableValue<f64>,
-    /// The projection’s viewport clip extent to the specified bounds in pixels. The extent
+    /// The projection's viewport clip extent to the specified bounds in pixels. The extent
     /// bounds are specified as an array `[[x0, y0], [x1, y1]]`, where `x0` is the left-side of
     /// the viewport, `y0` is the top, `x1` is the right and `y1` is the bottom. If `null`, no
     /// viewport clipping is performed.
@@ -9010,6 +10367,12 @@ pub struct Projection {
     pub distance: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
+    pub extent: Option<Vec<Vec<f64>>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub fit: Option<serde_json::Value>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
     pub fraction: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -9017,14 +10380,27 @@ pub struct Projection {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub parallel: Option<f64>,
+    /// For conic projections, the [two standard
+    /// parallels](https://en.wikipedia.org/wiki/Map_projection#Conic) that define the map
+    /// layout. The default depends on the specific conic projection used.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub parallels: Option<Vec<f64>>,
-    /// The threshold for the projection’s [adaptive
+    /// The default radius (in pixels) to use when drawing GeoJSON `Point` and `MultiPoint`
+    /// geometries. This parameter sets a constant default value. To modify the point radius in
+    /// response to data, see the corresponding parameter of the GeoPath and GeoShape
+    /// transforms.
+    ///
+    /// __Default value:__ `4.5`
+    #[serde(rename = "pointRadius")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub point_radius: Option<f64>,
+    /// The threshold for the projection's [adaptive
     /// resampling](http://bl.ocks.org/mbostock/3795544) to the specified value in pixels. This
     /// value corresponds to the [Douglas–Peucker
     /// distance](http://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm).
-    /// If precision is not specified, returns the projection’s current resampling precision
+    /// If precision is not specified, returns the projection's current resampling precision
     /// which defaults to `√0.5 ≅ 0.70710…`.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -9043,7 +10419,7 @@ pub struct Projection {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub reflect_y: Option<bool>,
-    /// The projection’s three-axis rotation to the specified angles, which must be a two- or
+    /// The projection's three-axis rotation to the specified angles, which must be a two- or
     /// three-element array of numbers [`lambda`, `phi`, `gamma`] specifying the rotation angles
     /// in degrees about each spherical axis. (These correspond to yaw, pitch and roll.)
     ///
@@ -9051,17 +10427,22 @@ pub struct Projection {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub rotate: Option<Vec<f64>>,
-    /// The projection's scale (zoom) value, overriding automatic fitting.
+    /// The projection’s scale (zoom) factor, overriding automatic fitting. The default scale is
+    /// projection-specific. The scale factor corresponds linearly to the distance between
+    /// projected points; however, scale factor values are not equivalent across projections.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub scale: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub size: Option<Vec<f64>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub spacing: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub tilt: Option<f64>,
-    /// The projection's translation (pan) value, overriding automatic fitting.
+    /// The projection’s translation offset as a two-element array `[tx, ty]`.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub translate: Option<Vec<f64>>,
@@ -9739,7 +11120,7 @@ pub struct TitleParams {
     /// The title text.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub text: Option<CategoryText>,
+    pub text: Option<ConditionalValueDefTextText>,
     /// The integer z-index indicating the layering of the title group relative to other axis,
     /// mark and legend groups.
     ///
@@ -9776,6 +11157,9 @@ pub struct Transform {
     #[builder(default)]
     pub groupby: Option<Vec<String>>,
     /// The output fields at which to write the start and end bin values.
+    /// This can be either a string or an array of strings with two elements denoting the name
+    /// for the fields for bin start and bin end respectively.
+    /// If a single string (e.g., `"val"`) is provided, the end field will be `"val_end"`.
     ///
     /// The field for storing the computed formula value.
     ///
@@ -9920,7 +11304,7 @@ pub struct Transform {
     /// (2), or (3).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub filter: Option<TransformPredicateComposition>,
+    pub filter: Option<ConditionalValueDefGradientStringNullPredicateComposition>,
     /// An array of one or more data fields containing arrays to flatten.
     /// If multiple fields are specified, their array values should have a parallel structure,
     /// ideally with the same length.
@@ -10285,6 +11669,8 @@ pub struct WindowFieldDef {
 /// An object defining the view background's fill and stroke.
 ///
 /// __Default value:__ none (transparent)
+///
+/// __Deprecated:__ Please avoid using width in a unit spec that's a part of a layer spec.
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
 pub struct ViewBackground {
@@ -10427,11 +11813,21 @@ pub struct Config {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub axis_bottom: Option<AxisConfig>,
+    /// Config for axes with "point" or "band" scales.
+    #[serde(rename = "axisDiscrete")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub axis_discrete: Option<AxisConfig>,
     /// Config for y-axis along the left edge of the chart.
     #[serde(rename = "axisLeft")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub axis_left: Option<AxisConfig>,
+    /// Config for axes with "point" scales.
+    #[serde(rename = "axisPoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub axis_point: Option<AxisConfig>,
     /// Config for quantitative axes.
     #[serde(rename = "axisQuantitative")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10515,6 +11911,10 @@ pub struct Config {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub field_title: Option<FieldTitle>,
+    /// Default font for all text marks, titles, and labels.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub font: Option<String>,
     /// Geoshape-Specific Config
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -10605,7 +12005,7 @@ pub struct Config {
     /// documentation](https://vega.github.io/vega-lite/docs/scale.html#config).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub range: Option<RangeConfig>,
+    pub range: Option<HashMap<String, RangeValue>>,
     /// Rect-Specific Config
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -10639,7 +12039,7 @@ pub struct Config {
     /// objects](https://vega.github.io/vega-lite/docs/mark.html#config).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub style: Option<HashMap<String, MarkConfig>>,
+    pub style: Option<HashMap<String, StyleValue>>,
     /// Text-Specific Config
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -10664,7 +12064,7 @@ pub struct Config {
     /// documentation](https://vega.github.io/vega-lite/docs/title.html#config).
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub title: Option<ExcludeMappedValueRefBaseTitle>,
+    pub title: Option<BaseTitleNoValueRefs>,
     /// Trail-Specific Config
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -10913,7 +12313,7 @@ pub struct AreaConfig {
     /// therefore explicitly specified value will be ignored.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub orient: Option<Orientation>,
+    pub orient: Option<GradientDirectionEnum>,
     /// A flag for overlaying points on top of line or area marks, or an object defining the
     /// properties of the overlayed points.
     ///
@@ -11108,7 +12508,11 @@ pub struct AreaConfig {
 ///
 /// Config for x-axis along the bottom edge of the chart.
 ///
+/// Config for axes with "point" or "band" scales.
+///
 /// Config for y-axis along the left edge of the chart.
+///
+/// Config for axes with "point" scales.
 ///
 /// Config for quantitative axes.
 ///
@@ -11227,6 +12631,14 @@ pub struct AxisConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub label_color: Option<Color>,
+    /// [Vega expression](https://vega.github.io/vega/docs/expressions/) for customizing labels.
+    ///
+    /// __Note:__ The label text and value can be assessed via the `label` and `value` properties
+    /// of the axis's backing `datum` object.
+    #[serde(rename = "labelExpr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_expr: Option<String>,
     /// Indicates if the first and last axis labels should be aligned flush with the scale range.
     /// Flush alignment for a horizontal axis will left-align the first label and right-align the
     /// last label. For vertical axes, bottom and top text baselines are applied instead. If this
@@ -11272,6 +12684,11 @@ pub struct AxisConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub label_limit: Option<f64>,
+    /// Position offset in pixels to apply to labels, in addition to tickOffset.
+    #[serde(rename = "labelOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_offset: Option<GridDashOffset>,
     #[serde(rename = "labelOpacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -11348,6 +12765,16 @@ pub struct AxisConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub tick_color: Option<Color>,
+    /// A desired number of ticks, for axes visualizing quantitative scales. The resulting number
+    /// may be different so that values are "nice" (multiples of 2, 5, 10) and lie within the
+    /// underlying scale's range.
+    ///
+    /// __Default value__: Determine using a formula `ceil(width/40)` for x and `ceil(height/40)`
+    /// for y.
+    #[serde(rename = "tickCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_count: Option<f64>,
     #[serde(rename = "tickDash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -11735,7 +13162,7 @@ pub struct BarConfig {
     /// therefore explicitly specified value will be ignored.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub orient: Option<Orientation>,
+    pub orient: Option<GradientDirectionEnum>,
     /// Polar coordinate radial offset, in pixels, of the text label from the origin determined
     /// by the `x` and `y` properties.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12512,7 +13939,7 @@ pub struct RectConfig {
     /// therefore explicitly specified value will be ignored.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub orient: Option<Orientation>,
+    pub orient: Option<GradientDirectionEnum>,
     /// Polar coordinate radial offset, in pixels, of the text label from the origin determined
     /// by the `x` and `y` properties.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12722,7 +14149,7 @@ pub struct LegendConfig {
     #[serde(rename = "gradientDirection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub gradient_direction: Option<Orientation>,
+    pub gradient_direction: Option<GradientDirectionEnum>,
     /// Max legend length for a horizontal gradient when `config.legend.gradientLength` is
     /// undefined.
     ///
@@ -12979,7 +14406,7 @@ pub struct LegendConfig {
     #[serde(rename = "symbolDirection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub symbol_direction: Option<Orientation>,
+    pub symbol_direction: Option<GradientDirectionEnum>,
     /// The color of the legend symbol,
     #[serde(rename = "symbolFillColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -13355,7 +14782,7 @@ pub struct LineConfig {
     /// therefore explicitly specified value will be ignored.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub orient: Option<Orientation>,
+    pub orient: Option<GradientDirectionEnum>,
     /// A flag for overlaying points on top of line or area marks, or an object defining the
     /// properties of the overlayed points.
     ///
@@ -13558,46 +14985,9 @@ pub struct PaddingClass {
     pub top: Option<f64>,
 }
 
-/// An object hash that defines default range arrays or schemes for using with scales.
-/// For a full list of scale range configuration options, please see the [corresponding
-/// section of the scale
-/// documentation](https://vega.github.io/vega-lite/docs/scale.html#config).
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
-pub struct RangeConfig {
-    /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for categorical data.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub category: Option<CategoryUnion>,
-    /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for diverging
-    /// quantitative ramps.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub diverging: Option<CategoryUnion>,
-    /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for quantitative
-    /// heatmaps.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub heatmap: Option<CategoryUnion>,
-    /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for rank-ordered data.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub ordinal: Option<CategoryUnion>,
-    /// Default [color scheme](https://vega.github.io/vega/docs/schemes/) for sequential
-    /// quantitative ramps.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub ramp: Option<CategoryUnion>,
-    /// Array of [symbol](https://vega.github.io/vega/docs/marks/symbol/) names or paths for the
-    /// default shape palette.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(default)]
-    pub symbol: Option<Vec<String>>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
-#[builder(setter(into, strip_option))]
-pub struct CategoryClass {
+pub struct RangeClass {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub count: Option<f64>,
@@ -13606,7 +14996,7 @@ pub struct CategoryClass {
     pub extent: Option<Vec<f64>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub scheme: Option<CategoryText>,
+    pub scheme: Option<ConditionalValueDefTextText>,
 }
 
 /// Scale configuration determines default properties for all
@@ -13777,6 +15167,11 @@ pub struct ScaleConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub use_unaggregated_domain: Option<bool>,
+    /// Reverse x-scale by default (useful for right-to-left charts).
+    #[serde(rename = "xReverse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub x_reverse: Option<bool>,
 }
 
 /// An object hash for defining default properties for each type of selections.
@@ -14187,6 +15582,979 @@ pub struct FluffyBinding {
     pub merge: Option<Vec<Stream>>,
 }
 
+/// Area-Specific Config
+///
+/// Bar-Specific Config
+///
+/// Circle-Specific Config
+///
+/// Geoshape-Specific Config
+///
+/// Mark Config
+///
+/// Point-Specific Config
+///
+/// Rule-Specific Config
+///
+/// Square-Specific Config
+///
+/// Default style for chart subtitles
+///
+/// Default style for chart titles
+///
+/// Default style for axis, legend, and header labels.
+///
+/// Default style for axis, legend, and header titles.
+///
+/// Text-Specific Config
+///
+/// Image-specific Config
+///
+/// Rect-Specific Config
+///
+/// Line-Specific Config
+///
+/// Trail-Specific Config
+///
+/// Tick-Specific Config
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
+#[builder(setter(into, strip_option))]
+pub struct StyleValue {
+    /// The horizontal alignment of the text or ranged marks (area, bar, image, rect, rule). One
+    /// of `"left"`, `"right"`, `"center"`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub align: Option<Align>,
+    /// The rotation angle of the text, in degrees.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub angle: Option<f64>,
+    /// Whether to keep aspect ratio of image marks.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub aspect: Option<bool>,
+    /// The vertical text baseline. One of `"top"`, `"bottom"`, `"middle"`, `"alphabetic"` (for
+    /// text only).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub baseline: Option<Baseline>,
+    /// Default color.
+    ///
+    /// __Default value:__ <span style="color: #4682b4;">&#9632;</span> `"#4682b4"`
+    ///
+    /// __Note:__
+    /// - This property cannot be used in a [style
+    /// config](https://vega.github.io/vega-lite/docs/mark.html#style-config).
+    /// - The `fill` and `stroke` properties have higher precedence than `color` and will
+    /// override `color`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub color: Option<ColorUnion>,
+    /// The radius in pixels of rounded rectangle corners.
+    ///
+    /// __Default value:__ `0`
+    #[serde(rename = "cornerRadius")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub corner_radius: Option<f64>,
+    /// The radius in pixels of rounded rectangle bottom left corner.
+    ///
+    /// __Default value:__ `0`
+    #[serde(rename = "cornerRadiusBottomLeft")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub corner_radius_bottom_left: Option<f64>,
+    /// The radius in pixels of rounded rectangle bottom right corner.
+    ///
+    /// __Default value:__ `0`
+    #[serde(rename = "cornerRadiusBottomRight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub corner_radius_bottom_right: Option<f64>,
+    /// The radius in pixels of rounded rectangle top right corner.
+    ///
+    /// __Default value:__ `0`
+    #[serde(rename = "cornerRadiusTopLeft")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub corner_radius_top_left: Option<f64>,
+    /// The radius in pixels of rounded rectangle top left corner.
+    ///
+    /// __Default value:__ `0`
+    #[serde(rename = "cornerRadiusTopRight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub corner_radius_top_right: Option<f64>,
+    /// The mouse cursor used over the mark. Any valid [CSS cursor
+    /// type](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor#Values) can be used.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub cursor: Option<Cursor>,
+    /// The direction of the text. One of `"ltr"` (left-to-right) or `"rtl"` (right-to-left).
+    /// This property determines on which side is truncated in response to the limit parameter.
+    ///
+    /// __Default value:__ `"ltr"`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub dir: Option<TextDirection>,
+    /// The horizontal offset, in pixels, between the text label and its anchor point. The offset
+    /// is applied after rotation by the _angle_ property.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub dx: Option<f64>,
+    /// The vertical offset, in pixels, between the text label and its anchor point. The offset
+    /// is applied after rotation by the _angle_ property.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub dy: Option<f64>,
+    /// The ellipsis string for text truncated in response to the limit parameter.
+    ///
+    /// __Default value:__ `"…"`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub ellipsis: Option<String>,
+    /// Default Fill Color. This property has higher precedence than `config.color`.
+    ///
+    /// __Default value:__ (None)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub fill: Option<FillUnion>,
+    /// Whether the mark's color should be used as fill color instead of stroke color.
+    ///
+    /// __Default value:__ `false` for all `point`, `line`, and `rule` marks as well as
+    /// `geoshape` marks for
+    /// [`graticule`](https://vega.github.io/vega-lite/docs/data.html#graticule) data sources;
+    /// otherwise, `true`.
+    ///
+    /// __Note:__ This property cannot be used in a [style
+    /// config](https://vega.github.io/vega-lite/docs/mark.html#style-config).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub filled: Option<bool>,
+    /// The fill opacity (value between [0,1]).
+    ///
+    /// __Default value:__ `1`
+    #[serde(rename = "fillOpacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub fill_opacity: Option<f64>,
+    /// The typeface to set the text in (e.g., `"Helvetica Neue"`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub font: Option<String>,
+    /// The font size, in pixels.
+    ///
+    /// __Default value:__ `11`
+    #[serde(rename = "fontSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub font_size: Option<f64>,
+    /// The font style (e.g., `"italic"`).
+    #[serde(rename = "fontStyle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub font_style: Option<String>,
+    /// The font weight.
+    /// This can be either a string (e.g `"bold"`, `"normal"`) or a number (`100`, `200`, `300`,
+    /// ..., `900` where `"normal"` = `400` and `"bold"` = `700`).
+    #[serde(rename = "fontWeight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub font_weight: Option<FontWeight>,
+    /// Height of the marks.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub height: Option<f64>,
+    /// A URL to load upon mouse click. If defined, the mark acts as a hyperlink.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub href: Option<String>,
+    /// The line interpolation method to use for line and area marks. One of the following:
+    /// - `"linear"`: piecewise linear segments, as in a polyline.
+    /// - `"linear-closed"`: close the linear segments to form a polygon.
+    /// - `"step"`: alternate between horizontal and vertical segments, as in a step function.
+    /// - `"step-before"`: alternate between vertical and horizontal segments, as in a step
+    /// function.
+    /// - `"step-after"`: alternate between horizontal and vertical segments, as in a step
+    /// function.
+    /// - `"basis"`: a B-spline, with control point duplication on the ends.
+    /// - `"basis-open"`: an open B-spline; may not intersect the start or end.
+    /// - `"basis-closed"`: a closed B-spline, as in a loop.
+    /// - `"cardinal"`: a Cardinal spline, with control point duplication on the ends.
+    /// - `"cardinal-open"`: an open Cardinal spline; may not intersect the start or end, but
+    /// will intersect other control points.
+    /// - `"cardinal-closed"`: a closed Cardinal spline, as in a loop.
+    /// - `"bundle"`: equivalent to basis, except the tension parameter is used to straighten the
+    /// spline.
+    /// - `"monotone"`: cubic interpolation that preserves monotonicity in y.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub interpolate: Option<Interpolate>,
+    /// Defines how Vega-Lite should handle marks for invalid values (`null` and `NaN`).
+    /// - If set to `"filter"` (default), all data items with null values will be skipped (for
+    /// line, trail, and area marks) or filtered (for other marks).
+    /// - If `null`, all data items are included. In this case, invalid values will be
+    /// interpreted as zeroes.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub invalid: RemovableValue<Invalid>,
+    /// The maximum length of the text mark in pixels. The text value will be automatically
+    /// truncated if the rendered size exceeds the limit.
+    ///
+    /// __Default value:__ `0` -- indicating no limit
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub limit: Option<f64>,
+    /// A flag for overlaying line on top of area marks, or an object defining the properties of
+    /// the overlayed lines.
+    ///
+    /// - If this value is an empty object (`{}`) or `true`, lines with default properties will
+    /// be used.
+    ///
+    /// - If this value is `false`, no lines would be automatically added to area marks.
+    ///
+    /// __Default value:__ `false`.
+    ///
+    /// Line-Specific Config
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub line: Option<Line>,
+    /// A delimiter, such as a newline character, upon which to break text strings into multiple
+    /// lines. This property is ignored if the text is array-valued.
+    #[serde(rename = "lineBreak")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub line_break: Option<String>,
+    /// The line height in pixels (the spacing between subsequent lines of text) for multi-line
+    /// text marks.
+    #[serde(rename = "lineHeight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub line_height: Option<f64>,
+    /// The overall opacity (value between [0,1]).
+    ///
+    /// __Default value:__ `0.7` for non-aggregate plots with `point`, `tick`, `circle`, or
+    /// `square` marks or layered `bar` charts and `1` otherwise.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub opacity: Option<f64>,
+    /// For line and trail marks, this `order` property can be set to `null` or `false` to make
+    /// the lines use the original order in the data sources.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub order: Option<bool>,
+    /// The orientation of a non-stacked bar, tick, area, and line charts.
+    /// The value is either horizontal (default) or vertical.
+    /// - For bar, rule and tick, this determines whether the size of the bar and tick
+    /// should be applied to x or y dimension.
+    /// - For area, this property determines the orient property of the Vega output.
+    /// - For line and trail marks, this property determines the sort order of the points in the
+    /// line
+    /// if `config.sortLineBy` is not specified.
+    /// For stacked charts, this is always determined by the orientation of the stack;
+    /// therefore explicitly specified value will be ignored.
+    ///
+    /// The orientation of the axis. One of `"top"`, `"bottom"`, `"left"` or `"right"`. The
+    /// orientation can be used to further specialize the axis type (e.g., a y-axis oriented
+    /// towards the right edge of the chart).
+    ///
+    /// __Default value:__ `"bottom"` for x-axes and `"left"` for y-axes.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub orient: Option<StyleOrient>,
+    /// A flag for overlaying points on top of line or area marks, or an object defining the
+    /// properties of the overlayed points.
+    ///
+    /// - If this property is `"transparent"`, transparent points will be used (for enhancing
+    /// tooltips and selections).
+    ///
+    /// - If this property is an empty object (`{}`) or `true`, filled points with default
+    /// properties will be used.
+    ///
+    /// - If this property is `false`, no points would be automatically added to line or area
+    /// marks.
+    ///
+    /// __Default value:__ `false`.
+    ///
+    /// Point-Specific Config
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub point: Option<PointUnion>,
+    /// Polar coordinate radial offset, in pixels, of the text label from the origin determined
+    /// by the `x` and `y` properties.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub radius: Option<f64>,
+    /// Shape of the point marks. Supported values include:
+    /// - plotting shapes: `"circle"`, `"square"`, `"cross"`, `"diamond"`, `"triangle-up"`,
+    /// `"triangle-down"`, `"triangle-right"`, or `"triangle-left"`.
+    /// - the line symbol `"stroke"`
+    /// - centered directional shapes `"arrow"`, `"wedge"`, or `"triangle"`
+    /// - a custom [SVG path
+    /// string](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths) (For correct
+    /// sizing, custom shape paths should be defined within a square bounding box with
+    /// coordinates ranging from -1 to 1 along both the x and y dimensions.)
+    ///
+    /// __Default value:__ `"circle"`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub shape: Option<String>,
+    /// Default size for marks.
+    /// - For `point`/`circle`/`square`, this represents the pixel area of the marks. Note that
+    /// this value sets the area of the symbol; the side lengths will increase with the square
+    /// root of this value.
+    /// - For `bar`, this represents the band size of the bar, in pixels.
+    /// - For `text`, this represents the font size, in pixels.
+    ///
+    /// __Default value:__
+    /// - `30` for point, circle, square marks; width/height's `step`
+    /// - `2` for bar marks with discrete dimensions;
+    /// - `5` for bar marks with continuous dimensions;
+    /// - `11` for text marks.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub size: Option<f64>,
+    /// Default Stroke Color. This property has higher precedence than `config.color`.
+    ///
+    /// __Default value:__ (None)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub stroke: Option<FillUnion>,
+    /// The stroke cap for line ending style. One of `"butt"`, `"round"`, or `"square"`.
+    ///
+    /// __Default value:__ `"butt"`
+    #[serde(rename = "strokeCap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub stroke_cap: Option<String>,
+    /// An array of alternating stroke, space lengths for creating dashed or dotted lines.
+    #[serde(rename = "strokeDash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub stroke_dash: Option<Vec<f64>>,
+    /// The offset (in pixels) into which to begin drawing with the stroke dash array.
+    #[serde(rename = "strokeDashOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub stroke_dash_offset: Option<f64>,
+    /// The stroke line join method. One of `"miter"`, `"round"` or `"bevel"`.
+    ///
+    /// __Default value:__ `"miter"`
+    #[serde(rename = "strokeJoin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub stroke_join: Option<String>,
+    /// The miter limit at which to bevel a line join.
+    #[serde(rename = "strokeMiterLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub stroke_miter_limit: Option<f64>,
+    /// The offset in pixels at which to draw the group stroke and fill. If unspecified, the
+    /// default behavior is to dynamically offset stroked groups such that 1 pixel stroke widths
+    /// align with the pixel grid.
+    #[serde(rename = "strokeOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub stroke_offset: Option<f64>,
+    /// The stroke opacity (value between [0,1]).
+    ///
+    /// __Default value:__ `1`
+    #[serde(rename = "strokeOpacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub stroke_opacity: Option<f64>,
+    /// The stroke width, in pixels.
+    #[serde(rename = "strokeWidth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub stroke_width: Option<f64>,
+    /// Depending on the interpolation type, sets the tension parameter (for line and area marks).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tension: Option<f64>,
+    /// Placeholder text if the `text` channel is not specified
+    ///
+    /// Text-Specific Config
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub text: Option<LegendText>,
+    /// Polar coordinate angle, in radians, of the text label from the origin determined by the
+    /// `x` and `y` properties. Values for `theta` follow the same convention of `arc` mark
+    /// `startAngle` and `endAngle` properties: angles are measured in radians, with `0`
+    /// indicating "north".
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub theta: Option<f64>,
+    /// Default relative band size for a time unit. If set to `1`, the bandwidth of the marks
+    /// will be equal to the time unit band step.
+    /// If set to `0.5`, bandwidth of the marks will be half of the time unit band step.
+    #[serde(rename = "timeUnitBand")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub time_unit_band: Option<f64>,
+    /// Default relative band position for a time unit. If set to `0`, the marks will be
+    /// positioned at the beginning of the time unit band step.
+    /// If set to `0.5`, the marks will be positioned in the middle of the time unit band step.
+    #[serde(rename = "timeUnitBandPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub time_unit_band_position: Option<f64>,
+    /// The tooltip text string to show upon mouse hover or an object defining which fields
+    /// should the tooltip be derived from.
+    ///
+    /// - If `tooltip` is `true` or `{"content": "encoding"}`, then all fields from `encoding`
+    /// will be used.
+    /// - If `tooltip` is `{"content": "data"}`, then all fields that appear in the highlighted
+    /// data point will be used.
+    /// - If set to `null` or `false`, then no tooltip will be used.
+    ///
+    /// See the [`tooltip`](https://vega.github.io/vega-lite/docs/tooltip.html) documentation for
+    /// a detailed discussion about tooltip  in Vega-Lite.
+    ///
+    /// __Default value:__ `null`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tooltip: Option<MarkConfigTooltip>,
+    /// Width of the marks.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub width: Option<f64>,
+    /// X coordinates of the marks, or width of horizontal `"bar"` and `"area"` without specified
+    /// `x2` or `width`.
+    ///
+    /// The `value` of this channel can be a number or a string `"width"` for the width of the
+    /// plot.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub x: Option<XUnion>,
+    /// X2 coordinates for ranged `"area"`, `"bar"`, `"rect"`, and  `"rule"`.
+    ///
+    /// The `value` of this channel can be a number or a string `"width"` for the width of the
+    /// plot.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub x2: Option<XUnion>,
+    /// Y coordinates of the marks, or height of vertical `"bar"` and `"area"` without specified
+    /// `y2` or `height`.
+    ///
+    /// The `value` of this channel can be a number or a string `"height"` for the height of the
+    /// plot.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub y: Option<YUnion>,
+    /// Y2 coordinates for ranged `"area"`, `"bar"`, `"rect"`, and  `"rule"`.
+    ///
+    /// The `value` of this channel can be a number or a string `"height"` for the height of the
+    /// plot.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub y2: Option<YUnion>,
+    /// Offset between bars for binned field. The ideal value for this is either 0 (preferred by
+    /// statisticians) or 1 (Vega-Lite default, D3 example style).
+    ///
+    /// __Default value:__ `1`
+    #[serde(rename = "binSpacing")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub bin_spacing: Option<f64>,
+    /// The default size of the bars on continuous scales.
+    ///
+    /// __Default value:__ `5`
+    #[serde(rename = "continuousBandSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub continuous_band_size: Option<f64>,
+    /// - For vertical bars, top-left and top-right corner radius.
+    /// - For horizontal bars, top-right and bottom-right corner radius.
+    #[serde(rename = "cornerRadiusEnd")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub corner_radius_end: Option<f64>,
+    /// The default size of the bars with discrete dimensions. If unspecified, the default size
+    /// is  `step-2`, which provides 2 pixel offset between bars.
+    #[serde(rename = "discreteBandSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub discrete_band_size: Option<f64>,
+    /// The width of the ticks.
+    ///
+    /// __Default value:__  3/4 of step (width step for horizontal ticks and height step for
+    /// vertical ticks).
+    #[serde(rename = "bandSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub band_size: Option<f64>,
+    /// Thickness of the tick mark.
+    ///
+    /// __Default value:__  `1`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub thickness: Option<f64>,
+    /// An interpolation fraction indicating where, for `band` scales, axis ticks should be
+    /// positioned. A value of `0` places ticks at the left edge of their bands. A value of `0.5`
+    /// places ticks in the middle of their bands.
+    ///
+    /// __Default value:__ `0.5`
+    #[serde(rename = "bandPosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub band_position: Option<f64>,
+    /// A boolean flag indicating if the domain (the axis baseline) should be included as part of
+    /// the axis.
+    ///
+    /// __Default value:__ `true`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub domain: Option<bool>,
+    /// Color of axis domain line.
+    ///
+    /// __Default value:__ `"gray"`.
+    #[serde(rename = "domainColor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub domain_color: Option<String>,
+    /// An array of alternating [stroke, space] lengths for dashed domain lines.
+    #[serde(rename = "domainDash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub domain_dash: Option<Vec<f64>>,
+    /// The pixel offset at which to start drawing with the domain dash array.
+    #[serde(rename = "domainDashOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub domain_dash_offset: Option<f64>,
+    /// Opacity of the axis domain line.
+    #[serde(rename = "domainOpacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub domain_opacity: Option<f64>,
+    /// Stroke width of axis domain line
+    ///
+    /// __Default value:__ `1`
+    #[serde(rename = "domainWidth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub domain_width: Option<f64>,
+    /// The text formatting pattern for labels of guides (axes, legends, headers) and text
+    /// marks.
+    ///
+    /// - If the format type is `"number"` (e.g., for quantitative fields), this is D3's [number
+    /// format pattern](https://github.com/d3/d3-format#locale_format).
+    /// - If the format type is `"time"` (e.g., for temporal fields), this is D3's [time format
+    /// pattern](https://github.com/d3/d3-time-format#locale_format).
+    ///
+    /// See the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for
+    /// more examples.
+    ///
+    /// __Default value:__  Derived from
+    /// [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for
+    /// number format and from
+    /// [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time
+    /// format.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub format: Option<String>,
+    /// The format type for labels (`"number"` or `"time"`).
+    ///
+    /// __Default value:__
+    /// - `"time"` for temporal fields and ordinal and nomimal fields with `timeUnit`.
+    /// - `"number"` for quantitative fields as well as ordinal and nomimal fields without
+    /// `timeUnit`.
+    #[serde(rename = "formatType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub format_type: Option<FormatType>,
+    /// A boolean flag indicating if grid lines should be included as part of the axis
+    ///
+    /// __Default value:__ `true` for [continuous
+    /// scales](https://vega.github.io/vega-lite/docs/scale.html#continuous) that are not binned;
+    /// otherwise, `false`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub grid: Option<bool>,
+    #[serde(rename = "gridColor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub grid_color: Option<Color>,
+    #[serde(rename = "gridDash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub grid_dash: Option<Dash>,
+    #[serde(rename = "gridDashOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub grid_dash_offset: Option<GridDashOffset>,
+    #[serde(rename = "gridOpacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub grid_opacity: Option<GridOpacity>,
+    #[serde(rename = "gridWidth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub grid_width: Option<GridWidth>,
+    #[serde(rename = "labelAlign")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_align: Option<LabelAlign>,
+    /// The rotation angle of the axis labels.
+    ///
+    /// __Default value:__ `-90` for nominal and ordinal fields; `0` otherwise.
+    #[serde(rename = "labelAngle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_angle: Option<f64>,
+    #[serde(rename = "labelBaseline")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_baseline: Option<TextBaseline>,
+    /// Indicates if labels should be hidden if they exceed the axis range. If `false` (the
+    /// default) no bounds overlap analysis is performed. If `true`, labels will be hidden if
+    /// they exceed the axis range by more than 1 pixel. If this property is a number, it
+    /// specifies the pixel tolerance: the maximum amount by which a label bounding box may
+    /// exceed the axis range.
+    ///
+    /// __Default value:__ `false`.
+    #[serde(rename = "labelBound")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_bound: Option<Label>,
+    #[serde(rename = "labelColor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_color: Option<Color>,
+    /// [Vega expression](https://vega.github.io/vega/docs/expressions/) for customizing labels.
+    ///
+    /// __Note:__ The label text and value can be assessed via the `label` and `value` properties
+    /// of the axis's backing `datum` object.
+    #[serde(rename = "labelExpr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_expr: Option<String>,
+    /// Indicates if the first and last axis labels should be aligned flush with the scale range.
+    /// Flush alignment for a horizontal axis will left-align the first label and right-align the
+    /// last label. For vertical axes, bottom and top text baselines are applied instead. If this
+    /// property is a number, it also indicates the number of pixels by which to offset the first
+    /// and last labels; for example, a value of 2 will flush-align the first and last labels and
+    /// also push them 2 pixels outward from the center of the axis. The additional adjustment
+    /// can sometimes help the labels better visually group with corresponding axis ticks.
+    ///
+    /// __Default value:__ `true` for axis of a continuous x-scale. Otherwise, `false`.
+    #[serde(rename = "labelFlush")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_flush: Option<Label>,
+    /// Indicates the number of pixels by which to offset flush-adjusted labels. For example, a
+    /// value of `2` will push flush-adjusted labels 2 pixels outward from the center of the
+    /// axis. Offsets can help the labels better visually group with corresponding axis ticks.
+    ///
+    /// __Default value:__ `0`.
+    #[serde(rename = "labelFlushOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_flush_offset: Option<f64>,
+    #[serde(rename = "labelFont")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_font: Option<LabelFont>,
+    #[serde(rename = "labelFontSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_font_size: Option<GridWidth>,
+    #[serde(rename = "labelFontStyle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_font_style: Option<LabelFontStyle>,
+    #[serde(rename = "labelFontWeight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_font_weight: Option<LabelFontWeightUnion>,
+    /// Maximum allowed pixel width of axis tick labels.
+    ///
+    /// __Default value:__ `180`
+    #[serde(rename = "labelLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_limit: Option<f64>,
+    /// Position offset in pixels to apply to labels, in addition to tickOffset.
+    #[serde(rename = "labelOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_offset: Option<GridDashOffset>,
+    #[serde(rename = "labelOpacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_opacity: Option<GridDashOffset>,
+    /// The strategy to use for resolving overlap of axis labels. If `false` (the default), no
+    /// overlap reduction is attempted. If set to `true` or `"parity"`, a strategy of removing
+    /// every other label is used (this works well for standard linear axes). If set to
+    /// `"greedy"`, a linear scan of the labels is performed, removing any labels that overlaps
+    /// with the last visible label (this often works better for log-scaled axes).
+    ///
+    /// __Default value:__ `true` for non-nominal fields with non-log scales; `"greedy"` for log
+    /// scales; otherwise `false`.
+    #[serde(rename = "labelOverlap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_overlap: Option<LabelOverlap>,
+    #[serde(rename = "labelPadding")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_padding: Option<GridDashOffset>,
+    /// A boolean flag indicating if labels should be included as part of the axis.
+    ///
+    /// __Default value:__ `true`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub labels: Option<bool>,
+    /// The minimum separation that must be between label bounding boxes for them to be
+    /// considered non-overlapping (default `0`). This property is ignored if *labelOverlap*
+    /// resolution is not enabled.
+    #[serde(rename = "labelSeparation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub label_separation: Option<f64>,
+    /// The maximum extent in pixels that axis ticks and labels should use. This determines a
+    /// maximum offset value for axis titles.
+    ///
+    /// __Default value:__ `undefined`.
+    #[serde(rename = "maxExtent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub max_extent: Option<f64>,
+    /// The minimum extent in pixels that axis ticks and labels should use. This determines a
+    /// minimum offset value for axis titles.
+    ///
+    /// __Default value:__ `30` for y-axis; `undefined` for x-axis.
+    #[serde(rename = "minExtent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub min_extent: Option<f64>,
+    /// The offset, in pixels, by which to displace the axis from the edge of the enclosing group
+    /// or data rectangle.
+    ///
+    /// __Default value:__ derived from the [axis
+    /// config](https://vega.github.io/vega-lite/docs/config.html#facet-scale-config)'s `offset`
+    /// (`0` by default)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub offset: Option<f64>,
+    /// The anchor position of the axis in pixels. For x-axes with top or bottom orientation,
+    /// this sets the axis group x coordinate. For y-axes with left or right orientation, this
+    /// sets the axis group y coordinate.
+    ///
+    /// __Default value__: `0`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub position: Option<f64>,
+    /// A string or array of strings indicating the name of custom styles to apply to the axis. A
+    /// style is a named collection of axis property defined within the [style
+    /// configuration](https://vega.github.io/vega-lite/docs/mark.html#style-config). If style is
+    /// an array, later styles will override earlier styles. Any [axis
+    /// properties](https://vega.github.io/vega-lite/docs/encoding.html#mark-prop) explicitly
+    /// defined within the `encoding` will override a style default.
+    ///
+    /// __Default value:__ (none)
+    /// __Note:__ Any specified style will augment the default style. For example, an x-axis mark
+    /// with `"style": "foo"` will use `config.axisX` and `config.style.foo` (the specified style
+    /// `"foo"` has higher precedence).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub style: Option<LegendText>,
+    /// For band scales, indicates if ticks and grid lines should be placed at the center of a
+    /// band (default) or at the band extents to indicate intervals.
+    #[serde(rename = "tickBand")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_band: Option<TickBand>,
+    #[serde(rename = "tickColor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_color: Option<Color>,
+    /// A desired number of ticks, for axes visualizing quantitative scales. The resulting number
+    /// may be different so that values are "nice" (multiples of 2, 5, 10) and lie within the
+    /// underlying scale's range.
+    ///
+    /// __Default value__: Determine using a formula `ceil(width/40)` for x and `ceil(height/40)`
+    /// for y.
+    #[serde(rename = "tickCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_count: Option<f64>,
+    #[serde(rename = "tickDash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_dash: Option<Dash>,
+    #[serde(rename = "tickDashOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_dash_offset: Option<GridDashOffset>,
+    /// Boolean flag indicating if an extra axis tick should be added for the initial position of
+    /// the axis. This flag is useful for styling axes for `band` scales such that ticks are
+    /// placed on band boundaries rather in the middle of a band. Use in conjunction with
+    /// `"bandPosition": 1` and an axis `"padding"` value of `0`.
+    #[serde(rename = "tickExtra")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_extra: Option<bool>,
+    /// The minimum desired step between axis ticks, in terms of scale domain values. For
+    /// example, a value of `1` indicates that ticks should not be less than 1 unit apart. If
+    /// `tickMinStep` is specified, the `tickCount` value will be adjusted, if necessary, to
+    /// enforce the minimum step value.
+    ///
+    /// __Default value__: `undefined`
+    #[serde(rename = "tickMinStep")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_min_step: Option<f64>,
+    /// Position offset in pixels to apply to ticks, labels, and gridlines.
+    #[serde(rename = "tickOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_offset: Option<f64>,
+    #[serde(rename = "tickOpacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_opacity: Option<GridDashOffset>,
+    /// Boolean flag indicating if pixel position values should be rounded to the nearest
+    /// integer.
+    ///
+    /// __Default value:__ `true`
+    #[serde(rename = "tickRound")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_round: Option<bool>,
+    /// Boolean value that determines whether the axis should include ticks.
+    ///
+    /// __Default value:__ `true`
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub ticks: Option<bool>,
+    #[serde(rename = "tickSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_size: Option<GridWidth>,
+    #[serde(rename = "tickWidth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub tick_width: Option<GridWidth>,
+    /// A title for the field. If `null`, the title will be removed.
+    ///
+    /// __Default value:__  derived from the field's name and transformation function
+    /// (`aggregate`, `bin` and `timeUnit`). If the field has an aggregate function, the function
+    /// is displayed as part of the title (e.g., `"Sum of Profit"`). If the field is binned or
+    /// has a time unit applied, the applied function is shown in parentheses (e.g., `"Profit
+    /// (binned)"`, `"Transaction Date (year-month)"`). Otherwise, the title is simply the field
+    /// name.
+    ///
+    /// __Notes__:
+    ///
+    /// 1) You can customize the default field title format by providing the
+    /// [`fieldTitle`](https://vega.github.io/vega-lite/docs/config.html#top-level-config)
+    /// property in the [config](https://vega.github.io/vega-lite/docs/config.html) or
+    /// [`fieldTitle` function via the `compile` function's
+    /// options](https://vega.github.io/vega-lite/docs/compile.html#field-title).
+    ///
+    /// 2) If both field definition's `title` and axis, header, or legend `title` are defined,
+    /// axis/header/legend title will be used.
+    #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
+    #[builder(default)]
+    pub title: RemovableValue<LegendText>,
+    /// Horizontal text alignment of axis titles.
+    #[serde(rename = "titleAlign")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_align: Option<Align>,
+    /// Text anchor position for placing axis titles.
+    #[serde(rename = "titleAnchor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_anchor: Option<TitleAnchor>,
+    /// Angle in degrees of axis titles.
+    #[serde(rename = "titleAngle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_angle: Option<f64>,
+    /// Vertical text baseline for axis titles.
+    #[serde(rename = "titleBaseline")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_baseline: Option<Baseline>,
+    /// Color of the title, can be in hex color code or regular color name.
+    #[serde(rename = "titleColor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_color: Option<String>,
+    /// Font of the title. (e.g., `"Helvetica Neue"`).
+    #[serde(rename = "titleFont")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_font: Option<String>,
+    /// Font size of the title.
+    #[serde(rename = "titleFontSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_font_size: Option<f64>,
+    /// Font style of the title.
+    #[serde(rename = "titleFontStyle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_font_style: Option<String>,
+    /// Font weight of the title.
+    /// This can be either a string (e.g `"bold"`, `"normal"`) or a number (`100`, `200`, `300`,
+    /// ..., `900` where `"normal"` = `400` and `"bold"` = `700`).
+    #[serde(rename = "titleFontWeight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_font_weight: Option<FontWeight>,
+    /// Maximum allowed pixel width of axis titles.
+    #[serde(rename = "titleLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_limit: Option<f64>,
+    /// Line height in pixels for multi-line title text.
+    #[serde(rename = "titleLineHeight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_line_height: Option<f64>,
+    /// Opacity of the axis title.
+    #[serde(rename = "titleOpacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_opacity: Option<f64>,
+    /// The padding, in pixels, between title and axis.
+    #[serde(rename = "titlePadding")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_padding: Option<f64>,
+    /// X-coordinate of the axis title relative to the axis group.
+    #[serde(rename = "titleX")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_x: Option<f64>,
+    /// Y-coordinate of the axis title relative to the axis group.
+    #[serde(rename = "titleY")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub title_y: Option<f64>,
+    /// Translation offset in pixels applied to the axis group mark x and y. If specified,
+    /// overrides the default behavior of a 0.5 offset to pixel-align stroked lines.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub translate: Option<f64>,
+    /// Explicitly set the visible axis tick values.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub values: Option<Vec<SelectionInitIntervalElement>>,
+    /// A non-negative integer indicating the z-index of the axis.
+    /// If zindex is 0, axes should be drawn behind all chart elements.
+    /// To put them in front, set `zindex` to `1` or more.
+    ///
+    /// __Default value:__ `0` (behind the marks).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(default)]
+    pub zindex: Option<f64>,
+}
+
 /// Tick-Specific Config
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
@@ -14420,7 +16788,7 @@ pub struct TickConfig {
     /// therefore explicitly specified value will be ignored.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub orient: Option<Orientation>,
+    pub orient: Option<GradientDirectionEnum>,
     /// Polar coordinate radial offset, in pixels, of the text label from the origin determined
     /// by the `x` and `y` properties.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -14602,7 +16970,7 @@ pub struct TickConfig {
 /// documentation](https://vega.github.io/vega-lite/docs/title.html#config).
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Builder)]
 #[builder(setter(into, strip_option))]
-pub struct ExcludeMappedValueRefBaseTitle {
+pub struct BaseTitleNoValueRefs {
     /// Horizontal text alignment for title text. One of `"left"`, `"center"`, or `"right"`.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -14784,6 +17152,9 @@ pub struct ViewConfig {
     #[builder(default)]
     pub fill_opacity: Option<f64>,
     /// Default height
+    ///
+    /// __Deprecated:__ Since Vega-Lite 4.0. Please use continuousHeight and discreteHeight
+    /// instead.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub height: Option<f64>,
@@ -14846,6 +17217,8 @@ pub struct ViewConfig {
     #[builder(default)]
     pub stroke_width: Option<f64>,
     /// Default width
+    ///
+    /// __Deprecated:__ Since Vega-Lite 4.0. Please use continuousWidth and discreteWidth instead.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
     pub width: Option<f64>,
@@ -14934,7 +17307,7 @@ pub struct VegaliteSpec {
     /// facet.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub layer: Option<Vec<LayerSpec>>,
+    pub layer: Option<Vec<LayerElement>>,
     /// Name of the visualization for later reference.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
@@ -15474,6 +17847,208 @@ pub enum BinExtent {
     DoubleArray(Vec<f64>),
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum ValueConditionGradientStringNull {
+    ConditionalPredicateValueDefGradientStringNullClass(
+        ConditionalPredicateValueDefGradientStringNullClass,
+    ),
+    ConditionalValueDefGradientStringNullArray(Vec<ConditionalValueDefGradientStringNull>),
+}
+
+/// Filter using a selection name or a logical composition of selection names.
+///
+/// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+/// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum SelectionCompositionElement {
+    Selection(Selection),
+    String(String),
+}
+
+/// Filter using a selection name or a logical composition of selection names.
+///
+/// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
+/// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum ConditionalValueDefGradientStringNullSelectionComposition {
+    Selection(Selection),
+    String(String),
+}
+
+/// Predicate for triggering the condition
+///
+/// The `filter` property must be a predication definition, which can takes one of the
+/// following forms:
+///
+/// 1) an [expression](https://vega.github.io/vega-lite/docs/types.html#expression) string,
+/// where `datum` can be used to refer to the current data object.
+/// For example, `{filter: "datum.b2 > 60"}` would make the output data includes only items
+/// that have values in the field `b2` over 60.
+///
+/// 2) one of the [field
+/// predicates](https://vega.github.io/vega-lite/docs/predicate.html#field-predicate):
+/// [`equal`](https://vega.github.io/* vega-lite/docs/predicate.html#field-equal-predicate),
+/// [`lt`](https://vega.github.io/vega-lite/docs/predicate.html#lt-predicate),
+/// [`lte`](https://vega.github.io/vega-lite/docs/predicate.html#lte-predicate),
+/// [`gt`](https://vega.github.io/vega-lite/docs/predicate.html#gt-predicate),
+/// [`gte`](https://vega.github.io/vega-lite/docs/predicate.html#gte-predicate),
+/// [`range`](https://vega.github.io/vega-lite/docs/predicate.html#range-predicate),
+/// [`oneOf`](https://vega.github.io/vega-lite/docs/predicate.html#one-of-predicate),
+/// or [`valid`](https://vega.github.io/vega-lite/docs/predicate.html#valid-predicate),
+///
+/// 3) a [selection
+/// predicate](https://vega.github.io/vega-lite/docs/predicate.html#selection-predicate),
+/// which define the names of a selection that the data point should belong to (or a logical
+/// composition of selections).
+///
+/// 4) a [logical
+/// composition](https://vega.github.io/vega-lite/docs/predicate.html#composition) of (1),
+/// (2), or (3).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum PredicateCompositionElement {
+    Predicate(Box<Predicate>),
+    String(String),
+}
+
+/// Predicate for triggering the condition
+///
+/// The `filter` property must be a predication definition, which can takes one of the
+/// following forms:
+///
+/// 1) an [expression](https://vega.github.io/vega-lite/docs/types.html#expression) string,
+/// where `datum` can be used to refer to the current data object.
+/// For example, `{filter: "datum.b2 > 60"}` would make the output data includes only items
+/// that have values in the field `b2` over 60.
+///
+/// 2) one of the [field
+/// predicates](https://vega.github.io/vega-lite/docs/predicate.html#field-predicate):
+/// [`equal`](https://vega.github.io/* vega-lite/docs/predicate.html#field-equal-predicate),
+/// [`lt`](https://vega.github.io/vega-lite/docs/predicate.html#lt-predicate),
+/// [`lte`](https://vega.github.io/vega-lite/docs/predicate.html#lte-predicate),
+/// [`gt`](https://vega.github.io/vega-lite/docs/predicate.html#gt-predicate),
+/// [`gte`](https://vega.github.io/vega-lite/docs/predicate.html#gte-predicate),
+/// [`range`](https://vega.github.io/vega-lite/docs/predicate.html#range-predicate),
+/// [`oneOf`](https://vega.github.io/vega-lite/docs/predicate.html#one-of-predicate),
+/// or [`valid`](https://vega.github.io/vega-lite/docs/predicate.html#valid-predicate),
+///
+/// 3) a [selection
+/// predicate](https://vega.github.io/vega-lite/docs/predicate.html#selection-predicate),
+/// which define the names of a selection that the data point should belong to (or a logical
+/// composition of selections).
+///
+/// 4) a [logical
+/// composition](https://vega.github.io/vega-lite/docs/predicate.html#composition) of (1),
+/// (2), or (3).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum ConditionalValueDefGradientStringNullPredicateComposition {
+    Predicate(Box<Predicate>),
+    String(String),
+}
+
+/// The value that the field should be equal to.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum EqualElement {
+    Bool(bool),
+    DateTime(DateTime),
+    Double(f64),
+    String(String),
+}
+
+/// Value representing the day of a week. This can be one of:
+/// (1) integer value -- `1` represents Monday;
+/// (2) case-insensitive day name (e.g., `"Monday"`);
+/// (3) case-insensitive, 3-character short day name (e.g., `"Mon"`).
+///
+/// **Warning:** A DateTime definition object with `day`** should not be combined with
+/// `year`, `quarter`, `month`, or `date`.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum Day {
+    Double(f64),
+    String(String),
+}
+
+/// One of:
+/// (1) integer value representing the month from `1`-`12`. `1` represents January;
+/// (2) case-insensitive month name (e.g., `"January"`);
+/// (3) case-insensitive, 3-character short month name (e.g., `"Jan"`).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum Month {
+    Double(f64),
+    String(String),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum Lt {
+    DateTime(DateTime),
+    Double(f64),
+    String(String),
+}
+
+/// The value that the field should be equal to.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum SelectionInitIntervalElement {
+    Bool(bool),
+    DateTime(DateTime),
+    Double(f64),
+    String(String),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum LogicalNotPredicateRange {
+    DateTime(DateTime),
+    Double(f64),
+}
+
+/// Time unit for the field to be tested.
+///
+/// Time unit (e.g., `year`, `yearmonth`, `month`, `hours`) for a temporal field.
+/// or [a temporal field that gets casted as
+/// ordinal](https://vega.github.io/vega-lite/docs/type.html#cast).
+///
+/// __Default value:__ `undefined` (None)
+///
+/// __See also:__ [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html)
+/// documentation.
+///
+/// The timeUnit.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum TimeUnitUnion {
+    Enum(TimeUnit),
+    TimeUnitParams(TimeUnitParams),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum ValueUnion {
+    String(String),
+    ValueLinearGradient(ValueLinearGradient),
+}
+
 /// __Required.__ A string defining the name of the field from which to pull a data value
 /// or an object defining iterated values from the
 /// [`repeat`](https://vega.github.io/vega-lite/docs/repeat.html) operator.
@@ -15600,6 +18175,18 @@ pub enum TickCount {
 ///
 /// The title text.
 ///
+/// A string or array of strings indicating the name of custom styles to apply to the axis. A
+/// style is a named collection of axis property defined within the [style
+/// configuration](https://vega.github.io/vega-lite/docs/mark.html#style-config). If style is
+/// an array, later styles will override earlier styles. Any [axis
+/// properties](https://vega.github.io/vega-lite/docs/encoding.html#mark-prop) explicitly
+/// defined within the `encoding` will override a style default.
+///
+/// __Default value:__ (none)
+/// __Note:__ Any specified style will augment the default style. For example, an x-axis mark
+/// with `"style": "foo"` will use `config.axisX` and `config.style.foo` (the specified style
+/// `"foo"` has higher precedence).
+///
 /// A [mark style property](https://vega.github.io/vega-lite/docs/config.html#style) to apply
 /// to the title text mark.
 ///
@@ -15624,70 +18211,60 @@ pub enum LegendText {
     StringArray(Vec<String>),
 }
 
-/// The value that the field should be equal to.
+/// Bin boundaries can be provided to scales as either an explicit array of bin boundaries or
+/// as a bin specification object. The legal values are:
+/// - An [array](../types/#Array) literal of bin boundary values. For example, `[0, 5, 10,
+/// 15, 20]`. The array must include both starting and ending boundaries. The previous
+/// example uses five values to indicate a total of four bin intervals: [0-5), [5-10),
+/// [10-15), [15-20]. Array literals may include signal references as elements.
+/// - A [bin specification object](https://vega.github.io/vega-lite/docs/scale.html#bins)
+/// that indicates the bin _step_ size, and optionally the _start_ and _stop_ boundaries.
+/// - An array of bin boundaries over the scale domain. If provided, axes and legends will
+/// use the bin boundaries to inform the choice of tick marks and text labels.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
-pub enum SelectionInitIntervalElement {
-    Bool(bool),
-    DateTime(DateTime),
-    Double(f64),
-    String(String),
+pub enum ScaleBins {
+    DoubleArray(Vec<f64>),
+    ScaleBinParams(ScaleBinParams),
 }
 
-/// Value representing the day of a week. This can be one of:
-/// (1) integer value -- `1` represents Monday;
-/// (2) case-insensitive day name (e.g., `"Monday"`);
-/// (3) case-insensitive, 3-character short day name (e.g., `"Mon"`).
+/// Customized domain values in the form of constant values or dynamic values driven by a
+/// selection.
 ///
-/// **Warning:** A DateTime definition object with `day`** should not be combined with
-/// `year`, `quarter`, `month`, or `date`.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum Day {
-    Double(f64),
-    String(String),
-}
-
-/// One of:
-/// (1) integer value representing the month from `1`-`12`. `1` represents January;
-/// (2) case-insensitive month name (e.g., `"January"`);
-/// (3) case-insensitive, 3-character short month name (e.g., `"Jan"`).
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum Month {
-    Double(f64),
-    String(String),
-}
-
-/// Customized domain values.
+/// 1) Constant `domain` for _quantitative_ fields can take one of the following forms:
 ///
-/// For _quantitative_ fields, `domain` can take the form of a two-element array with minimum
-/// and maximum values. [Piecewise
-/// scales](https://vega.github.io/vega-lite/docs/scale.html#piecewise) can be created by
-/// providing a `domain` with more than two entries.
-/// If the input field is aggregated, `domain` can also be a string value `"unaggregated"`,
-/// indicating that the domain should include the raw data values prior to the aggregation.
+/// - A two-element array with minimum and maximum values. To create a diverging scale, this
+/// two-element array can be combined with the `domainMid` property.
+/// - An array with more than two entries, for [Piecewise quantitative
+/// scales](https://vega.github.io/vega-lite/docs/scale.html#piecewise).
+/// - A string value `"unaggregated"`, if the input field is aggregated, to indicate that the
+/// domain should include the raw data values prior to the aggregation.
 ///
-/// For _temporal_ fields, `domain` can be a two-element array minimum and maximum values, in
-/// the form of either timestamps or the [DateTime definition
+/// 2) Constant `domain` for _temporal_ fields can be a two-element array with minimum and
+/// maximum values, in the form of either timestamps or the [DateTime definition
 /// objects](https://vega.github.io/vega-lite/docs/types.html#datetime).
 ///
-/// For _ordinal_ and _nominal_ fields, `domain` can be an array that lists valid input
-/// values.
+/// 3) Constant `domain` for _ordinal_ and _nominal_ fields can be an array that lists valid
+/// input values.
 ///
-/// The `selection` property can be used to [interactively
-/// determine](https://vega.github.io/vega-lite/docs/selection.html#scale-domains) the scale
+/// 4) To combine (union) specified constant domain with the field's values, `domain` can be
+/// an object with a `unionWith` property that specify constant domain to be combined. For
+/// example, `domain: {unionWith: [0, 100]}` for a quantitative scale means that the scale
+/// domain always includes `[0, 100]`, but will include other values in the fields beyond
+/// `[0, 100]`.
+///
+/// 5) Domain can also takes an object defining a field or encoding of a selection that
+/// [interactively
+/// determines](https://vega.github.io/vega-lite/docs/selection.html#scale-domains) the scale
 /// domain.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
 pub enum DomainUnion {
-    DomainClass(DomainClass),
+    DomainUnionWith(DomainUnionWith),
     Enum(Domain),
-    UnionArray(Vec<SelectionInitIntervalElement>),
+    UnionArray(Vec<Option<EqualElement>>),
 }
 
 /// The interpolation method for range values. By default, a general interpolator for
@@ -15704,7 +18281,7 @@ pub enum DomainUnion {
 #[serde(untagged)]
 #[derive(From)]
 pub enum InterpolateUnion {
-    Enum(ScaleInterpolate),
+    Enum(ScaleInterpolateEnum),
     ScaleInterpolateParams(ScaleInterpolateParams),
 }
 
@@ -15730,11 +18307,11 @@ pub enum InterpolateUnion {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
-pub enum NiceUnion {
+pub enum Nice {
     Bool(bool),
     Double(f64),
-    Enum(NiceTime),
-    NiceClass(NiceClass),
+    Enum(TimeInterval),
+    TimeIntervalStep(TimeIntervalStep),
 }
 
 /// The range of the scale. One of:
@@ -15773,6 +18350,7 @@ pub enum ScaleRange {
 #[derive(From)]
 pub enum RangeRange {
     Double(f64),
+    DoubleArray(Vec<f64>),
     String(String),
 }
 
@@ -15836,34 +18414,6 @@ pub enum SortUnion {
     UnionArray(Vec<SelectionInitIntervalElement>),
 }
 
-/// Time unit for the field to be tested.
-///
-/// Time unit (e.g., `year`, `yearmonth`, `month`, `hours`) for a temporal field.
-/// or [a temporal field that gets casted as
-/// ordinal](https://vega.github.io/vega-lite/docs/type.html#cast).
-///
-/// __Default value:__ `undefined` (None)
-///
-/// __See also:__ [`timeUnit`](https://vega.github.io/vega-lite/docs/timeunit.html)
-/// documentation.
-///
-/// The timeUnit.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum TimeUnitUnion {
-    Enum(TimeUnit),
-    TimeUnitParams(TimeUnitParams),
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum ValueUnion {
-    String(String),
-    ValueLinearGradient(ValueLinearGradient),
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
@@ -15901,9 +18451,110 @@ pub enum Spacing {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
+pub enum ValueConditionNumber {
+    ConditionalDef(ConditionalDef),
+    ConditionalNumberValueDefArray(Vec<ConditionalNumberValueDef>),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum ValueConditionString {
+    ConditionalArray(Vec<Conditional>),
+    ConditionalPredicateValueDefStringClass(ConditionalPredicateValueDefStringClass),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
 pub enum Order {
     OrderFieldDefArray(Vec<OrderFieldDef>),
     OrderFieldDefClass(OrderFieldDefClass),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum ValueConditionStringNull {
+    ConditionalPredicateMarkPropFieldDefTypeForShapeClass(
+        ConditionalPredicateMarkPropFieldDefTypeForShapeClass,
+    ),
+    ConditionalStringValueDefArray(Vec<ConditionalStringValueDef>),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum StrokeDashCondition {
+    ConditionalPredicateValueDefNumberClass(ConditionalPredicateValueDefNumberClass),
+    ConditionalValueDefNumberArray(Vec<ConditionalValueDefNumber>),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum ValueConditionText {
+    ConditionalPredicateValueDefTextClass(ConditionalPredicateValueDefTextClass),
+    ConditionalValueDefTextArray(Vec<ConditionalValueDefText>),
+}
+
+/// A string or array of strings indicating the name of custom styles to apply to the mark. A
+/// style is a named collection of mark property defaults defined within the [style
+/// configuration](https://vega.github.io/vega-lite/docs/mark.html#style-config). If style is
+/// an array, later styles will override earlier styles. Any [mark
+/// properties](https://vega.github.io/vega-lite/docs/encoding.html#mark-prop) explicitly
+/// defined within the `encoding` will override a style default.
+///
+/// __Default value:__ The mark's name. For example, a bar mark will have style `"bar"` by
+/// default.
+/// __Note:__ Any specified style will augment the default style. For example, a bar mark
+/// with `"style": "foo"` will receive from `config.style.bar` and `config.style.foo` (the
+/// specified style `"foo"` has higher precedence).
+///
+/// Placeholder text if the `text` channel is not specified
+///
+/// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
+/// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
+/// between `0` to `1` for opacity).
+///
+/// The subtitle Text.
+///
+/// The title text.
+///
+/// A string or array of strings indicating the name of custom styles to apply to the axis. A
+/// style is a named collection of axis property defined within the [style
+/// configuration](https://vega.github.io/vega-lite/docs/mark.html#style-config). If style is
+/// an array, later styles will override earlier styles. Any [axis
+/// properties](https://vega.github.io/vega-lite/docs/encoding.html#mark-prop) explicitly
+/// defined within the `encoding` will override a style default.
+///
+/// __Default value:__ (none)
+/// __Note:__ Any specified style will augment the default style. For example, an x-axis mark
+/// with `"style": "foo"` will use `config.axisX` and `config.style.foo` (the specified style
+/// `"foo"` has higher precedence).
+///
+/// A [mark style property](https://vega.github.io/vega-lite/docs/config.html#style) to apply
+/// to the title text mark.
+///
+/// __Default value:__ `"group-title"`.
+///
+/// Output field names. This can be either a string or an array of strings with two elements
+/// denoting the name for the fields for stack start and stack end respectively.
+/// If a single string(e.g., `"val"`) is provided, the end field will be `"val_end"`.
+///
+/// A string or array of strings indicating the name of custom styles to apply to the view
+/// background. A style is a named collection of mark property defaults defined within the
+/// [style configuration](https://vega.github.io/vega-lite/docs/mark.html#style-config). If
+/// style is an array, later styles will override earlier styles.
+///
+/// __Default value:__ `"cell"`
+/// __Note:__ Any specified view background properties will augment the default style.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[derive(From)]
+pub enum ConditionalValueDefTextText {
+    String(String),
+    StringArray(Vec<String>),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -15928,132 +18579,6 @@ pub enum Color {
 pub enum ConditionalAxisPropertyColorNullCondition {
     ConditionalPredicateValueDefColorNull(ConditionalPredicateValueDefColorNull),
     ConditionalPredicateValueDefColorNullArray(Vec<ConditionalPredicateValueDefColorNull>),
-}
-
-/// Predicate for triggering the condition
-///
-/// The `filter` property must be a predication definition, which can takes one of the
-/// following forms:
-///
-/// 1) an [expression](https://vega.github.io/vega-lite/docs/types.html#expression) string,
-/// where `datum` can be used to refer to the current data object.
-/// For example, `{filter: "datum.b2 > 60"}` would make the output data includes only items
-/// that have values in the field `b2` over 60.
-///
-/// 2) one of the [field
-/// predicates](https://vega.github.io/vega-lite/docs/predicate.html#field-predicate):
-/// [`equal`](https://vega.github.io/* vega-lite/docs/predicate.html#field-equal-predicate),
-/// [`lt`](https://vega.github.io/vega-lite/docs/predicate.html#lt-predicate),
-/// [`lte`](https://vega.github.io/vega-lite/docs/predicate.html#lte-predicate),
-/// [`gt`](https://vega.github.io/vega-lite/docs/predicate.html#gt-predicate),
-/// [`gte`](https://vega.github.io/vega-lite/docs/predicate.html#gte-predicate),
-/// [`range`](https://vega.github.io/vega-lite/docs/predicate.html#range-predicate),
-/// [`oneOf`](https://vega.github.io/vega-lite/docs/predicate.html#one-of-predicate),
-/// or [`valid`](https://vega.github.io/vega-lite/docs/predicate.html#valid-predicate),
-///
-/// 3) a [selection
-/// predicate](https://vega.github.io/vega-lite/docs/predicate.html#selection-predicate),
-/// which define the names of a selection that the data point should belong to (or a logical
-/// composition of selections).
-///
-/// 4) a [logical
-/// composition](https://vega.github.io/vega-lite/docs/predicate.html#composition) of (1),
-/// (2), or (3).
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum TransformPredicateComposition {
-    Predicate(Box<Predicate>),
-    String(String),
-}
-
-/// Predicate for triggering the condition
-///
-/// The `filter` property must be a predication definition, which can takes one of the
-/// following forms:
-///
-/// 1) an [expression](https://vega.github.io/vega-lite/docs/types.html#expression) string,
-/// where `datum` can be used to refer to the current data object.
-/// For example, `{filter: "datum.b2 > 60"}` would make the output data includes only items
-/// that have values in the field `b2` over 60.
-///
-/// 2) one of the [field
-/// predicates](https://vega.github.io/vega-lite/docs/predicate.html#field-predicate):
-/// [`equal`](https://vega.github.io/* vega-lite/docs/predicate.html#field-equal-predicate),
-/// [`lt`](https://vega.github.io/vega-lite/docs/predicate.html#lt-predicate),
-/// [`lte`](https://vega.github.io/vega-lite/docs/predicate.html#lte-predicate),
-/// [`gt`](https://vega.github.io/vega-lite/docs/predicate.html#gt-predicate),
-/// [`gte`](https://vega.github.io/vega-lite/docs/predicate.html#gte-predicate),
-/// [`range`](https://vega.github.io/vega-lite/docs/predicate.html#range-predicate),
-/// [`oneOf`](https://vega.github.io/vega-lite/docs/predicate.html#one-of-predicate),
-/// or [`valid`](https://vega.github.io/vega-lite/docs/predicate.html#valid-predicate),
-///
-/// 3) a [selection
-/// predicate](https://vega.github.io/vega-lite/docs/predicate.html#selection-predicate),
-/// which define the names of a selection that the data point should belong to (or a logical
-/// composition of selections).
-///
-/// 4) a [logical
-/// composition](https://vega.github.io/vega-lite/docs/predicate.html#composition) of (1),
-/// (2), or (3).
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum PredicateCompositionElement {
-    Predicate(Box<Predicate>),
-    String(String),
-}
-
-/// The value that the field should be equal to.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum EqualUnion {
-    Bool(bool),
-    DateTime(DateTime),
-    Double(f64),
-    String(String),
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum Lt {
-    DateTime(DateTime),
-    Double(f64),
-    String(String),
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum LogicalNotPredicateRange {
-    DateTime(DateTime),
-    Double(f64),
-}
-
-/// Filter using a selection name or a logical composition of selection names.
-///
-/// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
-/// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum SelectionCompositionElement {
-    Selection(Selection),
-    String(String),
-}
-
-/// Filter using a selection name or a logical composition of selection names.
-///
-/// A [selection name](https://vega.github.io/vega-lite/docs/selection.html), or a series of
-/// [composed selections](https://vega.github.io/vega-lite/docs/selection.html#compose).
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum LogicalNotPredicateSelectionComposition {
-    Selection(Selection),
-    String(String),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -16472,53 +18997,6 @@ pub enum Text {
     TitleParams(TitleParams),
 }
 
-/// A string or array of strings indicating the name of custom styles to apply to the mark. A
-/// style is a named collection of mark property defaults defined within the [style
-/// configuration](https://vega.github.io/vega-lite/docs/mark.html#style-config). If style is
-/// an array, later styles will override earlier styles. Any [mark
-/// properties](https://vega.github.io/vega-lite/docs/encoding.html#mark-prop) explicitly
-/// defined within the `encoding` will override a style default.
-///
-/// __Default value:__ The mark's name. For example, a bar mark will have style `"bar"` by
-/// default.
-/// __Note:__ Any specified style will augment the default style. For example, a bar mark
-/// with `"style": "foo"` will receive from `config.style.bar` and `config.style.foo` (the
-/// specified style `"foo"` has higher precedence).
-///
-/// Placeholder text if the `text` channel is not specified
-///
-/// A constant value in visual domain (e.g., `"red"` / `"#0099ff"` / [gradient
-/// definition](https://vega.github.io/vega-lite/docs/types.html#gradient) for color, values
-/// between `0` to `1` for opacity).
-///
-/// The subtitle Text.
-///
-/// The title text.
-///
-/// A [mark style property](https://vega.github.io/vega-lite/docs/config.html#style) to apply
-/// to the title text mark.
-///
-/// __Default value:__ `"group-title"`.
-///
-/// Output field names. This can be either a string or an array of strings with two elements
-/// denoting the name for the fields for stack start and stack end respectively.
-/// If a single string(e.g., `"val"`) is provided, the end field will be `"val_end"`.
-///
-/// A string or array of strings indicating the name of custom styles to apply to the view
-/// background. A style is a named collection of mark property defaults defined within the
-/// [style configuration](https://vega.github.io/vega-lite/docs/mark.html#style-config). If
-/// style is an array, later styles will override earlier styles.
-///
-/// __Default value:__ `"cell"`
-/// __Note:__ Any specified view background properties will augment the default style.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum CategoryText {
-    String(String),
-    StringArray(Vec<String>),
-}
-
 /// Definition for fields to be repeated. One of:
 /// 1) An array of fields to be repeated. If `"repeat"` is an array, the field can be
 /// referred using `{"repeat": "repeat"}`
@@ -16566,20 +19044,10 @@ pub enum Padding {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 #[derive(From)]
-pub enum CategoryUnion {
-    CategoryClass(CategoryClass),
+pub enum RangeValue {
+    AnythingArray(Vec<Option<serde_json::Value>>),
     Enum(RangeEnum),
-    UnionArray(Vec<Option<RangeRaw>>),
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-#[derive(From)]
-pub enum RangeRaw {
-    Bool(bool),
-    Double(f64),
-    DoubleArray(Vec<f64>),
-    String(String),
+    RangeClass(RangeClass),
 }
 
 /// When set, a selection is populated by interacting with the corresponding legend. Direct
@@ -16786,7 +19254,7 @@ pub enum DataFormatType {
 /// For a full list of operations, please see the documentation for
 /// [aggregate](https://vega.github.io/vega-lite/docs/aggregate.html#ops).
 ///
-/// __Default value:__ `"sum"` for stacked plots. Otherwise, `"mean"`.
+/// __Default value:__ `"sum"` for stacked plots. Otherwise, `"min"`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum NonArgAggregateOp {
     #[serde(rename = "average")]
@@ -16882,6 +19350,114 @@ pub enum SingleDefUnitChannel {
     Y2,
 }
 
+/// Defines how date-time values should be binned.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum TimeUnit {
+    #[serde(rename = "date")]
+    Date,
+    #[serde(rename = "day")]
+    Day,
+    #[serde(rename = "hours")]
+    Hours,
+    #[serde(rename = "hoursminutes")]
+    Hoursminutes,
+    #[serde(rename = "hoursminutesseconds")]
+    Hoursminutesseconds,
+    #[serde(rename = "milliseconds")]
+    Milliseconds,
+    #[serde(rename = "minutes")]
+    Minutes,
+    #[serde(rename = "minutesseconds")]
+    Minutesseconds,
+    #[serde(rename = "month")]
+    Month,
+    #[serde(rename = "monthdate")]
+    Monthdate,
+    #[serde(rename = "monthdatehours")]
+    Monthdatehours,
+    #[serde(rename = "quarter")]
+    Quarter,
+    #[serde(rename = "quartermonth")]
+    Quartermonth,
+    #[serde(rename = "seconds")]
+    Seconds,
+    #[serde(rename = "secondsmilliseconds")]
+    Secondsmilliseconds,
+    #[serde(rename = "utcdate")]
+    Utcdate,
+    #[serde(rename = "utcday")]
+    Utcday,
+    #[serde(rename = "utchours")]
+    Utchours,
+    #[serde(rename = "utchoursminutes")]
+    Utchoursminutes,
+    #[serde(rename = "utchoursminutesseconds")]
+    Utchoursminutesseconds,
+    #[serde(rename = "utcmilliseconds")]
+    Utcmilliseconds,
+    #[serde(rename = "utcminutes")]
+    Utcminutes,
+    #[serde(rename = "utcminutesseconds")]
+    Utcminutesseconds,
+    #[serde(rename = "utcmonth")]
+    Utcmonth,
+    #[serde(rename = "utcmonthdate")]
+    Utcmonthdate,
+    #[serde(rename = "utcmonthdatehours")]
+    Utcmonthdatehours,
+    #[serde(rename = "utcquarter")]
+    Utcquarter,
+    #[serde(rename = "utcquartermonth")]
+    Utcquartermonth,
+    #[serde(rename = "utcseconds")]
+    Utcseconds,
+    #[serde(rename = "utcsecondsmilliseconds")]
+    Utcsecondsmilliseconds,
+    #[serde(rename = "utcyear")]
+    Utcyear,
+    #[serde(rename = "utcyearmonth")]
+    Utcyearmonth,
+    #[serde(rename = "utcyearmonthdate")]
+    Utcyearmonthdate,
+    #[serde(rename = "utcyearmonthdatehours")]
+    Utcyearmonthdatehours,
+    #[serde(rename = "utcyearmonthdatehoursminutes")]
+    Utcyearmonthdatehoursminutes,
+    #[serde(rename = "utcyearmonthdatehoursminutesseconds")]
+    Utcyearmonthdatehoursminutesseconds,
+    #[serde(rename = "utcyearquarter")]
+    Utcyearquarter,
+    #[serde(rename = "utcyearquartermonth")]
+    Utcyearquartermonth,
+    #[serde(rename = "year")]
+    Year,
+    #[serde(rename = "yearmonth")]
+    Yearmonth,
+    #[serde(rename = "yearmonthdate")]
+    Yearmonthdate,
+    #[serde(rename = "yearmonthdatehours")]
+    Yearmonthdatehours,
+    #[serde(rename = "yearmonthdatehoursminutes")]
+    Yearmonthdatehoursminutes,
+    #[serde(rename = "yearmonthdatehoursminutesseconds")]
+    Yearmonthdatehoursminutesseconds,
+    #[serde(rename = "yearquarter")]
+    Yearquarter,
+    #[serde(rename = "yearquartermonth")]
+    Yearquartermonth,
+}
+
+/// The type of gradient. Use `"linear"` for a linear gradient.
+///
+/// The type of gradient. Use `"radial"` for a radial gradient.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum Gradient {
+    #[serde(rename = "linear")]
+    Linear,
+    #[serde(rename = "radial")]
+    Radial,
+}
+
 /// The encoded field's type of measurement (`"quantitative"`, `"temporal"`, `"ordinal"`, or
 /// `"nominal"`).
 /// It can also be a `"geojson"` type for encoding
@@ -16974,7 +19550,7 @@ pub enum RepeatEnum {
 /// Orientation of the error band. This is normally automatically determined, but can be
 /// specified when the orientation is ambiguous and cannot be automatically determined.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum Orientation {
+pub enum GradientDirectionEnum {
     #[serde(rename = "horizontal")]
     Horizontal,
     #[serde(rename = "vertical")]
@@ -17195,7 +19771,7 @@ pub enum ScaleInterpolateParamsType {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum ScaleInterpolate {
+pub enum ScaleInterpolateEnum {
     #[serde(rename = "cubehelix")]
     Cubehelix,
     #[serde(rename = "cubehelix-long")]
@@ -17212,24 +19788,6 @@ pub enum ScaleInterpolate {
     Lab,
     #[serde(rename = "rgb")]
     Rgb,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum NiceTime {
-    #[serde(rename = "day")]
-    Day,
-    #[serde(rename = "hour")]
-    Hour,
-    #[serde(rename = "minute")]
-    Minute,
-    #[serde(rename = "month")]
-    Month,
-    #[serde(rename = "second")]
-    Second,
-    #[serde(rename = "week")]
-    Week,
-    #[serde(rename = "year")]
-    Year,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -17286,6 +19844,8 @@ pub enum ScaleType {
     Band,
     #[serde(rename = "bin-ordinal")]
     BinOrdinal,
+    #[serde(rename = "identity")]
+    Identity,
     #[serde(rename = "linear")]
     Linear,
     #[serde(rename = "log")]
@@ -17300,6 +19860,8 @@ pub enum ScaleType {
     Quantile,
     #[serde(rename = "quantize")]
     Quantize,
+    #[serde(rename = "sequential")]
+    Sequential,
     #[serde(rename = "sqrt")]
     Sqrt,
     #[serde(rename = "symlog")]
@@ -17409,114 +19971,6 @@ pub enum Sort {
     X,
     #[serde(rename = "y")]
     Y,
-}
-
-/// Defines how date-time values should be binned.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum TimeUnit {
-    #[serde(rename = "date")]
-    Date,
-    #[serde(rename = "day")]
-    Day,
-    #[serde(rename = "hours")]
-    Hours,
-    #[serde(rename = "hoursminutes")]
-    Hoursminutes,
-    #[serde(rename = "hoursminutesseconds")]
-    Hoursminutesseconds,
-    #[serde(rename = "milliseconds")]
-    Milliseconds,
-    #[serde(rename = "minutes")]
-    Minutes,
-    #[serde(rename = "minutesseconds")]
-    Minutesseconds,
-    #[serde(rename = "month")]
-    Month,
-    #[serde(rename = "monthdate")]
-    Monthdate,
-    #[serde(rename = "monthdatehours")]
-    Monthdatehours,
-    #[serde(rename = "quarter")]
-    Quarter,
-    #[serde(rename = "quartermonth")]
-    Quartermonth,
-    #[serde(rename = "seconds")]
-    Seconds,
-    #[serde(rename = "secondsmilliseconds")]
-    Secondsmilliseconds,
-    #[serde(rename = "utcdate")]
-    Utcdate,
-    #[serde(rename = "utcday")]
-    Utcday,
-    #[serde(rename = "utchours")]
-    Utchours,
-    #[serde(rename = "utchoursminutes")]
-    Utchoursminutes,
-    #[serde(rename = "utchoursminutesseconds")]
-    Utchoursminutesseconds,
-    #[serde(rename = "utcmilliseconds")]
-    Utcmilliseconds,
-    #[serde(rename = "utcminutes")]
-    Utcminutes,
-    #[serde(rename = "utcminutesseconds")]
-    Utcminutesseconds,
-    #[serde(rename = "utcmonth")]
-    Utcmonth,
-    #[serde(rename = "utcmonthdate")]
-    Utcmonthdate,
-    #[serde(rename = "utcmonthdatehours")]
-    Utcmonthdatehours,
-    #[serde(rename = "utcquarter")]
-    Utcquarter,
-    #[serde(rename = "utcquartermonth")]
-    Utcquartermonth,
-    #[serde(rename = "utcseconds")]
-    Utcseconds,
-    #[serde(rename = "utcsecondsmilliseconds")]
-    Utcsecondsmilliseconds,
-    #[serde(rename = "utcyear")]
-    Utcyear,
-    #[serde(rename = "utcyearmonth")]
-    Utcyearmonth,
-    #[serde(rename = "utcyearmonthdate")]
-    Utcyearmonthdate,
-    #[serde(rename = "utcyearmonthdatehours")]
-    Utcyearmonthdatehours,
-    #[serde(rename = "utcyearmonthdatehoursminutes")]
-    Utcyearmonthdatehoursminutes,
-    #[serde(rename = "utcyearmonthdatehoursminutesseconds")]
-    Utcyearmonthdatehoursminutesseconds,
-    #[serde(rename = "utcyearquarter")]
-    Utcyearquarter,
-    #[serde(rename = "utcyearquartermonth")]
-    Utcyearquartermonth,
-    #[serde(rename = "year")]
-    Year,
-    #[serde(rename = "yearmonth")]
-    Yearmonth,
-    #[serde(rename = "yearmonthdate")]
-    Yearmonthdate,
-    #[serde(rename = "yearmonthdatehours")]
-    Yearmonthdatehours,
-    #[serde(rename = "yearmonthdatehoursminutes")]
-    Yearmonthdatehoursminutes,
-    #[serde(rename = "yearmonthdatehoursminutesseconds")]
-    Yearmonthdatehoursminutesseconds,
-    #[serde(rename = "yearquarter")]
-    Yearquarter,
-    #[serde(rename = "yearquartermonth")]
-    Yearquartermonth,
-}
-
-/// The type of gradient. Use `"linear"` for a linear gradient.
-///
-/// The type of gradient. Use `"radial"` for a radial gradient.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum Gradient {
-    #[serde(rename = "linear")]
-    Linear,
-    #[serde(rename = "radial")]
-    Radial,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -18332,4 +20786,64 @@ pub enum Bind {
 pub enum LegendBindingEnum {
     #[serde(rename = "legend")]
     Legend,
+}
+
+/// The orientation of a non-stacked bar, tick, area, and line charts.
+/// The value is either horizontal (default) or vertical.
+/// - For bar, rule and tick, this determines whether the size of the bar and tick
+/// should be applied to x or y dimension.
+/// - For area, this property determines the orient property of the Vega output.
+/// - For line and trail marks, this property determines the sort order of the points in the
+/// line
+/// if `config.sortLineBy` is not specified.
+/// For stacked charts, this is always determined by the orientation of the stack;
+/// therefore explicitly specified value will be ignored.
+///
+/// The default direction (`"horizontal"` or `"vertical"`) for gradient legends.
+///
+/// __Default value:__ `"vertical"`.
+///
+/// The default direction (`"horizontal"` or `"vertical"`) for symbol legends.
+///
+/// __Default value:__ `"vertical"`.
+///
+/// The direction of the legend, one of `"vertical"` or `"horizontal"`.
+///
+/// __Default value:__
+/// - For top-/bottom-`orient`ed legends, `"horizontal"`
+/// - For left-/right-`orient`ed legends, `"vertical"`
+/// - For top/bottom-left/right-`orient`ed legends, `"horizontal"` for gradient legends and
+/// `"vertical"` for symbol legends.
+///
+/// Orientation of the box plot. This is normally automatically determined based on types of
+/// fields on x and y channels. However, an explicit `orient` be specified when the
+/// orientation is ambiguous.
+///
+/// __Default value:__ `"vertical"`.
+///
+/// Orientation of the error bar. This is normally automatically determined, but can be
+/// specified when the orientation is ambiguous and cannot be automatically determined.
+///
+/// Orientation of the error band. This is normally automatically determined, but can be
+/// specified when the orientation is ambiguous and cannot be automatically determined.
+///
+/// The orientation of the axis. One of `"top"`, `"bottom"`, `"left"` or `"right"`. The
+/// orientation can be used to further specialize the axis type (e.g., a y-axis oriented
+/// towards the right edge of the chart).
+///
+/// __Default value:__ `"bottom"` for x-axes and `"left"` for y-axes.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum StyleOrient {
+    #[serde(rename = "bottom")]
+    Bottom,
+    #[serde(rename = "horizontal")]
+    Horizontal,
+    #[serde(rename = "left")]
+    Left,
+    #[serde(rename = "right")]
+    Right,
+    #[serde(rename = "top")]
+    Top,
+    #[serde(rename = "vertical")]
+    Vertical,
 }
