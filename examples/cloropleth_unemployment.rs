@@ -30,9 +30,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .encoding(
             EncodingBuilder::default()
                 .color(
-                    DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
+                    DefGradientStringNullBuilder::default()
                         .field("rate")
-                        .def_with_condition_mark_prop_field_def_gradient_string_null_type(StandardType::Quantitative)
+                        .def_gradient_string_null_type(Type::Quantitative)
                         .build()?,
                 )
                 .build()?,

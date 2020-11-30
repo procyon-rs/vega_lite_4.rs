@@ -28,14 +28,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             EncodingBuilder::default()
                 .x(XClassBuilder::default()
                     .field("x")
-                    .def_type(StandardType::Quantitative)
+                    .def_type(Type::Quantitative)
                     .build()?)
                 .y(YClassBuilder::default()
                     .field("y")
-                    .def_type(StandardType::Quantitative)
+                    .def_type(Type::Quantitative)
                     .build()?)
                 .color(
-                    DefWithConditionMarkPropFieldDefGradientStringNullBuilder::default()
+                    DefGradientStringNullBuilder::default()
                         .field("cluster")
                         .build()?,
                 )

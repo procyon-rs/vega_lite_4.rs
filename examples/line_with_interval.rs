@@ -16,7 +16,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             EncodingBuilder::default()
                 .x(XClassBuilder::default()
                     .field("Year")
-                    .def_type(StandardType::Temporal)
+                    .def_type(Type::Temporal)
                     .time_unit(TimeUnit::Year)
                     .build()?)
                 .build()?,
@@ -28,7 +28,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     LayerEncodingBuilder::default()
                         .y(YClassBuilder::default()
                             .field("Miles_per_Gallon")
-                            .def_type(StandardType::Quantitative)
+                            .def_type(Type::Quantitative)
                             .aggregate(NonArgAggregateOp::Mean)
                             .build()?)
                         .build()?,
@@ -46,7 +46,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .y(YClassBuilder::default()
                             .title("Mean of Miles per Gallon (95% CIs)")
                             .field("Miles_per_Gallon")
-                            .def_type(StandardType::Quantitative)
+                            .def_type(Type::Quantitative)
                             .build()?)
                         .build()?,
                 )

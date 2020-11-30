@@ -56,14 +56,15 @@ from_into_string!(
     ClearUnion,
     Color,
     ColorUnion,
-    ConditionalValueDefGradientStringNullPredicateComposition,
-    ConditionalValueDefGradientStringNullSelectionComposition,
+    ConditionalNumberValueDefPredicateComposition,
+    ConditionalNumberValueDefSelectionComposition,
     ConditionalValueDefTextText,
     Day,
     EqualElement,
     Field,
     FillUnion,
     FluffyStream,
+    Format,
     InitValue,
     InlineDatasetValue,
     LabelFont,
@@ -84,6 +85,7 @@ from_into_string!(
     Text,
     Translate,
     UrlDataInlineDataset,
+    Value,
     ValueUnion,
 );
 
@@ -169,9 +171,10 @@ macro_rules! from_into_array_of_str_opt{
 //   xargs -I {} sh -c 'grep -B 5 \"{}\" src/schema.rs | grep \"pub enum\" | sed \"s/pub enum \(.*\) {/\1/\" | \
 //     xargs -I $ sh -c \"echo \\\"$::{}\\\"\"'" | sort | uniq
 from_into_array_of_str!(
+    FluffySortArray::UnionArray(Vec<SelectionInitIntervalElement>),
     InitValue::UnionArray(Vec<SelectionInitIntervalElement>),
+    PurpleSortArray::UnionArray(Vec<SelectionInitIntervalElement>),
     ScaleRange::UnionArray(Vec<RangeRange>),
-    SortArray::UnionArray(Vec<SelectionInitIntervalElement>),
     SortUnion::UnionArray(Vec<SelectionInitIntervalElement>),
 );
 from_into_array_of_str_opt!(DomainUnion::UnionArray(Vec<Option<EqualElement>>),);

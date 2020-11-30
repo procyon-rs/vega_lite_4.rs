@@ -17,11 +17,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             EncodingBuilder::default()
                 .x(XClassBuilder::default()
                     .field("data.0")
-                    .def_type(StandardType::Quantitative)
+                    .def_type(Type::Quantitative)
                     .build()?)
                 .y(YClassBuilder::default()
                     .field("data.1")
-                    .def_type(StandardType::Quantitative)
+                    .def_type(Type::Quantitative)
                     .build()?)
                 .build()?,
         )

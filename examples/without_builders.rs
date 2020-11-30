@@ -10,7 +10,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             ..Default::default()
         }),
         transform: Some(vec![Transform {
-            filter: Some(ConditionalValueDefGradientStringNullPredicateComposition::String("datum.symbol==='GOOG'".to_string())),
+            filter: Some(ConditionalNumberValueDefPredicateComposition::String("datum.symbol==='GOOG'".to_string())),
             ..Default::default()
         }]),
         mark: Some(AnyMark::Enum(Mark::Line)),
@@ -18,12 +18,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             Encoding {
                 x: Some(XClass {
                     field: Some(Field::String("date".to_string())),
-                    def_type: Some(StandardType::Temporal),
+                    def_type: Some(Type::Temporal),
                     ..Default::default()
                 }),
                 y: Some(YClass {
                     field: Some(Field::String("price".to_string())),
-                    def_type: Some(StandardType::Quantitative),
+                    def_type: Some(Type::Quantitative),
                     ..Default::default()
                 }),
                 ..Default::default()

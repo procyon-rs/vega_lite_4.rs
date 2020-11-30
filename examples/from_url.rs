@@ -15,11 +15,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .encoding(EncodingBuilder::default()
             .x(XClassBuilder::default()
                 .field("date")
-                .def_type(StandardType::Temporal)
+                .def_type(Type::Temporal)
                 .build()?)
             .y(YClassBuilder::default()
                 .field("price")
-                .def_type(StandardType::Quantitative)
+                .def_type(Type::Quantitative)
                 .build()?).build()?).build()?;
 
     // display the chart using `showata`
