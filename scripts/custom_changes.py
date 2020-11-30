@@ -3,9 +3,9 @@ import re
 
 changes = [
     {
-        'struct': 'SpecClass',
-        'from': r'pub spec: Box<Option<SpecClass>>',
-        'to': r'pub spec: Option<Box<SpecClass>>'
+        'struct': 'SpecSpec',
+        'from': r'pub spec: Box<Option<SpecSpec>>',
+        'to': r'pub spec: Option<Box<SpecSpec>>'
     },
     {
         'struct': 'Stream',

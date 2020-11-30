@@ -5,7 +5,7 @@ file=${1:-"src/schema.rs"}
 npm install -g quicktype
 quicktype --version
 
-url=https://vega.github.io/schema/vega-lite/v4.0.2.json
+url=https://vega.github.io/schema/vega-lite/v4.2.0.json
 escaped_url=$(echo $url | sed 's#/#\\\/#g')
 
 echo '-- generating file from schema'

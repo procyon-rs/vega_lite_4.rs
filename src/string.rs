@@ -53,13 +53,12 @@ macro_rules! from_into_string{
 // enum that have a `String(String)`variant
 // `grep -B 5 "String(String)" src/schema.rs | grep "pub enum" | sort | sed 's/pub enum \(.*\) {/\1/'`
 from_into_string!(
+    CategoryText,
     ClearUnion,
     Color,
-    ColorScheme,
     ColorUnion,
-    ConditionalValueDefTextText,
     Day,
-    Equal,
+    EqualUnion,
     Field,
     FillUnion,
     FluffyStream,
@@ -67,24 +66,25 @@ from_into_string!(
     InlineDatasetValue,
     LabelFont,
     LabelFontStyle,
+    LegendText,
     LegendUnion,
-    LogicalOperandPredicateElement,
+    LogicalNotPredicateSelectionComposition,
     Lt,
+    MarkConfigTooltip,
     Month,
     OnUnion,
-    ConditionalValueDefGradientStringNullLogicalOperandPredicate,
-    ConditionalValueDefGradientStringNullSelectionOperand,
+    PredicateCompositionElement,
     PurpleStream,
-    LegendText,
     RangeRange,
     RangeRaw,
     Scheme,
+    SelectionCompositionElement,
     SelectionInit,
-    SelectionOperandElement,
+    SelectionInitIntervalElement,
     Text,
+    TransformPredicateComposition,
     Translate,
     UrlDataInlineDataset,
-    Value,
     ValueUnion,
 );
 
@@ -133,11 +133,11 @@ macro_rules! from_into_array_of_str{
 //   xargs -I {} sh -c 'grep -B 5 \"{}\" src/schema.rs | grep \"pub enum\" | sed \"s/pub enum \(.*\) {/\1/\" | \
 //     xargs -I $ sh -c \"echo \\\"$::{}\\\"\"'" | sort | uniq
 from_into_array_of_str!(
-    DomainUnion::UnionArray(Vec<Equal>),
-    InitValue::UnionArray(Vec<Equal>),
+    DomainUnion::UnionArray(Vec<SelectionInitIntervalElement>),
+    InitValue::UnionArray(Vec<SelectionInitIntervalElement>),
     ScaleRange::UnionArray(Vec<RangeRange>),
-    SortArray::UnionArray(Vec<Equal>),
-    SortUnion::UnionArray(Vec<Equal>),
+    SortArray::UnionArray(Vec<SelectionInitIntervalElement>),
+    SortUnion::UnionArray(Vec<SelectionInitIntervalElement>),
 );
 
 // #[cfg(test)]
