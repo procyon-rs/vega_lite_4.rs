@@ -8,6 +8,7 @@
   - [Stacked Bar Graph](#stacked-bar-graph)
   - [Stock Graph](#stock-graph)
   - [Line with confidence Interval](#line-with-confidence-interval)
+  - [Pie Chart](#pie-chart)
 - [Data Sources](#data-sources)
   - [From ndarray](#from-ndarray)
   - [From csv](#from-csv)
@@ -84,12 +85,22 @@ Loads data from a `csv`, deserializing to a `struct`, and display the graph as a
 ### [Line with confidence Interval](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/line_with_interval.rs)
 
 ```bash
-cargo run --example line_with_interval.rs
+cargo run --example line_with_interval
 ```
 
 Loads data from an URL, displaying the aggregated mean by year with the variance on a two level layers as a line graph.
 
 ![line_with_interval](https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/line_with_interval.png)
+
+### [Pie Chart](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/pie_chart.rs)
+
+```bash
+cargo run --example pie_chart
+```
+
+Loads data from an URL, displaying the aggregated mean by year with the variance on a two level layers as a line graph.
+
+![line_with_interval](https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/pie_chart.png)
 
 ## Data Sources
 
