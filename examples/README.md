@@ -100,7 +100,7 @@ cargo run --example pie_chart
 
 Loads data from an URL, displaying the aggregated mean by year with the variance on a two level layers as a line graph.
 
-![line_with_interval](https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/pie_chart.png)
+![pie_chart](https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/pie_chart.png)
 
 ## Data Sources
 
