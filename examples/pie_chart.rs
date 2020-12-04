@@ -42,17 +42,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .data(&values)
         .mark(Mark::Arc)
         .encoding(
-            EncodingBuilder::default()
+            EdEncodingBuilder::default()
                 .theta(
-                    PositionFieldDefBaseBuilder::default()
+                    ThetaClassBuilder::default()
                         .field("value")
-                        .position_field_def_base_type(Type::Quantitative)
+                        .polar_def_type(Type::Quantitative)
                         .build()?,
                 )
                 .color(
-                    DefGradientStringNullBuilder::default()
+                    ColorClassBuilder::default()
                         .field("category")
-                        .def_gradient_string_null_type(Type::Nominal)
+                        .mark_prop_def_gradient_string_null_type(Type::Nominal)
                         .build()?,
                 )
                 .build()?,

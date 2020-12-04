@@ -43,14 +43,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .build()?])
         .mark(Mark::Line)
         .encoding(
-            EncodingBuilder::default()
+            EdEncodingBuilder::default()
                 .x(XClassBuilder::default()
                     .field("date")
-                    .def_type(Type::Temporal)
+                    .position_def_type(Type::Temporal)
                     .build()?)
                 .y(YClassBuilder::default()
                     .field("price")
-                    .def_type(Type::Quantitative)
+                    .position_def_type(Type::Quantitative)
                     .build()?)
                 .build()?,
         )

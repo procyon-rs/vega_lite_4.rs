@@ -16,15 +16,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .build()?])
         .mark(Mark::Line)
         .encoding(
-            EncodingBuilder::default()
+            EdEncodingBuilder::default()
                 .x(XClassBuilder::default()
                     .field("1")
-                    .def_type(Type::Temporal)
+                    .position_def_type(Type::Temporal)
                     .axis(AxisBuilder::default().title("date").build()?)
                     .build()?)
                 .y(YClassBuilder::default()
                     .field("2")
-                    .def_type(Type::Quantitative)
+                    .position_def_type(Type::Quantitative)
                     .axis(AxisBuilder::default().title("price").build()?)
                     .build()?)
                 .build()?,

@@ -25,20 +25,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .data(&values)
         .mark(Mark::Point)
         .encoding(
-            EncodingBuilder::default()
+            EdEncodingBuilder::default()
                 .x(XClassBuilder::default()
                     .field("x")
-                    .def_type(Type::Quantitative)
+                    .position_def_type(Type::Quantitative)
                     .build()?)
                 .y(YClassBuilder::default()
                     .field("y")
-                    .def_type(Type::Quantitative)
+                    .position_def_type(Type::Quantitative)
                     .build()?)
-                .color(
-                    DefGradientStringNullBuilder::default()
-                        .field("cluster")
-                        .build()?,
-                )
+                .color(ColorClassBuilder::default().field("cluster").build()?)
                 .build()?,
         )
         .build()?;

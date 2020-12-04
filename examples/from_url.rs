@@ -12,14 +12,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             TransformBuilder::default().filter("datum.symbol==='GOOG'")
         .build()?])
         .mark(Mark::Line)
-        .encoding(EncodingBuilder::default()
+        .encoding(EdEncodingBuilder::default()
             .x(XClassBuilder::default()
                 .field("date")
-                .def_type(Type::Temporal)
+                .position_def_type(Type::Temporal)
                 .build()?)
             .y(YClassBuilder::default()
                 .field("price")
-                .def_type(Type::Quantitative)
+                .position_def_type(Type::Quantitative)
                 .build()?).build()?).build()?;
 
     // display the chart using `showata`

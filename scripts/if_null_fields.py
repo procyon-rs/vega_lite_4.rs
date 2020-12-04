@@ -18,6 +18,8 @@ with open(sys.argv[1], 'r', encoding="utf-8", errors='replace') as f:
                 change_next_field = True
             if "/// " in line and '`null` indicating no sort.' in line:
                 change_next_field = True
+            if "/// " in line and 'The stroke color.' in line:
+                change_next_field = True
 
             if change_next_field and re.search("^[^/]*pub \w*: Option<", line):
                 t.write(re.sub(r"pub (\w*): Option<",

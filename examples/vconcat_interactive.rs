@@ -30,9 +30,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
       NormalizedSpecBuilder::default()
         .selection(selector_1)
         .transform(vec![TransformBuilder::default()
-          .filter(ConditionalNumberValueDefPredicateComposition::Predicate(Box::new(
+          .filter(ConditionalValueDefNumberExprRefPredicateComposition::Predicate(Box::new(
             PredicateBuilder::default()
-              .selection(ConditionalNumberValueDefSelectionComposition::String("click".to_string()))
+              .selection(ConditionalValueDefNumberExprRefSelectionComposition::String("click".to_string()))
               .build()?,
           )))
           .build()?])
@@ -40,13 +40,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .width(600.)
         .height(300.)
         .encoding(
-          EncodingBuilder::default()
+          EdEncodingBuilder::default()
             .color(
-              DefGradientStringNullBuilder::default()
+              ColorClassBuilder::default()
                 .condition(
-                  ConditionalPredicateValueDefGradientStringNullClassBuilder::default()
-                    .selection(ConditionalNumberValueDefSelectionComposition::String("brush".to_string()))
-                    .conditional_value_def_gradient_string_null_type(Type::Nominal)
+                  ConditionalPredicateValueDefGradientStringNullExprRefClassBuilder::default()
+                    .selection(ConditionalValueDefNumberExprRefSelectionComposition::String("brush".to_string()))
+                    .conditional_value_def_gradient_string_null_expr_ref_type(Type::Nominal)
                     .field("weather")
                     .title("Weather")
                     .scale(
@@ -63,7 +63,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .x(
               XClassBuilder::default()
                 .field("date")
-                .def_type(Type::Temporal)
+                .position_def_type(Type::Temporal)
                 .time_unit(TimeUnit::Monthdate)
                 .axis(AxisBuilder::default().title("date").format("%b").build()?)
                 .build()?,
@@ -71,10 +71,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .y(
               YClassBuilder::default()
                 .field("temp_max")
-                .def_type(Type::Quantitative)
+                .position_def_type(Type::Quantitative)
                 .scale(
                   ScaleBuilder::default()
-                    .domain(vec![Some(EqualElement::Double(-5.0)), Some(EqualElement::Double(40.0))])
+                    .domain(vec![Some(DomainElement::Double(-5.0)), Some(DomainElement::Double(40.0))])
                     .build()?,
                 )
                 .axis(
@@ -85,13 +85,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .build()?,
             )
             .size(
-              AngleClassBuilder::default()
+              SizeClassBuilder::default()
                 .title("Precipitation")
                 .field("precipitation")
-                .def_number_type(Type::Quantitative)
+                .mark_prop_def_number_type(Type::Quantitative)
                 .scale(
                   ScaleBuilder::default()
-                    .domain(vec![Some(EqualElement::Double(-1.0)), Some(EqualElement::Double(50.0))])
+                    .domain(vec![Some(DomainElement::Double(-1.0)), Some(DomainElement::Double(50.0))])
                     .build()?,
                 )
                 .build()?,
@@ -104,20 +104,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .mark(Mark::Bar)
         .selection(selector_2)
         .transform(vec![TransformBuilder::default()
-          .filter(ConditionalNumberValueDefPredicateComposition::Predicate(Box::new(
+          .filter(ConditionalValueDefNumberExprRefPredicateComposition::Predicate(Box::new(
             PredicateBuilder::default()
-              .selection(ConditionalNumberValueDefSelectionComposition::String("brush".to_string()))
+              .selection(ConditionalValueDefNumberExprRefSelectionComposition::String("brush".to_string()))
               .build()?,
           )))
           .build()?])
         .encoding(
-          EncodingBuilder::default()
+          EdEncodingBuilder::default()
             .color(
-              DefGradientStringNullBuilder::default()
+              ColorClassBuilder::default()
                 .condition(
-                  ConditionalPredicateValueDefGradientStringNullClassBuilder::default()
-                    .selection(ConditionalNumberValueDefSelectionComposition::String("click".to_string()))
-                    .conditional_value_def_gradient_string_null_type(Type::Nominal)
+                  ConditionalPredicateValueDefGradientStringNullExprRefClassBuilder::default()
+                    .selection(ConditionalValueDefNumberExprRefSelectionComposition::String("click".to_string()))
+                    .conditional_value_def_gradient_string_null_expr_ref_type(Type::Nominal)
                     .field("weather")
                     .title("Weather")
                     .build()?,
@@ -127,14 +127,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .x(
               XClassBuilder::default()
                 .aggregate(NonArgAggregateOp::Count)
-                .def_type(Type::Quantitative)
+                .position_def_type(Type::Quantitative)
                 .build()?,
             )
             .y(
               YClassBuilder::default()
                 .title("Weather")
                 .field("weather")
-                .def_type(Type::Nominal)
+                .position_def_type(Type::Nominal)
                 .build()?,
             )
             .build()?,

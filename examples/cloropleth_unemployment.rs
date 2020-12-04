@@ -28,11 +28,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .build()?])
         .projection(ProjectionBuilder::default().projection_type(ProjectionType::AlbersUsa).build()?)
         .encoding(
-            EncodingBuilder::default()
+            EdEncodingBuilder::default()
                 .color(
-                    DefGradientStringNullBuilder::default()
+                    ColorClassBuilder::default()
                         .field("rate")
-                        .def_gradient_string_null_type(Type::Quantitative)
+                        .mark_prop_def_gradient_string_null_type(Type::Quantitative)
                         .build()?,
                 )
                 .build()?,

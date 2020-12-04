@@ -11,14 +11,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .data(values)
         .mark(Mark::Point)
         .encoding(
-            EncodingBuilder::default()
+            EdEncodingBuilder::default()
                 .x(XClassBuilder::default()
                     .field("0")
-                    .def_type(Type::Quantitative)
+                    .position_def_type(Type::Quantitative)
                     .build()?)
                 .y(YClassBuilder::default()
                     .field("1")
-                    .def_type(Type::Quantitative)
+                    .position_def_type(Type::Quantitative)
                     .build()?)
                 .build()?,
         )

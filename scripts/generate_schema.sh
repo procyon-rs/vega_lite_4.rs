@@ -1,16 +1,24 @@
 #!/bin/bash
 
+set -ex
+
 file=${1:-"src/schema.rs"}
 
 npm install -g quicktype
 quicktype --version
 
-url=https://vega.github.io/schema/vega-lite/v4.10.0.json
+url=https://vega.github.io/schema/vega-lite/v4.17.0.json
 escaped_url=$(echo $url | sed 's#/#\\\/#g')
+
+curl -o schema.json $url
+
+echo '-- replace "const" by enum with one value'
+sed -i 's/"const": \(.*\),/"enum": [\1],/' schema.json
+
 
 echo '-- generating file from schema'
 quicktype \
-  --src $url \
+  --src schema.json \
   --src-lang schema \
   --out $file \
   --top-level Vegalite \
@@ -18,7 +26,7 @@ quicktype \
   --visibility public \
   --derive-debug
 
-#cp $file $file.off
+# rm schema.json
 
 echo '-- remove extra comments'
 sed -i '/^\/\/[^\/]*$/d' $file

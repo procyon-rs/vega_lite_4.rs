@@ -55,38 +55,46 @@ macro_rules! from_into_string{
 from_into_string!(
     ClearUnion,
     Color,
-    ColorUnion,
-    ConditionalNumberValueDefPredicateComposition,
-    ConditionalNumberValueDefSelectionComposition,
-    ConditionalValueDefTextText,
+    ConditionalAxisPropertyFontStyleNull,
+    ConditionalAxisPropertyStringNull,
+    ConditionalPredicateValueDefTextExprRefText,
+    ConditionalValueDefGradientStringNullExprRefValue,
+    ConditionalValueDefNumberExprRefPredicateComposition,
+    ConditionalValueDefNumberExprRefSelectionComposition,
+    ConditionalValueDefTextExprRefText,
     Day,
-    EqualElement,
+    DomainElement,
+    Equal,
     Field,
-    FillUnion,
+    FluffyRange,
     FluffyStream,
     Format,
+    GridColorUnion,
     InitValue,
     InlineDatasetValue,
-    LabelFont,
-    LabelFontStyle,
     LegendText,
     LegendUnion,
     Lt,
-    MarkConfigTooltip,
+    MarkConfigExprOrSignalRefColor,
+    MarkConfigExprOrSignalRefFill,
+    MarkConfigExprOrSignalRefTooltip,
     Month,
     OnUnion,
     PredicateCompositionElement,
+    PrimitiveValue,
     PurpleStream,
-    RangeRange,
+    RangeM,
+    RangeText,
     Scheme,
     SelectionCompositionElement,
     SelectionInit,
-    SelectionInitIntervalElement,
-    Text,
+    SelectionInitInterval,
+    StyleColor,
+    StyleFill,
+    StyleTooltip,
+    TitleUnion,
     Translate,
     UrlDataInlineDataset,
-    Value,
-    ValueUnion,
 );
 
 // for every enum with a variant that takes a vec of an enum with a String(String) variant
@@ -129,7 +137,6 @@ macro_rules! from_into_array_of_str{
 }
 
 macro_rules! from_into_array_of_str_opt{
-
     ( $( $e:ident::$v:ident(Vec<Option<$t:ident>>) ),* $(,)? ) => {
         from_into_array_of_str_opt!($( $e::$v(Vec<Option<$t>>), )*, 32,31,30,29,28,27,26,25,24,23,
         22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0);
@@ -171,13 +178,14 @@ macro_rules! from_into_array_of_str_opt{
 //   xargs -I {} sh -c 'grep -B 5 \"{}\" src/schema.rs | grep \"pub enum\" | sed \"s/pub enum \(.*\) {/\1/\" | \
 //     xargs -I $ sh -c \"echo \\\"$::{}\\\"\"'" | sort | uniq
 from_into_array_of_str!(
-    FluffySortArray::UnionArray(Vec<SelectionInitIntervalElement>),
-    InitValue::UnionArray(Vec<SelectionInitIntervalElement>),
-    PurpleSortArray::UnionArray(Vec<SelectionInitIntervalElement>),
-    ScaleRange::UnionArray(Vec<RangeRange>),
-    SortUnion::UnionArray(Vec<SelectionInitIntervalElement>),
+    FluffySortArray::UnionArray(Vec<SelectionInitInterval>),
+    InitValue::UnionArray(Vec<SelectionInitInterval>),
+    PurpleSortArray::UnionArray(Vec<SelectionInitInterval>),
+    ScaleRange::UnionArray(Vec<FluffyRange>),
+    SortUnion::UnionArray(Vec<SelectionInitInterval>),
+    Values::UnionArray(Vec<SelectionInitInterval>),
 );
-from_into_array_of_str_opt!(DomainUnion::UnionArray(Vec<Option<EqualElement>>),);
+from_into_array_of_str_opt!(DomainUnion::UnionArray(Vec<Option<DomainElement>>),);
 
 // #[cfg(test)]
 // mod tests {
