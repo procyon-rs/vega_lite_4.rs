@@ -1,0 +1,619 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'vega_lite_4'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "vega_lite_4",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'from_nalgebra'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=from_nalgebra",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_nalgebra",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'from_nalgebra'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=from_nalgebra",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_nalgebra",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'from_rulinalg'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=from_rulinalg",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_rulinalg",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'from_rulinalg'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=from_rulinalg",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_rulinalg",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'from_ndarray'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=from_ndarray",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_ndarray",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'from_ndarray'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=from_ndarray",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_ndarray",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'pie_chart'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=pie_chart",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "pie_chart",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'pie_chart'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=pie_chart",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "pie_chart",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'from_csv'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=from_csv",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_csv",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'from_csv'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=from_csv",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_csv",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'without_builders'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=without_builders",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "without_builders",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'without_builders'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=without_builders",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "without_builders",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'from_url'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=from_url",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_url",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'from_url'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=from_url",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_url",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'scatterplot'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=scatterplot",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "scatterplot",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'scatterplot'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=scatterplot",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "scatterplot",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'from_mixed_json_rust'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=from_mixed_json_rust",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_mixed_json_rust",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'from_mixed_json_rust'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=from_mixed_json_rust",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_mixed_json_rust",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'from_json_spec'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=from_json_spec",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_json_spec",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'from_json_spec'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=from_json_spec",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "from_json_spec",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'stacked_bar_chart'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=stacked_bar_chart",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "stacked_bar_chart",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'stacked_bar_chart'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=stacked_bar_chart",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "stacked_bar_chart",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'diverging_stacked_bar_chart'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=diverging_stacked_bar_chart",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "diverging_stacked_bar_chart",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'diverging_stacked_bar_chart'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=diverging_stacked_bar_chart",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "diverging_stacked_bar_chart",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'stock_graph'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=stock_graph",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "stock_graph",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'stock_graph'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=stock_graph",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "stock_graph",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'vconcat_interactive'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=vconcat_interactive",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "vconcat_interactive",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'vconcat_interactive'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=vconcat_interactive",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "vconcat_interactive",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'cloropleth_unemployment'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=cloropleth_unemployment",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "cloropleth_unemployment",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'cloropleth_unemployment'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=cloropleth_unemployment",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "cloropleth_unemployment",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'line_with_interval'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=line_with_interval",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "line_with_interval",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'line_with_interval'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=line_with_interval",
+                    "--package=vega_lite_4"
+                ],
+                "filter": {
+                    "name": "line_with_interval",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
