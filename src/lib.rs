@@ -48,3 +48,15 @@ pub use data::*;
 pub use removable_value::RemovableValue;
 pub use schema::*;
 pub use string::*;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn serde_should_not_failed_on_empty() {
+        let _chart: Vegalite =
+            serde_json::from_str("{}").expect("to support empty json object: {}");
+    }
+}

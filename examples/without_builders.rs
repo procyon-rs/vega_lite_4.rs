@@ -14,7 +14,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             ..Default::default()
         }]),
         mark: Some(AnyMark::Enum(Mark::Line)),
-        encoding: Some(
+        encoding: Some(Box::new(
             EdEncoding {
                 x: Some(XClass {
                     field: Some(Field::String("date".to_string())),
@@ -28,7 +28,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }),
                 ..Default::default()
             },
-        ),
+        )),
         ..Default::default()
     };
 

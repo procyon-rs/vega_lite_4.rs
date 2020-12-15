@@ -94,7 +94,7 @@ pub struct Vegalite {
     /// specification.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub config: Option<Config>,
+    pub config: Option<Box<Config>>,
     /// An object describing the data source. Set to `null` to ignore the parent's data source.
     /// If no data is set, it is derived from the parent.
     #[serde(default, skip_serializing_if = "RemovableValue::is_default")]
@@ -116,7 +116,7 @@ pub struct Vegalite {
     /// underlying layers.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub encoding: Option<EdEncoding>,
+    pub encoding: Option<Box<EdEncoding>>,
     /// The height of a visualization.
     ///
     /// - For a plot with a continuous y-field, height should be a number. - For a plot with
@@ -256,7 +256,7 @@ pub struct Vegalite {
     /// A specification of the view that gets repeated.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(default)]
-    pub spec: Option<VegaliteSpec>,
+    pub spec: Option<Box<VegaliteSpec>>,
     /// Layer or single view specifications to be layered.
     ///
     /// __Note__: Specifications inside `layer` cannot use `row` and `column` channels as

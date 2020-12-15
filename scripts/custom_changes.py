@@ -32,6 +32,25 @@ changes = [
         'from': r'pub tooltip: Option<Tooltip>',
         'to': r'#[serde(default, skip_serializing_if = "RemovableValue::is_default")] #[builder(default)] pub tooltip: RemovableValue<Tooltip>'
     },
+    # Boxing of the following 3 fields to avoid the following error
+    #   test tests::serde_should_not_failed_on_empty ... 
+    #   thread 'main' has overflowed its stack
+    #   fatal runtime error: stack overflow
+    {
+        'struct': 'Vegalite',
+        'from': r'pub config: Option<Config>',
+        'to': r'pub config: Option<Box<Config>>'
+    },
+    {
+        'struct': 'Vegalite',
+        'from': r'pub encoding: Option<EdEncoding>',
+        'to': r'pub encoding: Option<Box<EdEncoding>>'
+    },
+    {
+        'struct': 'Vegalite',
+        'from': r'pub spec: Option<VegaliteSpec>',
+        'to': r'pub spec: Option<Box<VegaliteSpec>>'
+    },
 ]
 
 change_is_done = {}

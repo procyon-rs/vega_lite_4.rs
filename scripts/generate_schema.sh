@@ -1,11 +1,12 @@
 #!/bin/bash
 
-set -ex
+set -euo pipefail
 
-file=${1:-"src/schema.rs"}
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." >/dev/null 2>&1 && pwd)"
 
-npm install -g quicktype
-quicktype --version
+file=${1:-"${DIR}/src/schema.rs"}
+
+npm install quicktype
 
 url=https://vega.github.io/schema/vega-lite/v4.17.0.json
 escaped_url=$(echo $url | sed 's#/#\\\/#g')
@@ -15,9 +16,8 @@ curl -o schema.json $url
 echo '-- replace "const" by enum with one value'
 sed -i 's/"const": \(.*\),/"enum": [\1],/' schema.json
 
-
 echo '-- generating file from schema'
-quicktype \
+${DIR}/node_modules/.bin/quicktype \
   --src schema.json \
   --src-lang schema \
   --out $file \
@@ -25,8 +25,6 @@ quicktype \
   --density dense \
   --visibility public \
   --derive-debug
-
-# rm schema.json
 
 echo '-- remove extra comments'
 sed -i '/^\/\/[^\/]*$/d' $file
@@ -105,3 +103,5 @@ echo '-- Fix doc links'
 sed -i 's/types#datetime/struct.DateTime.html/' $file
 
 cargo fmt -- $file
+
+rm ${DIR}/schema.json
