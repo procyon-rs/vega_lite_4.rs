@@ -27,6 +27,13 @@ To help describe all the possible features a [gallery of example is provided on 
 [<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/stock_graph.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/stock_graph.rs)
 [<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/line_with_interval.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/line_with_interval.rs)
 
+To launch all examples
+
+```sh
+cargo install cargo-make
+cargo make run-all-examples
+```
+
 ### Simple chart using ndarray generated data
 
 ```rust
@@ -98,3 +105,23 @@ chart.show()?;
 - [Specifying Data in Altair — Altair 3.0.0 documentation](https://altair-viz.github.io/user_guide/data.html#long-form-vs-wide-form-data)
 - [Visualization — list of Rust libraries/crates // Lib.rs](https://lib.rs/visualization)
 - [Quicktype](https://quicktype.io/) (got issue with the [alternative](https://transform.now.sh/json-to-rust-serde)) was used to bootstrap `src/schema.rs` from the [vega-lite's json schema](https://vega.github.io/schema/vega-lite/v4.json)
+
+## Troubleshoot
+
+### Stack size
+
+The vegalite json schema is large with lot of alternative, so the typed rust version create a large set of struct and enum (the generated source file before macro expension is 28K lines). So the size of a model in stack could be large (it's also why Box is used in the struct).
+
+On wasm32, with the default stack size (~ 1 MB), using vegalite_4 can raise error like:
+
+- crash tab with `SIGSEVG` (on chromium based browser)
+- `Uncaught (in promise) RuntimeError: memory access out of bounds` or simply `Uncaught (in promise) RuntimeError`
+
+The current work arround is to increase the stacksize (eg ~ 1.5 MB). For cargo based project you can add into `.cargo/config` file of the project:
+
+```toml
+[target.wasm32-unknown-unknown]
+rustflags = [
+  "-C", "link-args=-z stack-size=1500000",
+]
+```
