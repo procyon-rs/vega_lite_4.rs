@@ -92,7 +92,7 @@ sed -i 's/<BoxPlot>/<Mark>/' $file
 sed -i 's/pub enum BoxPlot /pub enum Mark /' $file
 
 sed -i 's/pub \(\w*\): Box<Option<\(\S*\)>>/#[serde(skip_serializing_if = "Option::is_none")] #[builder(default)] pub \1: Option<\2>/' $file
-sed -i 's/pub filter: Option<Box<ConditionalValueDefGradientStringNullLogicalOperandPredicatePredicate>>,/pub filter: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicatePredicate>,/' $file
+#sed -i 's/pub filter: Option<Box<ConditionalValueDefGradientStringNullLogicalOperandPredicatePredicate>>,/pub filter: Option<ConditionalValueDefGradientStringNullLogicalOperandPredicatePredicate>,/' $file
 
 echo '-- From for enums'
 sed -i '/use serde::/i\
@@ -101,6 +101,13 @@ sed -i 's/#\[serde(untagged)\]$/#[serde(untagged)] #[derive(From)]/' $file
 
 echo '-- Fix doc links'
 sed -i 's/types#datetime/struct.DateTime.html/' $file
+
+echo '-- allocation on heap to reduce stack use'
+# Boxing of some fields to avoid the following error
+#   test tests::serde_should_not_failed_on_empty ...
+#   thread 'main' has overflowed its stack
+#   fatal runtime error: stack overflow
+sed -i 's/: Option<\([A-Z][a-zA-Z0-9]*\))>>/: Option<Box<\1>>/' $file
 
 cargo fmt -- $file
 

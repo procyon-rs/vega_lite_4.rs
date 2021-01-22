@@ -13,7 +13,7 @@ args = ["release", "${@}"]
 SHOWATA_MEDIUM = "BROWSER"
 [tasks.run-all-examples]
 script = [
-    "for example in examples/*.rs; do echo $example; cargo run --example $(basename $example | cut -f 1 -d '.'); done"
+    "for example in examples/*.rs; do echo $example; cargo run --example $(basename $example | cut -f 1 -d '.') --all-features; done"
 ]
 
 [tasks.pre-coverage]
