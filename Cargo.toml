@@ -25,7 +25,7 @@ polars = {version = "0.28", features = ["lazy"], optional = true}
 
 [dev-dependencies]
 csv = "1.1"
-ndarray-rand = "0.12"
+ndarray-rand = "0.13"
 
 [features]
 show_vega = ["showata", "anyhow"]
