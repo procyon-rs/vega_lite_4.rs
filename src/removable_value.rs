@@ -42,7 +42,8 @@ pub enum RemovableValue<T: Clone> {
 
 impl<T: Clone> RemovableValue<T> {
     pub(crate) fn is_default(&self) -> bool {
-        matches!(self, RemovableValue::Default)}
+        matches!(self, RemovableValue::Default)
+    }
 }
 
 impl<T: Clone> From<T> for RemovableValue<T> {

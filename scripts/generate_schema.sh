@@ -108,8 +108,11 @@ echo '-- allocation on heap to reduce stack use'
 #   test tests::serde_should_not_failed_on_empty ...
 #   thread 'main' has overflowed its stack
 #   fatal runtime error: stack overflow
-sed -i 's/: Option<\([A-Z][a-zA-Z0-9]*\)>/: Option<Box<\1>>/' $file
-sed -i 's/schema: Option<Box<String>>/schema: Option<String>/' $file
+#sed -i 's/: Option<\([A-Z][a-zA-Z0-9]*\))>>/: Option<Box<\1>>/' $file
+sed -i 's/: Option<SpecSpec>/: Option<Box<SpecSpec>>/' $file
+sed -i 's/: Option<VegaliteSpec>/: Option<Box<VegaliteSpec>>/' $file
+sed -i 's/: Option<ConfigClass>/: Option<Box<ConfigClass>>/' $file
+sed -i 's/: Option<EdEncoding>/: Option<Box<EdEncoding>>/' $file
 
 cargo fmt -- $file
 
