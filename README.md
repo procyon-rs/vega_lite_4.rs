@@ -18,14 +18,14 @@ It's also possible to use an existing Vega-Lite json and plug your data source s
 ## Examples
 
 In order to have a complete mapping of the Vega-Lite V4 specification the code for the schema was automaticlly generated.
-To help describe all the possible features a [gallery of example is provided on github](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/)
+To help describe all the possible features a [gallery of example is provided on github](./examples/)
 
-[<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/cloropleth_unemployment.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/cloropleth_unemployment.rs)
-[<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/diverging_stacked_bar_chart.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/diverging_stacked_bar_chart.rs)
-[<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/scatterplot.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/scatterplot.rs)
-[<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/stacked_bar_chart.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/stacked_bar_chart.rs)
-[<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/stock_graph.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/stock_graph.rs)
-[<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/line_with_interval.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/line_with_interval.rs)
+[<img src="./examples/res/screens/cloropleth_unemployment.png" height="150px">](./examples/cloropleth_unemployment.rs)
+[<img src="./examples/res/screens/diverging_stacked_bar_chart.png" height="150px">](./examples/diverging_stacked_bar_chart.rs)
+[<img src="./examples/res/screens/scatterplot.png" height="150px">](./examples/scatterplot.rs)
+[<img src="./examples/res/screens/stacked_bar_chart.png" height="150px">](./examples/stacked_bar_chart.rs)
+[<img src="./examples/res/screens/stock_graph.png" height="150px">](./examples/stock_graph.rs)
+[<img src="./examples/res/screens/line_with_interval.png" height="150px">](./examples/line_with_interval.rs)
 
 To launch all examples
 
@@ -64,7 +64,7 @@ chart.show()?;
 ```rust
 // Use existing vega-lite json specification
 let spec = r##"{
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "encoding": {
         "x": {
             "field": "data.0",
@@ -104,7 +104,7 @@ chart.show()?;
 - [A Dramatic Tour through Python’s Data Visualization Landscape (including ggplot and Altair) – Regress to Impress](https://dsaber.com/2016/10/02/a-dramatic-tour-through-pythons-data-visualization-landscape-including-ggplot-and-altair/)
 - [Specifying Data in Altair — Altair 3.0.0 documentation](https://altair-viz.github.io/user_guide/data.html#long-form-vs-wide-form-data)
 - [Visualization — list of Rust libraries/crates // Lib.rs](https://lib.rs/visualization)
-- [Quicktype](https://quicktype.io/) (got issue with the [alternative](https://transform.now.sh/json-to-rust-serde)) was used to bootstrap `src/schema.rs` from the [vega-lite's json schema](https://vega.github.io/schema/vega-lite/v4.json)
+- [Quicktype](https://quicktype.io/) (got issue with the [alternative](https://transform.now.sh/json-to-rust-serde)) was used to bootstrap `src/schema.rs` from the [vega-lite's json schema](https://vega.github.io/schema/vega-lite/v5.json)
 
 ## Troubleshoot
 
@@ -112,7 +112,7 @@ chart.show()?;
 
 The vegalite json schema is large with lot of alternative, so the typed rust version create a large set of struct and enum (the generated source file before macro expension is 28K lines). So the size of a model in stack could be large (it's also why Box is used in the struct).
 
-On wasm32, with the default stack size (~ 1 MB), using vegalite_4 can raise error like:
+On wasm32, with the default stack size (~ 1 MB), using vegalite_5 can raise error like:
 
 - crash tab with `SIGSEVG` (on chromium based browser)
 - `Uncaught (in promise) RuntimeError: memory access out of bounds` or simply `Uncaught (in promise) RuntimeError`
