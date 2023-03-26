@@ -1,3 +1,3 @@
-# How to make `vegalite3` schema
+# How to make `vegalite5` schema
 
-see script [`generate_schema.sh`](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/scripts/generate_schema.sh)
+see script [`generate_schema.sh`](../scripts/generate_schema.sh)

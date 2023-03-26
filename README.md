@@ -1,4 +1,4 @@
-# Vega-Lite V4 for Rust
+# Vega-Lite V5 for Rust
 
 [![license](https://img.shields.io/crates/l/vega_lite_4.svg)](https://spdx.org/licenses/Apache-2.0.html)
 [![version](https://img.shields.io/crates/v/vega_lite_4.svg)](https://crates.io/crates/vega_lite_4)
