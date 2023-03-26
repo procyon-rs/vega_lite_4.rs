@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use vega_lite_4::*;
+use vega_lite_5::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut selector_1 = HashMap::new();

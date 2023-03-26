@@ -1,4 +1,4 @@
-use vega_lite_4::*;
+use vega_lite_5::*;
 
 use ndarray::{Array, Array2};
 use ndarray_rand::rand_distr::StandardNormal;

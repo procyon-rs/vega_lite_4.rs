@@ -1,5 +1,5 @@
 use nalgebra::Matrix4x2;
-use vega_lite_4::*;
+use vega_lite_5::*;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // A new matrix with 4 rows and 2 columns.
     let values = Matrix4x2::new(1, 2, 3, 4, 5, 6, 7, 8);

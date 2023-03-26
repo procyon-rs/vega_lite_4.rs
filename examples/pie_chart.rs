@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use vega_lite_4::*;
+use vega_lite_5::*;
 
 #[derive(Serialize, Deserialize)]
 pub struct CategoricalItem {

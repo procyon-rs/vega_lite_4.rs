@@ -1,8 +1,8 @@
 [package]
-name = "vega_lite_4"
+name = "vega_lite_5"
 version = "0.6.1-dev"
 authors = ["David Bernard <david.bernard.31@gmail.com>", "François Mockers <mockersf@gmail.com>", "Thomas Aubry <github.thomaub@gmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "Apache-2.0"
 description = "rust api for vega-lite v4"
 repository = "https://github.com/procyon-rs/vega_lite_4.rs"
@@ -17,14 +17,14 @@ derive_builder = "0.9"
 derive_more = {version = "0.99", default-features = false, features = ["from"]}
 showata = {version = "0.2", optional = true}
 anyhow = {version = "1.0", optional = true }
-ndarray = {version = "0.14", features = ["serde"], optional = true}
+ndarray = {version = "0.15", features = ["serde"], optional = true}
 csv = {version = "1.1", optional = true}
 rulinalg = {version ="0.4", optional=true}
 nalgebra = {version ="0.23", features = ["serde-serialize"], optional=true}
 
 [dev-dependencies]
 csv = "1.1"
-ndarray-rand = "0.12"
+ndarray-rand = "0.14"
 
 [features]
 show_vega = ["showata", "anyhow"]

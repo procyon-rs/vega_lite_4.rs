@@ -1,4 +1,4 @@
-use vega_lite_4::*;
+use vega_lite_5::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // the chart
@@ -6,7 +6,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         title: Some(TitleUnion::String("Stock price".to_string())),
         description: Some("Google's stock price over time.".to_string()),
         data: RemovableValue::Specified(UrlData {
-            url: Some("https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/data/stocks.csv".to_string()),
+            url: Some("https://raw.githubusercontent.com/procyon-rs/vega_lite_5.rs/master/examples/res/data/stocks.csv".to_string()),
             ..Default::default()
         }),
         transform: Some(vec![Transform {

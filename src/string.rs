@@ -12,7 +12,6 @@
 use crate::schema::*;
 // use std::str::FromStr;
 // use std::convert::TryFrom;
-use serde_json;
 
 // impl FromStr for Vegalite {
 //     type Err = serde_json::Error;
@@ -53,6 +52,7 @@ macro_rules! from_into_string{
 // enum that have a `String(String)`variant
 // `grep -B 5 "String(String)" src/schema.rs | grep "pub enum" | sort | sed 's/pub enum \(.*\) {/\1/'`
 from_into_string!(
+    BindingValue,
     ClearUnion,
     Color,
     ConditionalAxisPropertyFontStyleNull,
@@ -60,40 +60,35 @@ from_into_string!(
     ConditionalPredicateValueDefTextExprRefText,
     ConditionalValueDefGradientStringNullExprRefValue,
     ConditionalValueDefNumberExprRefPredicateComposition,
-    ConditionalValueDefNumberExprRefSelectionComposition,
     ConditionalValueDefTextExprRefText,
-    Day,
+    DateTimeValue,
+    DayUnion,
     DomainElement,
+    ElementUnion,
     Equal,
     Field,
     FluffyRange,
-    FluffyStream,
     Format,
     GridColorUnion,
-    InitValue,
     InlineDatasetValue,
     LegendText,
-    LegendUnion,
     Lt,
-    MarkConfigExprOrSignalRefColor,
-    MarkConfigExprOrSignalRefFill,
-    MarkConfigExprOrSignalRefTooltip,
+    MarkConfigColor,
+    MarkConfigFill,
     Month,
     OnUnion,
+    OverlayMarkDefTooltip,
+    ParamValue,
     PredicateCompositionElement,
     PrimitiveValue,
     PurpleStream,
     RangeM,
-    RangeText,
     Scheme,
-    SelectionCompositionElement,
     SelectionInit,
     SelectionInitInterval,
-    StyleColor,
-    StyleFill,
-    StyleTooltip,
+    TextElement,
     TitleUnion,
-    Translate,
+    Toggle,
     UrlDataInlineDataset,
 );
 
@@ -178,10 +173,9 @@ macro_rules! from_into_array_of_str_opt{
 //   xargs -I {} sh -c 'grep -B 5 \"{}\" src/schema.rs | grep \"pub enum\" | sed \"s/pub enum \(.*\) {/\1/\" | \
 //     xargs -I $ sh -c \"echo \\\"$::{}\\\"\"'" | sort | uniq
 from_into_array_of_str!(
-    FluffySortArray::UnionArray(Vec<SelectionInitInterval>),
-    InitValue::UnionArray(Vec<SelectionInitInterval>),
-    PurpleSortArray::UnionArray(Vec<SelectionInitInterval>),
+    DateTimeValue::UnionArray(Vec<SelectionInitInterval>),
     ScaleRange::UnionArray(Vec<FluffyRange>),
+    SortArray::UnionArray(Vec<SelectionInitInterval>),
     SortUnion::UnionArray(Vec<SelectionInitInterval>),
     Values::UnionArray(Vec<SelectionInitInterval>),
 );

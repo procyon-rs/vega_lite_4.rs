@@ -1,4 +1,4 @@
-use vega_lite_4::*;
+use vega_lite_5::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // the chart
@@ -38,7 +38,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .legend(LegendBuilder::default().orient(LegendOrient::Top).title(RemovableValue::Remove).build()?)
                 .build()?)
             .build()?)
-        .config(ConfigBuilder::default()
+        .config(ConfigClassBuilder::default()
             .view(ViewConfigBuilder::default().stroke(RemovableValue::Remove).build()?)
             .axis(AxisConfigBuilder::default().grid(false).build()?)
             .build()?)

@@ -1,7 +1,7 @@
 use csv;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
-use vega_lite_4::*;
+use vega_lite_5::*;
 
 #[derive(Serialize, Deserialize)]
 pub struct Item {

@@ -1,4 +1,4 @@
-use vega_lite_4::*;
+use vega_lite_5::*;
 
 use rulinalg::matrix::Matrix;
 

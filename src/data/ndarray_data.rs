@@ -10,7 +10,7 @@ where
     S: ndarray::Data<Elem = A>,
 {
     fn from(v: ArrayBase<S, D>) -> Self {
-        iter_to_data(v.genrows().into_iter())
+        iter_to_data(v.rows().into_iter())
     }
 }
 

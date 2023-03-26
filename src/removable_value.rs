@@ -18,9 +18,10 @@ use std::marker::PhantomData;
 use crate::schema::*;
 
 /// Wrapper for a field that can be either the default value, null or specified
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub enum RemovableValue<T: Clone> {
     /// The default value for this field
+    #[default]
     Default,
     /// This field should be removed
     Remove,
@@ -41,11 +42,7 @@ pub enum RemovableValue<T: Clone> {
 
 impl<T: Clone> RemovableValue<T> {
     pub(crate) fn is_default(&self) -> bool {
-        match self {
-            RemovableValue::Default => true,
-            _ => false,
-        }
-    }
+        matches!(self, RemovableValue::Default)}
 }
 
 impl<T: Clone> From<T> for RemovableValue<T> {
@@ -70,6 +67,7 @@ macro_rules! from_into_with_removable{
 from_into_with_removable! {
     &str => String,
 
+    &str => BindingValue,
     &str => ClearUnion,
     &str => Color,
     &str => ConditionalAxisPropertyFontStyleNull,
@@ -77,40 +75,35 @@ from_into_with_removable! {
     &str => ConditionalPredicateValueDefTextExprRefText,
     &str => ConditionalValueDefGradientStringNullExprRefValue,
     &str => ConditionalValueDefNumberExprRefPredicateComposition,
-    &str => ConditionalValueDefNumberExprRefSelectionComposition,
     &str => ConditionalValueDefTextExprRefText,
-    &str => Day,
+    &str => DateTimeValue,
+    &str => DayUnion,
     &str => DomainElement,
+    &str => ElementUnion,
     &str => Equal,
     &str => Field,
     &str => FluffyRange,
-    &str => FluffyStream,
     &str => Format,
     &str => GridColorUnion,
-    &str => InitValue,
     &str => InlineDatasetValue,
     &str => LegendText,
-    &str => LegendUnion,
     &str => Lt,
-    &str => MarkConfigExprOrSignalRefColor,
-    &str => MarkConfigExprOrSignalRefFill,
-    &str => MarkConfigExprOrSignalRefTooltip,
+    &str => MarkConfigColor,
+    &str => MarkConfigFill,
     &str => Month,
     &str => OnUnion,
+    &str => OverlayMarkDefTooltip,
+    &str => ParamValue,
     &str => PredicateCompositionElement,
     &str => PrimitiveValue,
     &str => PurpleStream,
     &str => RangeM,
-    &str => RangeText,
     &str => Scheme,
-    &str => SelectionCompositionElement,
     &str => SelectionInit,
     &str => SelectionInitInterval,
-    &str => StyleColor,
-    &str => StyleFill,
-    &str => StyleTooltip,
+    &str => TextElement,
     &str => TitleUnion,
-    &str => Translate,
+    &str => Toggle,
     &str => UrlDataInlineDataset,
 
     Sort => SortUnion,
@@ -124,12 +117,6 @@ from_into_with_removable! {
     // f64 => TooltipUnion,
     // String => TooltipUnion,
     // TooltipContent => TooltipUnion,
-}
-
-impl<T: Clone> Default for RemovableValue<T> {
-    fn default() -> Self {
-        RemovableValue::Default
-    }
 }
 
 impl<T> Serialize for RemovableValue<T>
