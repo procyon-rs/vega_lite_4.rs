@@ -1,21 +1,26 @@
-use std::collections::HashMap;
 use vega_lite_5::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut selector_1 = HashMap::new();
-    selector_1.insert(
-        "brush".to_string(),
-        SelectionDefBuilder::default()
-            .encodings(vec![SingleDefUnitChannel::X])
-            .selection_def_type(SelectionDefType::Interval)
+    let mut selector_1 = vec![];
+    selector_1.push(
+        SelectionParameterBuilder::default()
+            .name("brush")
+            .select(SelectionConfigBuilder::default()
+                    .selection_config_type(SelectionType::Interval)
+                    .encodings(vec![SingleDefUnitChannel::X])
+                    .build()?)
             .build()?,
     );
-    let mut selector_2 = HashMap::new();
-    selector_2.insert(
-        "click".to_string(),
-        SelectionDefBuilder::default()
-            .encodings(vec![SingleDefUnitChannel::Color])
-            .selection_def_type(SelectionDefType::Multi)
+    let mut selector_2 = vec![];
+    selector_2.push(
+        SelectionParameterBuilder::default()
+            .name("click")
+            .select(ParamSelect::SelectionConfig(
+                SelectionConfigBuilder::default()
+                    .selection_config_type(SelectionType::Point)
+                    .encodings(vec![SingleDefUnitChannel::Color])
+                    .build()?,
+            ))
             .build()?,
     );
 
@@ -27,12 +32,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build()?,
     )
     .vconcat(vec![
-      NormalizedSpecBuilder::default()
-        .selection(selector_1)
+      SpecBuilder::default()
+        .params(selector_1)
         .transform(vec![TransformBuilder::default()
-          .filter(ConditionalValueDefNumberExprRefPredicateComposition::Predicate(Box::new(
+            .filter(ConditionalValueDefNumberExprRefPredicateComposition::Predicate(Box::new(
             PredicateBuilder::default()
-              .selection(ConditionalValueDefNumberExprRefSelectionComposition::String("click".to_string()))
+              .param("click")
               .build()?,
           )))
           .build()?])
@@ -44,9 +49,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .color(
               ColorClassBuilder::default()
                 .condition(
-                  ConditionalPredicateValueDefGradientStringNullExprRefClassBuilder::default()
-                    .selection(ConditionalValueDefNumberExprRefSelectionComposition::String("brush".to_string()))
-                    .conditional_value_def_gradient_string_null_expr_ref_type(Type::Nominal)
+                  ConditionalPValueDefGradientStringNullExprRefBuilder::default()
+                    .param("brush")
+                    .conditional_p_value_def_gradient_string_null_expr_ref_type(Type::Nominal)
                     .field("weather")
                     .title("Weather")
                     .scale(
@@ -99,15 +104,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .build()?,
         )
         .build()?,
-      NormalizedSpecBuilder::default()
+      SpecBuilder::default()
         .width(600.)
         .mark(Mark::Bar)
-        .selection(selector_2)
+        .params(selector_2)
         .transform(vec![TransformBuilder::default()
-          .filter(ConditionalValueDefNumberExprRefPredicateComposition::Predicate(Box::new(
+            .filter(ConditionalValueDefNumberExprRefPredicateComposition::Predicate(Box::new(
             PredicateBuilder::default()
-              .selection(ConditionalValueDefNumberExprRefSelectionComposition::String("brush".to_string()))
-              .build()?,
+            .param("brush")
+            .build()?,
           )))
           .build()?])
         .encoding(
@@ -115,13 +120,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .color(
               ColorClassBuilder::default()
                 .condition(
-                  ConditionalPredicateValueDefGradientStringNullExprRefClassBuilder::default()
-                    .selection(ConditionalValueDefNumberExprRefSelectionComposition::String("click".to_string()))
-                    .conditional_value_def_gradient_string_null_expr_ref_type(Type::Nominal)
+                  ConditionalPValueDefGradientStringNullExprRefBuilder::default()
+                    .param("click")
+                    .conditional_p_value_def_gradient_string_null_expr_ref_type(Type::Nominal)
                     .field("weather")
-                    .title("Weather")
+                    .scale(
+                      ScaleBuilder::default()
+                        .domain(["sun", "fog", "drizzle", "rain", "snow"])
+                        .range(["#e7ba52", "#c7c7c7", "#aec7e8", "#1f77b4", "#9467bd"])
+                        .build()?,
+                    )
                     .build()?,
                 )
+                .value("lightgray")
                 .build()?,
             )
             .x(

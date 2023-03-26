@@ -42,7 +42,7 @@ const VEGA_EMBED_HTML_TEMPLATE: &str = r#"
   <meta charset="utf-8">
   <!-- Import Vega 5 & Vega-Lite 4 (does not have to be from CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <!-- Import vega-embed -->
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
