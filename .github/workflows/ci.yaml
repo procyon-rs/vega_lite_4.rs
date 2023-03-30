@@ -11,28 +11,17 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os.imageName }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         rust_toolchain: ["stable"]
-        os:
-          - imageName: ubuntu-18.04
-            target: x86_64-unknown-linux-gnu
-            profile: linux
-          - imageName: "macOS-latest"
-            target: x86_64-apple-darwin
-            profile: mac
-          - imageName: "windows-2019"
-            target: x86_64-pc-windows-msvc
-            profile: windows
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.rust_toolchain }}
-          override: true
+      - name: Set up Rust
+        run: rustup show
       - uses: davidB/rust-cargo-make@v1
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: Run tests
         run: cargo make --profile ci-static-code-analysis-tasks --env TARGET=${{matrix.os.target}} ci-flow
         env:
