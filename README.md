@@ -97,6 +97,7 @@ chart.show()?;
 | ndarray   | yes                | can load data from a ndarray                       | [ndarray](https://crates.io/crates/ndarray)   |
 | nalgebra  | no                 | can load data from a nalgebra::Matrix              | [nalgebra](https://crates.io/crates/nalgebra) |
 | rulinalg  | no                 | can load data from a rulinalg::matrix::Matrix      | [rulinalg](https://crates.io/crates/rulinalg) |
+| polars    | no                 | can load data from a polars::prelude::DataFrame    | [polars](https://crates.io/crates/polars)     |
 
 ## Links
 

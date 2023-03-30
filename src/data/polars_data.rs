@@ -15,8 +15,7 @@ impl From<DataFrame> for UrlData {
             .iter()
             .map(|s| s.iter())
             .collect::<Vec<_>>();
-        let fields = df.fields();
-        let columns: Vec<&String> = fields.iter().map(|x| x.name()).collect();
+        let columns: Vec<&str> = df.get_column_names();
         let mut res = vec![];
         for _ in 0..df.height() {
             let mut row = HashMap::new();
