@@ -20,6 +20,16 @@ jobs:
     steps:
       - name: Set up Rust
         run: rustup show
+      - name: Free Disk Space (Ubuntu)
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: true
       - uses: davidB/rust-cargo-make@v1
       - uses: actions/checkout@v3
       - name: Run tests
