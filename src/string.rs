@@ -12,7 +12,6 @@
 use crate::schema::*;
 // use std::str::FromStr;
 // use std::convert::TryFrom;
-use serde_json;
 
 // impl FromStr for Vegalite {
 //     type Err = serde_json::Error;

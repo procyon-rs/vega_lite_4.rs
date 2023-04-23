@@ -1,4 +1,3 @@
-use csv;
 use std::path::Path;
 use vega_lite_4::*;
 

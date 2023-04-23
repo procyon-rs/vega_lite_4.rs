@@ -52,7 +52,6 @@ pub use string::*;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use serde_json;
 
     #[test]
     fn serde_should_not_failed_on_empty() {

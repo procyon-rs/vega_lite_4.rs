@@ -18,9 +18,10 @@ use std::marker::PhantomData;
 use crate::schema::*;
 
 /// Wrapper for a field that can be either the default value, null or specified
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub enum RemovableValue<T: Clone> {
     /// The default value for this field
+    #[default]
     Default,
     /// This field should be removed
     Remove,
@@ -41,10 +42,7 @@ pub enum RemovableValue<T: Clone> {
 
 impl<T: Clone> RemovableValue<T> {
     pub(crate) fn is_default(&self) -> bool {
-        match self {
-            RemovableValue::Default => true,
-            _ => false,
-        }
+        matches!(self, RemovableValue::Default)
     }
 }
 
@@ -124,12 +122,6 @@ from_into_with_removable! {
     // f64 => TooltipUnion,
     // String => TooltipUnion,
     // TooltipContent => TooltipUnion,
-}
-
-impl<T: Clone> Default for RemovableValue<T> {
-    fn default() -> Self {
-        RemovableValue::Default
-    }
 }
 
 impl<T> Serialize for RemovableValue<T>

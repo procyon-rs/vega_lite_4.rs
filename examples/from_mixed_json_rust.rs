@@ -1,7 +1,6 @@
 use ndarray::{Array, Array2};
 use ndarray_rand::rand_distr::Uniform;
 use ndarray_rand::RandomExt;
-use serde_json;
 use vega_lite_4::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

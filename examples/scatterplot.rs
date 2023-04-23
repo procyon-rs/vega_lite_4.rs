@@ -1,4 +1,3 @@
-use csv;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 use vega_lite_4::*;
@@ -15,7 +14,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut rdr = csv::Reader::from_path(Path::new("examples/res/data/clustered_data.csv"))?;
     let values = rdr
         .deserialize()
-        .into_iter()
         .collect::<Result<Vec<Item>, csv::Error>>()?;
 
     // the chart
