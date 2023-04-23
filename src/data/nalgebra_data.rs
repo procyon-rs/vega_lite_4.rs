@@ -14,13 +14,11 @@ where
     fn from(v: naMatrix<N, R, C, S>) -> Self {
         let strides = v.strides();
         iter_to_data(v.row_iter().map(|row| {
-            row.data
-                .as_slice()
-                .iter()
-                .cloned()
+            row.iter()
                 .enumerate()
                 .filter(|(i, _)| i % strides.1 == 0)
                 .map(|(_, v)| v)
+                .cloned()
                 .collect::<Vec<_>>()
         }))
     }
