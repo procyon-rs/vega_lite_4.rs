@@ -27,7 +27,7 @@ ndarray = { version = "0.15", features = ["serde"], optional = true }
 csv = { version = "1.1", optional = true }
 rulinalg = { version = "0.4", optional = true }
 nalgebra = { version = "0.32", features = ["serde-serialize"], optional = true }
-polars = { version = "0.28", features = ["lazy"], optional = true }
+polars = { version = "0.31", features = ["lazy"], optional = true }
 
 [dev-dependencies]
 csv = "1.1"
