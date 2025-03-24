@@ -47,7 +47,7 @@ pub use showata::Showable;
 pub use data::*;
 pub use removable_value::RemovableValue;
 pub use schema::*;
-pub use string::*;
+// pub use string::*;
 
 #[cfg(test)]
 mod tests {
