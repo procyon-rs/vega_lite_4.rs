@@ -1,29 +1,6 @@
 use vega_lite_4::*;
 
-// On windows stack overflow:
-// ```
-// thread 'main' has overflowed its stack
-// error: process didn't exit successfully: `target\debug\examples\from_json_spec.exe` (exit code: 0xc00000fd, STATUS_STACK_OVERFLOW)
-// ```
-// as a workaround, spawn new thread or change the compilation see .cargo/config.toml
-// see
-// - [Stack Overflow when trying to run from\_json\_spec example · Issue #35 · procyon-rs/vega\_lite\_4.rs](https://github.com/procyon-rs/vega_lite_4.rs/issues/35#issuecomment-2748511426)
-// - [What can I do to avoid "thread 'main' has overflowed its stack" when working with large arrays - help - The Rust Programming Language Forum](https://users.rust-lang.org/t/what-can-i-do-to-avoid-thread-main-has-overflowed-its-stack-when-working-with-large-arrays/77091/5)
-// - [Stack overflow when compiling on Windows 10 - help - The Rust Programming Language Forum](https://users.rust-lang.org/t/stack-overflow-when-compiling-on-windows-10/50818)
-//
-fn main() -> ()  {
-  /*
-    const N: usize = 1_000_000;
-
-    std::thread::Builder::new()
-        .stack_size(size_of::<f64>() * N)
-        .spawn(|| main_2())
-        .unwrap().join().unwrap()
-  */
-  main_2()
-}
-
-fn main_2() -> () {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let spec = r##"
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
@@ -59,13 +36,14 @@ fn main_2() -> () {
 }
 "##;
 
-    let chart: Vegalite = serde_json::from_str(spec).unwrap();
+    let chart: Vegalite = serde_json::from_str(spec)?;
 
     // display the chart using `showata`
-    chart.show().unwrap();
+    chart.show()?;
 
     // print the vega lite spec
-    eprintln!("{}", chart.to_string().unwrap());
+    eprintln!("{}", chart.to_string()?);
 
     eprintln!("{:#?}", chart);
+    Ok(())
 }

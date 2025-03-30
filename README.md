@@ -113,16 +113,47 @@ chart.show()?;
 
 The vegalite json schema is large with lot of alternative, so the typed rust version create a large set of struct and enum (the generated source file before macro expension is 28K lines). So the size of a model in stack could be large (it's also why Box is used in the struct).
 
-On wasm32, with the default stack size (~ 1 MB), using vegalite_4 can raise error like:
+On wasm32, windows, with the default stack size, using vegalite_4 can raise error like:
 
 - crash tab with `SIGSEVG` (on chromium based browser)
 - `Uncaught (in promise) RuntimeError: memory access out of bounds` or simply `Uncaught (in promise) RuntimeError`
+- `thread 'main' has overflowed its stack`
+- `error: process didn't exit successfully: ... (exit code: 0xc00000fd, STATUS_STACK_OVERFLOW)`
 
-The current work arround is to increase the stacksize (eg ~ 1.5 MB). For cargo based project you can add into `.cargo/config` file of the project:
+The current work arround is to increase the stacksize (eg ~ 1.5 MB). For cargo based project you can add into `.cargo/config.toml` file of the project:
 
 ```toml
 [target.wasm32-unknown-unknown]
 rustflags = [
   "-C", "link-args=-z stack-size=1500000",
 ]
+
+# 64 bit MSVC
+[target.x86_64-pc-windows-msvc]
+rustflags = [
+	"-C", "link-arg=/STACK:1500000"
+]
+
+# 64 bit Mingw
+[target.x86_64-pc-windows-gnu]
+rustflags = [
+    "-C", "link-arg=-Wl,--stack,1500000"
+]
 ```
+
+Increasing the stack size can also be done in Thread
+
+```rust
+    const N: usize = 1_500_000;
+
+    std::thread::Builder::new()
+        .stack_size(size_of::<f64>() * N)
+        .spawn(|| work_with_vegalite()) // <-- launch your job
+        .unwrap().join().unwrap()
+```
+
+see:
+
+  - [Stack Overflow when trying to run from\_json\_spec example · Issue #35 · procyon-rs/vega\_lite\_4.rs](https://github.com/procyon-rs/vega_lite_4.rs/issues/35#issuecomment-2748511426)
+  - [What can I do to avoid "thread 'main' has overflowed its stack" when working with large arrays - help - The Rust Programming Language Forum](https://users.rust-lang.org/t/what-can-i-do-to-avoid-thread-main-has-overflowed-its-stack-when-working-with-large-arrays/77091/5)
+  - [Stack overflow when compiling on Windows 10 - help - The Rust Programming Language Forum](https://users.rust-lang.org/t/stack-overflow-when-compiling-on-windows-10/50818)
