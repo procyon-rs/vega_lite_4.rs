@@ -1,16 +1,6 @@
 mod base_data;
 pub use base_data::*;
 
-#[cfg(feature = "nalgebra")]
-mod nalgebra_data;
-#[cfg(feature = "nalgebra")]
-pub use nalgebra_data::*;
-
-#[cfg(feature = "rulinalg")]
-mod rulinalg_data;
-#[cfg(feature = "rulinalg")]
-pub use rulinalg_data::*;
-
 #[cfg(feature = "ndarray")]
 mod ndarray_data;
 // #[cfg(feature = "ndarray")]
@@ -20,8 +10,3 @@ mod ndarray_data;
 mod csv_data;
 // #[cfg(feature = "csv")]
 // pub use csv_data::*;
-
-#[cfg(feature = "polars")]
-mod polars_data;
-#[cfg(feature = "polars")]
-pub use polars_data::*;

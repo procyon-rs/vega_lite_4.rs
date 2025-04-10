@@ -13,9 +13,9 @@ impl From<DataFrame> for UrlData {
         let mut iters = df
             .get_columns()
             .iter()
-            .map(|s| s.iter())
+            .map(|s| s.as_series().expect("Non empty datafarme").iter())
             .collect::<Vec<_>>();
-        let columns: Vec<&str> = df.get_column_names();
+        let columns: Vec<&str> = df.get_column_names_str();
         let mut res = vec![];
         for _ in 0..df.height() {
             let mut row = HashMap::new();
@@ -33,7 +33,7 @@ impl From<DataFrame> for UrlData {
                     AnyValue::UInt8(val) => json!(val),
                     AnyValue::Float32(val) => json!(val),
                     AnyValue::Float64(val) => json!(val),
-                    AnyValue::Utf8(val) => json!(val),
+                    AnyValue::String(val) => json!(val),
                     AnyValue::List(val) => match val.dtype() {
                         DataType::Int64 => {
                             let vec: Vec<Option<_>> = val.i64().unwrap().into_iter().collect();
@@ -75,8 +75,8 @@ impl From<DataFrame> for UrlData {
                             let vec: Vec<Option<_>> = val.f64().unwrap().into_iter().collect();
                             json!(vec)
                         }
-                        DataType::Utf8 => {
-                            let vec: Vec<Option<_>> = val.utf8().unwrap().into_iter().collect();
+                        DataType::String => {
+                            let vec: Vec<Option<_>> = val.str().unwrap().into_iter().collect();
                             json!(vec)
                         }
                         x => panic!(
