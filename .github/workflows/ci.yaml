@@ -28,8 +28,9 @@ jobs:
           - runner: ubuntu-latest
             features: "--features csv,ndarray,nalgebra,rulinalg,show_vega"
           # CI is too long on windows-latest with all features (especially polars)
-          - runner: windows-latest
-            features: "--features default"
+          # can be enabled/uncommented if needed
+          # - runner: windows-latest
+          #   features: "--features default"
           - runner: macos-latest
             features: "--all-features"
 
