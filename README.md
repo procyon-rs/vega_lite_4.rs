@@ -19,12 +19,14 @@ It's also possible to use an existing Vega-Lite json and plug your data source s
 In order to have a complete mapping of the Vega-Lite V4 specification the code for the schema was automaticlly generated.
 To help describe all the possible features a [gallery of example is provided on github](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/)
 
+<!-- markdownlint-disable MD033 MD045 -->
 [<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/cloropleth_unemployment.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/cloropleth_unemployment.rs)
 [<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/diverging_stacked_bar_chart.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/diverging_stacked_bar_chart.rs)
 [<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/scatterplot.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/scatterplot.rs)
 [<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/stacked_bar_chart.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/stacked_bar_chart.rs)
 [<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/stock_graph.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/stock_graph.rs)
 [<img src="https://raw.githubusercontent.com/procyon-rs/vega_lite_4.rs/master/examples/res/screens/line_with_interval.png" height="150px">](https://github.com/procyon-rs/vega_lite_4.rs/blob/master/examples/line_with_interval.rs)
+<!-- markdownlint-enable MD033 MD045 -->
 
 To launch all examples
 
@@ -130,13 +132,13 @@ rustflags = [
 # 64 bit MSVC
 [target.x86_64-pc-windows-msvc]
 rustflags = [
-	"-C", "link-arg=/STACK:1500000"
+  "-C", "link-arg=/STACK:1500000"
 ]
 
 # 64 bit Mingw
 [target.x86_64-pc-windows-gnu]
 rustflags = [
-    "-C", "link-arg=-Wl,--stack,1500000"
+  "-C", "link-arg=-Wl,--stack,1500000"
 ]
 ```
 
@@ -153,6 +155,6 @@ Increasing the stack size can also be done in Thread
 
 see:
 
-  - [Stack Overflow when trying to run from\_json\_spec example · Issue #35 · procyon-rs/vega\_lite\_4.rs](https://github.com/procyon-rs/vega_lite_4.rs/issues/35#issuecomment-2748511426)
-  - [What can I do to avoid "thread 'main' has overflowed its stack" when working with large arrays - help - The Rust Programming Language Forum](https://users.rust-lang.org/t/what-can-i-do-to-avoid-thread-main-has-overflowed-its-stack-when-working-with-large-arrays/77091/5)
-  - [Stack overflow when compiling on Windows 10 - help - The Rust Programming Language Forum](https://users.rust-lang.org/t/stack-overflow-when-compiling-on-windows-10/50818)
+- [Stack Overflow when trying to run from\_json\_spec example · Issue #35 · procyon-rs/vega\_lite\_4.rs](https://github.com/procyon-rs/vega_lite_4.rs/issues/35#issuecomment-2748511426)
+- [What can I do to avoid "thread 'main' has overflowed its stack" when working with large arrays - help - The Rust Programming Language Forum](https://users.rust-lang.org/t/what-can-i-do-to-avoid-thread-main-has-overflowed-its-stack-when-working-with-large-arrays/77091/5)
+- [Stack overflow when compiling on Windows 10 - help - The Rust Programming Language Forum](https://users.rust-lang.org/t/stack-overflow-when-compiling-on-windows-10/50818)
