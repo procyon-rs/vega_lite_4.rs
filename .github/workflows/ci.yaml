@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         rust_toolchain: ["stable"]
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest-large, windows-latest, macos-latest]
 
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -42,9 +42,7 @@ jobs:
       - uses: taiki-e/install-action@v2
         with:
           tool: cargo-nextest
-      # - uses: davidB/rust-cargo-make@v1
       - uses: actions/checkout@v4
-      # - run: cargo make --profile ci-static-code-analysis-tasks ci-flow
       - run: cargo fmt --all --check
       - run: cargo clippy --all-targets --all-features -- --deny warnings
       - run: cargo nextest run --all-features
