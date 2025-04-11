@@ -23,7 +23,7 @@ derive_more = { version = "2.0", default-features = false, features = [
 ] }
 showata = { version = "0.3", optional = true }
 anyhow = { version = "1.0", optional = true }
-ndarray = { version = "0.15", default-features = false, features = [
+ndarray = { version = "0.16", default-features = false, features = [
     "serde",
 ], optional = true }
 csv = { version = "1.1", default-features = false, optional = true }
