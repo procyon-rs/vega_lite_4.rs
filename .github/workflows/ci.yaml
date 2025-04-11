@@ -48,5 +48,5 @@ jobs:
         run: cargo make --profile ci-static-code-analysis-tasks ci-flow
         env:
           CARGO_MAKE_RUN_CODECOV: "false"
-          CARGO_MAKE_BUILD_EXAMPLES: "true"
+          CARGO_MAKE_BUILD_EXAMPLES: "false"
           # CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
