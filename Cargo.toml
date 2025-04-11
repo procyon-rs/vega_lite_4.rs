@@ -38,7 +38,7 @@ polars = { version = "0.46", default-features = false, features = [
 
 [dev-dependencies]
 csv = { version = "1.1", default-features = false }
-ndarray-rand = { version = "0.14", default-features = false }
+ndarray-rand = { version = "0.15", default-features = false }
 polars = { version = "0.46", default-features = false, features = ["csv"] }
 
 [features]
