@@ -18,12 +18,10 @@ keywords = ["visualization", "plot", "vega", "graphs", "charts"]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 derive_builder = "0.20"
-derive_more = { version = "2.0", default-features = false, features = [
-    "from",
-] }
+derive_more = { version = "2.0", default-features = false, features = ["from"] }
 showata = { version = "0.3", optional = true }
 anyhow = { version = "1.0", optional = true }
-ndarray = { version = "0.15", default-features = false, features = [
+ndarray = { version = "0.16", default-features = false, features = [
     "serde",
 ], optional = true }
 csv = { version = "1.1", default-features = false, optional = true }
@@ -38,7 +36,7 @@ polars = { version = "0.46", default-features = false, features = [
 
 [dev-dependencies]
 csv = { version = "1.1", default-features = false }
-ndarray-rand = { version = "0.14", default-features = false }
+ndarray-rand = { version = "0.15", default-features = false }
 polars = { version = "0.46", default-features = false, features = ["csv"] }
 
 [features]
