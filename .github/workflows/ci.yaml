@@ -18,15 +18,24 @@ env:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os.runner }}
     strategy:
       matrix:
         rust_toolchain: ["stable"]
-        os: [ubuntu-latest-large, windows-latest, macos-latest]
+        os:
+          # CI on ubuntu-latest failed with feature polars
+          # (exit code 143 => killed probably because it used too many resources)
+          - runner: ubuntu-latest
+            features: "--features csv,ndarray,nalgebra,rulinalg,show_vega"
+          # CI is too long on windows-latest with all features (especially polars)
+          - runner: windows-latest
+            features: "--features default"
+          - runner: macos-latest
+            features: "--all-features"
 
     steps:
       - name: Free Disk Space (Ubuntu)
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.os.runner == 'ubuntu-latest' }}
         uses: jlumbroso/free-disk-space@main
         with:
           tool-cache: false
@@ -44,6 +53,6 @@ jobs:
           tool: cargo-nextest
       - uses: actions/checkout@v4
       - run: cargo fmt --all --check
-      - run: cargo clippy --all-targets --all-features -- --deny warnings
-      - run: cargo nextest run --all-features
-      - run: cargo build --all-features --examples
+      - run: cargo clippy --all-targets ${{ matrix.os.features }} -- --deny warnings
+      - run: cargo nextest run ${{ matrix.os.features }}
+      - run: cargo build --examples ${{ matrix.os.features }}
