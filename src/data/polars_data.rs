@@ -22,6 +22,7 @@ impl From<DataFrame> for UrlData {
                 let value = iter.next().expect("should have as many iterations as rows");
                 let value = match value {
                     AnyValue::Null => json!(None::<String>),
+                    AnyValue::Int128(val) => json!(val),
                     AnyValue::Int64(val) => json!(val),
                     AnyValue::UInt64(val) => json!(val),
                     AnyValue::Int32(val) => json!(val),
@@ -34,6 +35,10 @@ impl From<DataFrame> for UrlData {
                     AnyValue::Float64(val) => json!(val),
                     AnyValue::String(val) => json!(val),
                     AnyValue::List(val) => match val.dtype() {
+                        // DataType::Int128 => {
+                        //     let vec: Vec<Option<_>> = val.i128().unwrap().into_iter().collect();
+                        //     json!(vec)
+                        // }
                         DataType::Int64 => {
                             let vec: Vec<Option<_>> = val.i64().unwrap().into_iter().collect();
                             json!(vec)
@@ -85,6 +90,8 @@ impl From<DataFrame> for UrlData {
                             x.inner_dtype()
                         ),
                     },
+                    AnyValue::Boolean(val) => json!(val),
+                    AnyValue::Date(val) => json!(val),
                     AnyValue::Datetime(val, _, _) => json!(val),
                     AnyValue::Duration(val, _) => json!(val),
                     AnyValue::Time(val) => json!(val),
