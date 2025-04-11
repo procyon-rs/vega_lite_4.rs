@@ -18,7 +18,7 @@ keywords = ["visualization", "plot", "vega", "graphs", "charts"]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 derive_builder = "0.12"
-derive_more = { version = "0.99", default-features = false, features = [
+derive_more = { version = "2.0", default-features = false, features = [
     "from",
 ] }
 showata = { version = "0.3", optional = true }
