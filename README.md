@@ -5,7 +5,6 @@
 [![Release Doc](https://docs.rs/vega_lite_4/badge.svg)](https://docs.rs/vega_lite_4)
 
 [![Actions Status](https://github.com/procyon-rs/vega_lite_4.rs/workflows/ci-flow/badge.svg)](https://github.com/procyon-rs/vega_lite_4.rs/actions)
-[![codecov](https://codecov.io/gh/procyon-rs/vega_lite_4.rs/branch/master/graph/badge.svg)](https://codecov.io/gh/procyon-rs/vega_lite_4.rs)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=procyon-rs/vega_lite_4.rs)](https://dependabot.com)
 
 A Rust API for Vega-Lite V4 to build chart with a rusty API.

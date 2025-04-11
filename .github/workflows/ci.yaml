@@ -45,8 +45,8 @@ jobs:
       - uses: davidB/rust-cargo-make@v1
       - uses: actions/checkout@v4
       - name: Run tests
-        run: cargo make --profile ci-static-code-analysis-tasks --env TARGET=${{matrix.os.target}} ci-flow
+        run: cargo make --profile ci-static-code-analysis-tasks ci-flow
         env:
-          CARGO_MAKE_RUN_CODECOV: "true"
+          CARGO_MAKE_RUN_CODECOV: "false"
           CARGO_MAKE_BUILD_EXAMPLES: "true"
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          # CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
