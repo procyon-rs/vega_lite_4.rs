@@ -3,8 +3,9 @@ use vega_lite_4::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // input data: a CSV reader
-    let df = CsvReader::from_path("examples/res/data/stocks.csv")?
-        .has_header(true)
+    let df = CsvReadOptions::default()
+        .with_has_header(true)
+        .try_into_reader_with_file_path(Some("examples/res/data/stocks.csv".into()))?
         .finish()?;
     let df = df
         .lazy()
