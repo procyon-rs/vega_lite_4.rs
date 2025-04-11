@@ -9,6 +9,13 @@ on:
     # tags-ignore:
     #   - "[0-9]+.[0-9]+.[0-9]+*"
 
+permissions:
+  contents: read
+
+env:
+  SCCACHE_GHA_ENABLED: "true"
+  RUSTC_WRAPPER: "sccache"
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -18,8 +25,6 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - name: Set up Rust
-        run: rustup show
       - name: Free Disk Space (Ubuntu)
         if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: jlumbroso/free-disk-space@main
@@ -30,8 +35,15 @@ jobs:
           haskell: true
           large-packages: false
           swap-storage: true
+      - uses: mozilla-actions/sccache-action@v0.0.9
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ matrix.rust_toolchain }}
+      # - uses: taiki-e/install-action@v2
+      #   with:
+      #     tool: cargo-make
       - uses: davidB/rust-cargo-make@v1
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Run tests
         run: cargo make --profile ci-static-code-analysis-tasks --env TARGET=${{matrix.os.target}} ci-flow
         env:
