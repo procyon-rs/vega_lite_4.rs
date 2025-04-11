@@ -18,15 +18,25 @@ env:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os.runner }}
     strategy:
       matrix:
         rust_toolchain: ["stable"]
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os:
+          # CI on ubuntu-latest failed with feature polars
+          # (exit code 143 => killed probably because it used too many resources)
+          - runner: ubuntu-latest
+            features: "--features csv,ndarray,nalgebra,rulinalg,show_vega"
+          # CI is too long on windows-latest with all features (especially polars)
+          # can be enabled/uncommented if needed
+          # - runner: windows-latest
+          #   features: "--features default"
+          - runner: macos-latest
+            features: "--all-features"
 
     steps:
       - name: Free Disk Space (Ubuntu)
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.os.runner == 'ubuntu-latest' }}
         uses: jlumbroso/free-disk-space@main
         with:
           tool-cache: false
@@ -39,14 +49,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: ${{ matrix.rust_toolchain }}
-      # - uses: taiki-e/install-action@v2
-      #   with:
-      #     tool: cargo-make
-      - uses: davidB/rust-cargo-make@v1
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-nextest
       - uses: actions/checkout@v4
-      - name: Run tests
-        run: cargo make --profile ci-static-code-analysis-tasks --env TARGET=${{matrix.os.target}} ci-flow
-        env:
-          CARGO_MAKE_RUN_CODECOV: "true"
-          CARGO_MAKE_BUILD_EXAMPLES: "true"
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - run: cargo fmt --all --check
+      - run: cargo clippy --all-targets ${{ matrix.os.features }} -- --deny warnings
+      - run: cargo nextest run ${{ matrix.os.features }}
+      - run: cargo build --examples ${{ matrix.os.features }}
