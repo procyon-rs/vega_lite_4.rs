@@ -39,14 +39,13 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: ${{ matrix.rust_toolchain }}
-      # - uses: taiki-e/install-action@v2
-      #   with:
-      #     tool: cargo-make
-      - uses: davidB/rust-cargo-make@v1
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-nextest
+      # - uses: davidB/rust-cargo-make@v1
       - uses: actions/checkout@v4
-      - name: Run tests
-        run: cargo make --profile ci-static-code-analysis-tasks ci-flow
-        env:
-          CARGO_MAKE_RUN_CODECOV: "false"
-          CARGO_MAKE_BUILD_EXAMPLES: "false"
-          # CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      # - run: cargo make --profile ci-static-code-analysis-tasks ci-flow
+      - run: cargo fmt --all --check
+      - run: cargo clippy --all-targets --all-features -- --deny warnings
+      - run: cargo nextest run --all-features
+      - run: cargo build --all-features --examples

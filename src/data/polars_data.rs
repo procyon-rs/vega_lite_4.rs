@@ -6,7 +6,6 @@ use serde_json::json;
 use std::collections::HashMap;
 use std::iter::zip;
 
-
 impl From<DataFrame> for UrlData {
     fn from(mut df: DataFrame) -> Self {
         df.as_single_chunk_par();
