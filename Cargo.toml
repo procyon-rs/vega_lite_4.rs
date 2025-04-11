@@ -1,6 +1,6 @@
 [package]
 name = "vega_lite_4"
-version = "0.8.0"
+version = "0.8.1"
 authors = [
     "David Bernard <david.bernard.31@gmail.com>",
     "François Mockers <mockersf@gmail.com>",
