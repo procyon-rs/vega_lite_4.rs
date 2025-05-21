@@ -29,7 +29,7 @@ rulinalg = { version = "0.4", default-features = false, optional = true }
 nalgebra = { version = "0.33", default-features = false, features = [
     "serde-serialize",
 ], optional = true }
-polars = { version = "0.47", default-features = false, features = [
+polars = { version = "0.48", default-features = false, features = [
     "dtype-datetime",
     "lazy",
 ], optional = true }
@@ -37,7 +37,7 @@ polars = { version = "0.47", default-features = false, features = [
 [dev-dependencies]
 csv = { version = "1.1", default-features = false }
 ndarray-rand = { version = "0.15", default-features = false }
-polars = { version = "0.47", default-features = false, features = ["csv"] }
+polars = { version = "0.48", default-features = false, features = ["csv"] }
 
 [features]
 csv = ["dep:csv"]
