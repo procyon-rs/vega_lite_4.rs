@@ -1,7 +1,7 @@
 [package]
 name = "vega_lite_4"
 version = "0.8.1"
-edition = "2021"
+edition = "2024"
 description = "rust api for vega-lite v4"
 readme = "README.md"
 repository = "https://github.com/procyon-rs/vega_lite_4.rs"
