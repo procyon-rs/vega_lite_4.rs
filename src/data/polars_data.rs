@@ -8,13 +8,14 @@ use std::iter::zip;
 
 impl From<DataFrame> for UrlData {
     fn from(mut df: DataFrame) -> Self {
-        df.as_single_chunk_par();
+        //df.as_single_chunk_par();
+        df.align_chunks_par();
         let mut iters = df
-            .get_columns()
+            .columns()
             .iter()
             .map(|s| s.as_series().expect("Non empty datafarme").iter())
             .collect::<Vec<_>>();
-        let columns: Vec<&str> = df.get_column_names_str();
+        let columns = df.get_column_names().clone();
         let mut res = vec![];
         for _ in 0..df.height() {
             let mut row = HashMap::new();
