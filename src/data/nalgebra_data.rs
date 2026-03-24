@@ -1,6 +1,6 @@
-use crate::data::base_data::*;
 use crate::RemovableValue;
 use crate::UrlData;
+use crate::data::base_data::*;
 use nalgebra::base::storage::Storage;
 use nalgebra::{Dim, Matrix as naMatrix, Scalar};
 use serde::Serialize;

@@ -1,6 +1,6 @@
-use crate::data::base_data::*;
 use crate::RemovableValue;
 use crate::UrlData;
+use crate::data::base_data::*;
 use rulinalg::matrix::{BaseMatrix, Matrix};
 use serde::Serialize;
 impl<T> From<Matrix<T>> for UrlData

@@ -1,6 +1,6 @@
-use crate::data::base_data::*;
 use crate::RemovableValue;
 use crate::UrlData;
+use crate::data::base_data::*;
 use ndarray::ArrayBase;
 use serde::Serialize;
 impl<A, D, S> From<ArrayBase<S, D>> for UrlData

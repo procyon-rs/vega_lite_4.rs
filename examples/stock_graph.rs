@@ -36,9 +36,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         // .padding(Some(Padding::Double(5.0)))
         .description("Google's stock price over time.")
         .data(&values)
-        .transform(vec![TransformBuilder::default()
-            .filter("datum.symbol==='GOOG'")
-            .build()?])
+        .transform(vec![
+            TransformBuilder::default()
+                .filter("datum.symbol==='GOOG'")
+                .build()?,
+        ])
         .mark(Mark::Line)
         .encoding(
             EdEncodingBuilder::default()

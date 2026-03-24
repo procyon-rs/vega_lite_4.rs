@@ -10,9 +10,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .title("Stock price")
         .description("Google's stock price over time.")
         .data(rdr)
-        .transform(vec![TransformBuilder::default()
-            .filter("datum[0]==='GOOG'")
-            .build()?])
+        .transform(vec![
+            TransformBuilder::default()
+                .filter("datum[0]==='GOOG'")
+                .build()?,
+        ])
         .mark(Mark::Line)
         .encoding(
             EdEncodingBuilder::default()
