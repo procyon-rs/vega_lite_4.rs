@@ -1,6 +1,6 @@
 [package]
 name = "vega_lite_4"
-version = "0.8.1"
+version = "0.9.0"
 edition = "2024"
 description = "rust api for vega-lite v4"
 readme = "README.md"
